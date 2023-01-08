@@ -1,0 +1,96 @@
+# abinitio
+#
+# https://digilent.com/reference/programmable-logic/guides/getting-started-with-ipi
+# use mig7 ui clock for all axi componenets including microblaze
+#
+# https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/18841745/Baremetal+Drivers+and+Libraries
+#
+#
+# The physical flash chip on the arty S7-50 is a Micron N25Q128A.
+# Looking at the datasheet it has 4KB erase sectors. 16MB total memory divided by 4KB
+# sectors gives us 4096 total sectors. If we look at our bistream that we created in Part 1,
+# located in <Vivado project directory>\<project name>.runs\impl_1 folder, with a .bit
+# extension we can see that it is 2,192,128 bytes long. Therefore we will need 536
+# sectors to store it on flash, we can then store our main application from the end of
+# sector 536 onwards, so in other words at an offset of 536 x 4096 = 2,195,456 or 0x00218000 in hex form
+
+# Generate Flash from Program Device
+# arty_system
+# arty_top.bit + arty_top.mmi + elf_boot.elf
+# will generate download.bit file
+#
+
+#
+# NOTE: FLASH DOES NOT WORK FOR DEBUG BUILDS ONLY RELEASE IN VITIS
+#       FLASH ORDER MATTERS, APP.ELF FIRST THEN FPGA.BIN OR FPGA.BIT FILE
+#
+
+
+write_cfgmem  -format bin -size 16 -interface SPIx4 -loadbit {up 0x00000000 "D:/ARTY-I/arty_uart_fpga/arty_top/pr_ddr/pr_ddr.runs/impl_1/arty_top.bit" } -file "D:/ARTY-I/arty_uart_fpga/mb/srec_boot/Release/arty_flash.bin"
+
+
+
+# Program Flash Memory
+# arty_system
+# download.bit file, offset = 0x0, flash type = s25fl128sxxxxxx0-x1_x2_x4, verify after flash
+
+# create binary file from elf
+mb-objcopy -O binary -R .vectors.* ${ProjName}.elf ${ProjName}.bin
+
+# create srec file from elf
+mb-objcopy -O sre -R ${ProjName}.elf ${ProjName}.elf
+
+# generate mapfile from linker, add to Miscellaneous Linker settings
+-Wl,-Map=${ProjName}.map
+
+write_cfgmem  -format mcs -size 16 -interface SPIx4 -loadbit {up 0x00000000 "D:/ARTY-I/arty_uart_fpga/mb/elf_boot/_ide/bitstream/download.bit" } -loaddata {up 0x00219000 "D:/ARTY-I/arty_uart_fpga/mb/arty_fw/Debug/arty_fw.bin" } -file "D:/ARTY-I/arty_uart_fpga/arty_top/pr_ddr/arty_top.mcs"
+
+mb-objcopy -O binary -R .vectors.* ${ProjName}.elf ${ProjName}.bin
+
+
+# starting from repository
+# double-click create_proj.bat from ip directory or execute from command line
+create_proj.bat
+
+# update fpga_build.h if desired
+source ip/pr_ddr/pre_build.tcl
+
+# create bitstream, double-click Generate Bitstream
+
+# export hardware and bitstream
+File->Export->Export Hardware (select export bitsream)
+
+# run Vitis
+Tools->Launch Vitis IDE
+
+# run write_project_tcl make_pr_ddr.tcl
+# rename local files by removing pr_ddr.srcs/sources_1/imports/ and
+                                 pr_ddr.srcs/utils_1/imports/
+
+
+# MISCELLANEOUS NOTES
+
+# launch vivado and cd to d:/arty_fpga/arty_top
+# run source ./ip/pr_ddr/make_pr_ddr.tcl
+# run "Generate Block Design"
+
+# flash .ELF/.BIT to spansion device on arty s7
+#
+# enable .BIT file generation Settings->Bitstream .bin_file* checkbox
+# re-synthesize design to enable access to bistream settings
+# select x4, compression, 33MHz and x4 programming mode
+#
+# update hardware specification in Vitis (after h/w export from Vivado)
+# right-click platform icon and "Update Hardware Specification"
+#
+# attach .ELF file to MicroBlaze in block design, right-click MB add elf file
+#
+# from hardware manager auto connect and "Add Configuration Memory Device..."
+# add spansion device s25fl128..._x4
+#
+# programm device
+
+# update fpga_build.vhd, requires IP upgrade, time stamp the design
+source ./ip/pr_ddr/pre_build.tcl
+
+

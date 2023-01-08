@@ -1,0 +1,51 @@
+# choose place and route from arty_uart_fpga\ip
+# double-click create_proj.bat file, this will delete existing PR directory
+
+# from vivado, click Generate Bitstream, takes a while
+
+# once complete, select File->Export->Export Hardware (include bitstream)
+
+# select Tools->Launch Vitis IDE (not until previous step is complete)
+
+# select arty_uart_fpga\mb directory, close welcome screen
+
+# select File->Import Eclipse workspace or zip file
+
+# unselect Copy projects into workspace and Browse to arty_uart_fpga\mb directory
+
+# select all projects and Finish
+
+# select Release for all projects from the Assistant, only release builds can be flashed
+
+# select Project->Clean, uncheck Clean all projects, check Build only the selected projects
+# select all projects and Clean
+# This step must be taken before adding any new projects
+
+#
+# FLASH ORDER MATTERS HERE, IF THE ELF FILE CHANGES THE BIT FILE MUST ALSO BE FLASHED
+#
+# ONLY FLASH RELEASED BUILDS
+#
+
+# program flash, Xilinx->Program Flash, Browse for arty_fw.elf
+# set offset = 0x600000
+# flash type = s25fl128sxxxxxx0-spi-x1_x2_x4
+# select Convert ELF, Blank check and Verify
+# then Program
+
+# program flash, Xilinx->Program Flash, Browse for arty_top\hw\arty_top.bit
+# set offset = 0x0
+# flash type = s25fl128sxxxxxx0-spi-x1_x2_x4
+# select Blank check and Verify
+# then Program
+
+# use write_project_tcl -force make_pr_ddr.tcl to capture changes to block design
+# use beyond compare to move changes into the IP PR directory
+
+# in order to use vitis debugger the mb_bootloop.elf file must be selected for association
+# in vivado and the bitstream rebuilt
+
+
+
+
+
