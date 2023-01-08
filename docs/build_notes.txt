@@ -17,9 +17,20 @@
 
 # select Release for all projects from the Assistant, only release builds can be flashed
 
+# select right-click arty_top and Update Hardware Specification
+
 # select Project->Clean, uncheck Clean all projects, check Build only the selected projects
 # select all projects and Clean
 # This step must be taken before adding any new projects
+
+# go back to vivado and associate the srec_boot.elf file with Tools->Associate ELF Files ...
+
+# regenerate bitstream
+
+# back to vitis, select right-click arty_top and Update Hardware Specification
+
+# select Project->Clean, uncheck Clean all projects, check Build only the selected projects
+# select all projects and Clean
 
 #
 # FLASH ORDER MATTERS HERE, IF THE ELF FILE CHANGES THE BIT FILE MUST ALSO BE FLASHED
