@@ -26,6 +26,7 @@
 # go back to vivado and associate the srec_boot.elf file with Tools->Associate ELF Files ...
 
 # regenerate bitstream
+# once complete, select File->Export->Export Hardware (include bitstream)
 
 # back to vitis, select right-click arty_top and Update Hardware Specification
 
