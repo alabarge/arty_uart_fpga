@@ -58,6 +58,11 @@
 # in vivado and the bitstream rebuilt
 
 
-
+#
+# the hardware manager can also be used to flash the device
+# use Tools->Generate Memory Configuration File ...
+# add bitstream and application ELF file (not binary if using the elf bootloader)
+#
+#
 
 

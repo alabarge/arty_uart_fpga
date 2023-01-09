@@ -38,10 +38,13 @@ write_cfgmem  -format bin -size 16 -interface SPIx4 -loadbit {up 0x00000000 "D:/
 mb-objcopy -O binary -R .vectors.* ${ProjName}.elf ${ProjName}.bin
 
 # create srec file from elf
-mb-objcopy -O sre -R ${ProjName}.elf ${ProjName}.elf
+mb-objcopy -O sre -R ${ProjName}.elf ${ProjName}.srec
 
 # generate mapfile from linker, add to Miscellaneous Linker settings
 -Wl,-Map=${ProjName}.map
+
+write_cfgmem  -format mcs -size 16 -interface SPIx4 -loadbit {up 0x00000000 "D:/arty_uart_fpga/arty_top/pr_ddr/pr_ddr.runs/impl_1/arty_top.bit" } -loaddata {up 0x00600000 "D:/arty_uart_fpga/mb/arty_fw/Release/arty_fw.elf" } -file "D:/arty_uart_fpga/arty_top/pr_ddr/arty_top.mcs"
+
 
 write_cfgmem  -format mcs -size 16 -interface SPIx4 -loadbit {up 0x00000000 "D:/ARTY-I/arty_uart_fpga/mb/elf_boot/_ide/bitstream/download.bit" } -loaddata {up 0x00219000 "D:/ARTY-I/arty_uart_fpga/mb/arty_fw/Debug/arty_fw.bin" } -file "D:/ARTY-I/arty_uart_fpga/arty_top/pr_ddr/arty_top.mcs"
 

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="ASCII"?>
+<sdkproject:SdkProject xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:sdkproject="http://www.xilinx.com/sdkproject" name="elf_boot" location="D:/arty_uart_fpga/mb/elf_boot" platform="D:/arty_uart_fpga/mb/arty_top/export/arty_top/arty_top.xpfm" platformUID="xilinx:arty-s7-50::0.0(custom)" systemProject="elf_boot_system" sysConfig="arty_top" runtime="C/C++" cpu="standalone_microblaze_0" cpuInstance="microblaze_0" os="standalone" mssSignature="566e35f4c192a524b1ffc4cb66e20334">
+  <configuration name="Debug" id="xilinx.gnu.mb.exe.debug.204088703" dirty="true">
+    <configBuildOptions xsi:type="sdkproject:SdkOptions"/>
+    <lastBuildOptions xsi:type="sdkproject:SdkOptions"/>
+  </configuration>
+  <configuration name="Release" id="xilinx.gnu.mb.exe.release.83848672">
+    <configBuildOptions xsi:type="sdkproject:SdkOptions"/>
+    <lastBuildOptions xsi:type="sdkproject:SdkOptions"/>
+  </configuration>
+  <template appTemplateName="hello_world"/>
+</sdkproject:SdkProject>
