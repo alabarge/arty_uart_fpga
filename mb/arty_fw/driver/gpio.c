@@ -79,8 +79,8 @@
 
 // 6.2  Local Data Structures
 
-   static   volatile pgpio_regs_t   leds = (volatile pgpio_regs_t)XPAR_AXI_GPIO_0_BASEADDR;
-   static   volatile pgpio_regs_t   btns = (volatile pgpin_regs_t)XPAR_AXI_GPIO_1_BASEADDR;
+   static   volatile pgpio_regs_t   leds = (volatile pgpio_regs_t)XPAR_AXI_LED_BASEADDR;
+   static   volatile pgpio_regs_t   btns = (volatile pgpio_regs_t)XPAR_AXI_BUTTON_BASEADDR;
 
 // 7 MODULE CODE
 
@@ -108,18 +108,17 @@ uint32_t gpio_init(void) {
 // 7.1.4   Data Structures
 
    uint32_t   result = CFG_STATUS_OK;
-   uint8_t    buf;
 
 // 7.1.5   Code
 
    // set gpio_1 direction, all out
-   leds->dir = 0x0;
+   leds->tri = 0x0;
 
    // set gpio_1 all off
    leds->dat = 0x0;
 
    // set gpio_2 direction, all in
-   btns->dir = 0xF;
+   btns->tri = 0xF;
 
    return result;
 
@@ -230,8 +229,6 @@ uint8_t gpio_key(void) {
 */
 
 // 7.4.4   Data Structures
-
-   uint32_t   dat;
 
 // 7.4.5   Code
 

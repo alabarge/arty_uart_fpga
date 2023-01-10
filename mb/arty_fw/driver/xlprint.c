@@ -85,7 +85,7 @@
    static int  printi(char **out, int i, int b, int sg, int width, int pad, int letbase);
    static int  print_uart(char **out, const char *format, va_list args);
 
-   static volatile puart_regs_t   uart = (volatile puart_regs_t)STDIN_BASEADDRESS;
+   static volatile puart_regs_t   uart = (volatile puart_regs_t)XPAR_AXI_STDIO_UART_BASEADDR;
 
 
 // 6.2  Local Data Structures
@@ -196,8 +196,8 @@ static void printchar(char **str, int c) {
       **str = c;
       ++(*str);
    }
-   else if (base != 0) {
-      while ((uart->status & UART_TX_FULL) == 1);
+   else if (uart != 0) {
+      while (uart->status & UART_TX_FULL);
       uart->tx_dat = c;
    }
 }
@@ -348,7 +348,7 @@ static int print_uart(char **out, const char *format, va_list args) {
 
 // 7.3
 
-XInterruptHandler xlprint_isr(void *arg) {
+void xlprint_isr(void *arg) {
 
 /* 7.3.1   Functional Description
 

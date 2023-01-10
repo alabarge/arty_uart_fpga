@@ -1,15 +1,5 @@
 #pragma once
 
-#include "sys/alt_stdio.h"
-#include "sys/alt_alarm.h"
-#include "sys/alt_timestamp.h"
-#include "sys/alt_flash.h"
-#include "sys/alt_irq.h"
-#include "sys/alt_cache.h"
-#include "nios2.h"
-#include "alt_types.h"
-
-#include <math.h>
 #include <time.h>
 #include <string.h>
 #include <ctype.h>
@@ -41,11 +31,7 @@
 #include "daq_hal.h"
 #include "daq_srv.h"
 
-// BOOLEAN DEFINES
-#define TRUE      1
-#define FALSE     0
-
-#define DE0_OK    0
+#define ARTY_OK    0
 
 #define  MSG_MAX_STR    32
 
@@ -128,6 +114,13 @@ gc_t, *pgc_t;
 // Global Access
 extern   ci_t ci;
 extern   gc_t gc;
+
+extern   uint8_t __bss_start;
+extern   uint8_t __bss_end;
+extern   uint8_t __alt_stack_limit;
+extern   uint8_t __alt_stack_pointer;
+extern   uint8_t __alt_heap_start;
+extern   uint8_t __alt_heap_limit;
 
 void     systimer(void *CallBackRef, u8 TmrCtrNumber);
 void     version(void);

@@ -81,7 +81,7 @@
 
 // 6.2  Local Data Structures
 
-   static   volatile pstamp_regs_t   regs = (volatile pstamp_regs_t)XPAR_STAMP_0_BASEADDR;
+   static   volatile pstamp_regs_t   regs = (volatile pstamp_regs_t)XPAR_AXI_STAMP_BASEADDR;
 
 // 7 MODULE CODE
 

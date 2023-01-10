@@ -426,9 +426,9 @@ void clk_sleep(uint32_t delay, uint32_t units) {
    // Cycles to Wait
    j = delay * units;
    // Read current system count
-   i = alt_timestamp();
+   i = XTmrCtr_GetValue(&gc.freetimer, 0);
    // Spin
-   while ((alt_timestamp() - i) < j);
+   while ((XTmrCtr_GetValue(&gc.freetimer, 0) - i) < j);
 
 }  // end clk_sleep()
 
@@ -467,12 +467,12 @@ uint32_t clk_time(uint8_t op, uint32_t units, uint32_t *tNow) {
    // Start the Count,
    // Read the 32-Bit Time Base Register
    if (op & CLK_START) {
-      *tNow = alt_timestamp();
+      *tNow = XTmrCtr_GetValue(&gc.freetimer, 0);
    }
    // Report the Count,
    // Read the 32-Bit Time Base Register
    else if (op & CLK_STOP) {
-      tEnd = alt_timestamp();
+      tEnd = XTmrCtr_GetValue(&gc.freetimer, 0);
       switch (units) {
          case MICROSECONDS:
             result = (uint32_t)(tEnd - *tNow) / MICROSECONDS;
@@ -533,9 +533,9 @@ void utick(uint32_t microseconds) {
    // Cycles to Wait
    j = microseconds * MICROSECONDS;
    // Read current system count
-   i = alt_timestamp();
+   i = XTmrCtr_GetValue(&gc.freetimer, 0);
    // Spin
-   while ((alt_timestamp() - i) < j);
+   while ((XTmrCtr_GetValue(&gc.freetimer, 0) - i) < j);
 
 }  // end utick()
 
@@ -571,8 +571,8 @@ void stick(uint32_t seconds) {
    // Cycles to Wait
    j = seconds * SECONDS;
    // Read current system count
-   i = alt_timestamp();
+   i = XTmrCtr_GetValue(&gc.freetimer, 0);
    // Spin
-   while ((alt_timestamp() - i) < j);
+   while ((XTmrCtr_GetValue(&gc.freetimer, 0) - i) < j);
 
 }  // end stick()

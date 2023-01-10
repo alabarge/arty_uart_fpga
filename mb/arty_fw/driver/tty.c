@@ -96,7 +96,7 @@
    static   tty_txq_t      txq;
    static   tty_rxq_t      rxq;
 
-   static   volatile ptty_regs_t   tty = (volatile ptty_regs_t)XPAR_AXI_UARTLITE_1_HIGHADDR;
+   static   volatile ptty_regs_t   tty = (volatile ptty_regs_t)XPAR_AXI_CM_UART_BASEADDR;
 
 // 7 MODULE CODE
 
@@ -167,7 +167,7 @@ uint32_t tty_init(uint32_t baudrate, uint8_t port) {
 
    // Report H/W Details
    if (gc.trace & CFG_TRACE_ID) {
-      xlprint("%-13s base:rev:irq %08X:%d:%d\n", "tty", XPAR_AXI_UARTLITE_1_HIGHADDR, 0,
+      xlprint("%-13s base:rev:irq %08X:%d:%d\n", "tty", XPAR_AXI_CM_UART_BASEADDR, 0,
          XPAR_INTC_0_UARTLITE_1_VEC_ID);
       xlprint("%-13s rate:   %d.%d Kbps\n", "tty", baudrate / 1000, baudrate % 1000);
       xlprint("%-13s port:   %d\n", "tty", cm_port);
@@ -182,7 +182,7 @@ uint32_t tty_init(uint32_t baudrate, uint8_t port) {
 
 // 7.2
 
-XInterruptHandler tty_isr(void *arg) {
+void tty_isr(void *arg) {
 
 /* 7.2.1   Functional Description
 
@@ -208,24 +208,19 @@ XInterruptHandler tty_isr(void *arg) {
 
    volatile pcm_msg_t  msg;
 
-   tty_sta_reg_t sta;
-
 // 7.2.5   Code
-
-   // process interrupt signals, receive has priority
-   sta.i = regs->sta;
 
    // report interrupt request
    if (gc.trace & CFG_TRACE_IRQ) {
-      xlprint("tty_isr() irq = %02X\n", sta.i);
+      xlprint("tty_isr() irq = %02X\n", tty->status);
    }
 
    //
    // RX INTERRUPT, PER CHARACTER
    //
-   if (sta.b.rrdy == 1) {
+   if (tty->status & UART_RX_VALID) {
       // reading clears interrupt
-      ch = regs->rxd;
+      ch = tty->rx_dat;
       switch (rxq.state) {
          case TTY_IDLE :
             if (ch == TTY_SOF) {
@@ -310,8 +305,6 @@ void tty_tx(void) {
    uint8_t   *out = (uint8_t *)txq.buf[txq.tail];
    pcm_msg_t  msg = (pcm_msg_t)txq.buf[txq.tail];
 
-   tty_sta_reg_t sta;
-
 // 7.4.5   Code
 
    // Disable ISR
@@ -324,21 +317,18 @@ void tty_tx(void) {
       dump((uint8_t *)msg, msg->h.msglen, 0, 0);
    }
 
-   // update local status
-   sta.i = regs->sta;
-
    // Validate message, drop if NULL
    if (txq.buf[txq.tail] == NULL) {
       // advance the tx queue
       if (++txq.tail == txq.slots) txq.tail = 0;
    }
    // check for transmit ready
-   else if (sta.b.trdy == 1) {
+   else if ((tty->status & UART_TX_FULL) == 0) {
       switch (txq.state) {
          case TTY_IDLE :
-            txq.state = TTY_IN_MSG;
-            regs->txd = TTY_SOF;
-            txq.n     = 0;
+            txq.state   = TTY_IN_MSG;
+            tty->tx_dat = TTY_SOF;
+            txq.n       = 0;
             // show activity
             gpio_set_val(GPIO_LED_COM, GPIO_LED_ON);
             // report message content
@@ -349,8 +339,8 @@ void tty_tx(void) {
             break;
          case TTY_IN_MSG :
             if (txq.n == txq.len[txq.tail]) {
-               txq.state = TTY_IDLE;
-               regs->txd = TTY_EOF;
+               txq.state   = TTY_IDLE;
+               tty->tx_dat = TTY_EOF;
                // release message
                cm_free((pcm_msg_t)txq.buf[txq.tail]);
                // clear the msg pointer
@@ -363,20 +353,20 @@ void tty_tx(void) {
             else if ((out[txq.n] == TTY_SOF)  ||
                      (out[txq.n] == TTY_EOF)  ||
                      (out[txq.n] == TTY_ESC)) {
-               txq.state = TTY_IN_ESC;
-               regs->txd = TTY_ESC;
+               txq.state   = TTY_IN_ESC;
+               tty->tx_dat = TTY_ESC;
             }
             // send regular character
             else {
                txq.state = TTY_IN_MSG;
-               regs->txd = out[txq.n];
+               tty->tx_dat = out[txq.n];
                txq.n++;
             }
             break;
          // send character after escape
          case TTY_IN_ESC :
             txq.state = TTY_IN_MSG;
-            regs->txd = out[txq.n] ^ TTY_BIT;
+            tty->tx_dat = out[txq.n] ^ TTY_BIT;
             txq.n++;
             break;
       }
@@ -488,7 +478,7 @@ void tty_pipe(uint32_t index, uint32_t msglen) {
 
 // 7.7.4   Data Structures
 
-   uint8_t *msg = (uint8_t *)ADC_FIFO_BASE + (index * ADC_POOL_CNT * sizeof(cm_pipe_daq_t));
+   uint8_t *msg = NULL;
 
 // 7.7.5   Code
 

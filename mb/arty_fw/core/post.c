@@ -167,17 +167,17 @@ uint32_t post_ddr(void) {
 
    uint32_t   result = POST_OK;
    uint32_t   i,j,k;
-   uint32_t   *pMem = (uint32_t *)(SDRAM_BASE + 0x40000);
+   uint32_t   *pMem = (uint32_t *)(XPAR_SDRAM_BASEADDR + 0x40000);
 
    // 7.2.5   Code
 
-   xlprint("postDDR() %08X : %02d MiB\n", pMem, ((SDRAM_SPAN / 1048576) - 2));
+   xlprint("postDDR() %08X : %02d MiB\n", pMem, (((XPAR_SDRAM_HIGHADDR - XPAR_SDRAM_BASEADDR)  / 1048576) - 2));
 
    // Seed Pseudo-Random Number Generator
    srand_32(100);
 
    // Write CFG_DDR_SIZE 1MB Regions
-   for (i=0,k=0;i<((SDRAM_SPAN / 1048576) - 2);i++) {
+   for (i=0,k=0;i<(((XPAR_SDRAM_HIGHADDR - XPAR_SDRAM_BASEADDR) / 1048576) - 2);i++) {
       // Write 128 32-Bit words in each region
       for (j=0;j<128;j++) {
          pMem[k+j] = rand_32();
@@ -187,13 +187,14 @@ uint32_t post_ddr(void) {
    }
 
    // Flush Data Cache
-   alt_dcache_flush((void *)SDRAM_BASE, SDRAM_SPAN);
+   Xil_L1DCacheFlush();
+   Xil_L1DCacheFlush();
 
    // Seed Pseudo-Random Number Generator
    srand_32(100);
 
    // Read CFG_DDR_SIZE 1MB Regions
-   for (i=0,k=0;i<((SDRAM_SPAN / 1048576) - 2);i++) {
+   for (i=0,k=0;i<(((XPAR_SDRAM_HIGHADDR - XPAR_SDRAM_BASEADDR) / 1048576) - 2);i++) {
       // Read 128 32-Bit words in each region
       for (j=0;j<128;j++) {
          if (pMem[k+j] != rand_32()) {

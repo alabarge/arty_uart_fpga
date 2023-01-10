@@ -83,8 +83,6 @@
             "SEP", "OCT", "NOV", "DEC"
           };
 
-   uint32_t   bootTable[32] __attribute__ ((section (".bootTable")));
-
 // 4.3   External Function Prototypes
 
 // 5 LOCAL CONSTANTS AND MACROS
@@ -130,12 +128,12 @@ int main() {
 
 // 7.1.4   Data Structures
 
-   uint32_t       i;
+   XWdtTb_Config    *config;
 
 // 7.1.5   Code
 
    // Open Debug Port
-   xlprint_open(STDOUT_BASE);
+   xlprint_open(XPAR_AXI_STDIO_UART_BASEADDR);
 
    // Clear the Terminal Screen and Home the Cursor
    xlprint(clr_scrn);
@@ -153,13 +151,13 @@ int main() {
    gc.debug     = 0;
    gc.status    = CFG_STATUS_INIT;
    gc.error     = CFG_ERROR_CLEAR;
-   gc.devid     = CM_DEV_ART;
+   gc.devid     = CM_DEV_ARTY;
    gc.winid     = CM_DEV_WIN;
    gc.com_port  = CM_PORT_COM0;
    gc.int_flag  = FALSE;
    gc.sw_reset  = FALSE;
    gc.sys_time  = 0;
-   gc.ping_time = alt_timestamp();
+   gc.ping_time = XTmrCtr_GetValue(&gc.freetimer, 0);
    gc.ping_cnt  = 0;
    gc.led_cycle = CFG_LED_CYCLE;
    gc.month     = month_table;
@@ -180,17 +178,17 @@ int main() {
    gc.error |= XIntc_Initialize(&gc.intc, XPAR_INTC_0_DEVICE_ID);
 
    // System Timer Init
-   gc.error |= XTmrCtr_Initialize(&gc.systimer, XPAR_AXI_TIMER_0_DEVICE_ID);
+   gc.error |= XTmrCtr_Initialize(&gc.systimer, XPAR_AXI_SYSTIMER_DEVICE_ID);
    XTmrCtr_SetOptions(&gc.systimer, 0, XTC_INT_MODE_OPTION | XTC_AUTO_RELOAD_OPTION);
-   XTmrCtr_SetHandler(&gc.systime, timer, &gc.systime);
-   gc.error |= XIntc_Connect(&gc.intc, XPAR_INTC_0_TMRCTR_0_VEC_ID,
+   XTmrCtr_SetHandler(&gc.systimer, systimer, &gc.systimer);
+   gc.error |= XIntc_Connect(&gc.intc, XPAR_INTC_0_TMRCTR_1_VEC_ID,
             (XInterruptHandler)XTmrCtr_InterruptHandler, (void *)&gc.systimer);
    // 10 mS roll-over, timer counts up
    XTmrCtr_SetResetValue(&gc.systimer, 0, 0xFFF39A40);
    XTmrCtr_Start(&gc.systimer, 0);
 
    // Free Running Timer Init
-   gc.error |= XTmrCtr_Initialize(&gc.freetimer, XPAR_AXI_TIMER_1_DEVICE_ID);
+   gc.error |= XTmrCtr_Initialize(&gc.freetimer, XPAR_AXI_FREETIMER_DEVICE_ID);
    XTmrCtr_SetOptions(&gc.freetimer, 0, XTC_AUTO_RELOAD_OPTION);
    XTmrCtr_Start(&gc.systimer, 0);
 
@@ -214,11 +212,11 @@ int main() {
    gc.error |= stamp_init();
 
    // Watchdog Init
-   config = XWdtTb_LookupConfig(XPAR_WDTTB_0_DEVICE_ID);
+   config = XWdtTb_LookupConfig(XPAR_AXI_WATCHDOG_DEVICE_ID);
    gc.error |= XWdtTb_CfgInitialize(&gc.watchdog, config, config->BaseAddr);
 
    // Report Ticks per Second
-   xlprint("ticks/sec: %d\n", 100);
+   xlprint("ticks/sec: %d\n", CFG_TICKS_PER_SECOND);
 
    // Report Timestamp Frequency
    xlprint("timestamp.freq: %d.%d MHz\n", XPAR_CPU_CORE_CLOCK_FREQ_HZ / 1000000,
@@ -293,7 +291,7 @@ int main() {
    Xil_ExceptionEnable();
 
    // Start the Watchdog
-   XWdtTb_Start(&WatchdogTimebase);
+   XWdtTb_Start(&gc.watchdog);
 
    // Initialization Finished so
    // start Running
@@ -433,8 +431,6 @@ void systimer(void *CallBackRef, u8 TmrCtrNumber) {
       }
    }
 
-   return CFG_TIMER_CYCLE;
-
 } // end timer()
 
 
@@ -461,24 +457,25 @@ void version(void) {
 
 // 7.2.4   Data Structures
 
-   struct tm     *quartus;
-
 // 7.2.5   Code
 
    // Hardware Devices
    xlprint("\n");
-   xlprint("%-13s base:irq %08X:%d:%d\n", "sdram", XPAR_MIG7SERIES_0_BASEADDR, SDRAM_IRQ);
-   xlprint("%-13s base:irq %08X:%d:%d\n", "axi_qspi", EPCS_BASE, EPCS_IRQ);
-   xlprint("%-13s base:irq %08X:%d:%d\n", "axi_systimer", SYSCLK_BASE, SYSCLK_IRQ);
-   xlprint("%-13s base:irq %08X:%d:%d\n", "axi_freetimer", SYSTIMER_BASE, SYSTIMER_IRQ);
-   xlprint("%-13s base:irq %08X:%d:%d\n", "axi_wdttb", WATCHDOG_BASE, WATCHDOG_IRQ);
-   xlprint("%-13s base:irq %08X:%d:%d\n", "gpio_0", GPX_BASE, GPX_IRQ);
-   xlprint("%-13s base:irq %08X:%d:%d\n", "gpio_1", GPI_BASE, GPI_IRQ);
-   xlprint("%-13s base:irq %08X:%d\n\n", "uart_0", STDOUT_BASE, STDOUT_IRQ);
-   xlprint("%-13s base:irq %08X:%d\n\n", "uart_1", STDOUT_BASE, STDOUT_IRQ);
-
-   xlprint("%-13s base:rev:irq %08X:%08X:%d\n", STAMP_NAME, STAMP_BASE, stamp_version(), STAMP_IRQ);
-   xlprint("%-13s base:rev:irq %08X:%d:%d\n", ADC_NAME, ADC_BASE, adc_version(), ADC_IRQ);
+   xlprint("%-13s base:irq %08X:%d:%d\n", "sdram", XPAR_SDRAM_BASEADDR, -1);
+   xlprint("%-13s base:irq %08X:%d:%d\n", "mb_bram", XPAR_BRAM_0_BASEADDR, -1);
+   xlprint("%-13s base:irq %08X:%d:%d\n", "axi_qspi", XPAR_AXI_QSPI_BASEADDR, XPAR_INTC_0_SPI_0_VEC_ID);
+   xlprint("%-13s base:irq %08X:%d:%d\n", "axi_systimer", XPAR_AXI_SYSTIMER_BASEADDR, XPAR_INTC_0_TMRCTR_1_VEC_ID);
+   xlprint("%-13s base:irq %08X:%d:%d\n", "axi_freetimer", XPAR_AXI_FREETIMER_BASEADDR, -1);
+   xlprint("%-13s base:irq %08X:%d:%d\n", "axi_wdttb", XPAR_AXI_WATCHDOG_BASEADDR, -1);
+   xlprint("%-13s base:irq %08X:%d:%d\n", "axi_xadc", XPAR_AXI_XADC_BASEADDR, XPAR_INTC_0_SYSMON_0_VEC_ID);
+   xlprint("%-13s base:irq %08X:%d:%d\n", "axi_stamp", XPAR_AXI_STAMP_BASEADDR, -1);
+   xlprint("%-13s base:irq %08X:%d:%d\n", "axi_button", XPAR_AXI_BUTTON_BASEADDR, -1);
+   xlprint("%-13s base:irq %08X:%d:%d\n", "axi_led", XPAR_AXI_LED_BASEADDR, -1);
+   xlprint("%-13s base:irq %08X:%d:%d\n", "axi_intc", XPAR_AXI_INTC_BASEADDR, XIL_EXCEPTION_ID_INT);
+   xlprint("%-13s base:irq %08X:%d:%d\n", "axi_oled", XPAR_AXI_OLED_BASEADDR, -1);
+   xlprint("%-13s base:irq %08X:%d\n", "stdio_uart", XPAR_AXI_STDIO_UART_BASEADDR, XPAR_INTC_0_UARTLITE_1_VEC_ID);
+   xlprint("%-13s base:irq %08X:%d\n", "cmd_uart", XPAR_AXI_CM_UART_BASEADDR, XPAR_INTC_0_UARTLITE_0_VEC_ID);
+   xlprint("\n");
 
    xlprint("hw/sw stamp.id: %d %d\n", gc.sysid, FPGA_SYSID);
    xlprint("hw/sw stamp.epoch: %d %d\n", (uint32_t)gc.timestamp, FPGA_EPOCH);

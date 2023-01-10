@@ -51,9 +51,6 @@
 
 -----------------------------------------------------------------------------*/
 // TIMER CYCLE
-//    This value is used to set the interval for the timer() callback,
-//    in units of alt_nticks.
-#define  CFG_TIMER_CYCLE         1
 
 // ACTIVITY INDICATOR CYCLING
 //    This value is used to determine the activity indicator

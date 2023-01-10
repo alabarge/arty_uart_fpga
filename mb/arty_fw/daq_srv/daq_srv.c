@@ -198,7 +198,7 @@ uint32_t daq_msg(pcm_msg_t msg) {
          // RUN State
          sv.state         = DAQH_STATE_RUN;
          sv.adc_index     = 0;
-         sv.blklen        = ADC_POOL_CNT * sizeof(cm_pipe_daq_t);
+//         sv.blklen        = ADC_POOL_CNT * sizeof(cm_pipe_daq_t);
          // Issue the H/W Run Command
          daq_hal_run(&sv);
          cm_send_msg(CM_MSG_RESP, (pcm_msg_t)rsp, msg, sizeof(daq_run_msg_t), 0, 0);
@@ -213,9 +213,9 @@ uint32_t daq_msg(pcm_msg_t msg) {
          // send ADC_POOL_CNT packets
           tty_pipe(sv.adc_index, sv.blklen);
          // next location in circular memory
-         if (++sv.adc_index > (ADC_FIFO_SPAN / (ADC_POOL_CNT * sizeof(cm_pipe_daq_t)))) {
-            sv.adc_index = 0;
-         }
+//         if (++sv.adc_index > (ADC_FIFO_SPAN / (ADC_POOL_CNT * sizeof(cm_pipe_daq_t)))) {
+//            sv.adc_index = 0;
+//         }
       }
       // Transfer Done Indication, from FIFO, FTDI or COM
       else if (msg->p.flags & DAQ_INT_FLAG_PIPE) {

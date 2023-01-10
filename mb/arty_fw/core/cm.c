@@ -182,7 +182,7 @@ uint32_t cm_init(void) {
    // Device ID where they reside.
    //
    cm.id    = CM_ID_INSTANCE;
-   cm.devid = CM_DEV_DE0;
+   cm.devid = CM_DEV_ARTY;
 
    // Initialize the CM Objects
    for (i=0;i<=CM_MAX_OBJS;i++) {
@@ -565,12 +565,10 @@ pcmq_t cm_alloc(void) {
    uint32_t    i;
    pcm_msg_t   msg = NULL;
 
-   alt_irq_context context;
-
 // 7.5.5   Code
 
    // Disable ALL interrupts
-   context = alt_irq_disable_all();
+   microblaze_disable_interrupts();
 
    // Find next available slot
    for (i=0;i<CM_MSGQ_SLOTS;i++) {
@@ -595,7 +593,7 @@ pcmq_t cm_alloc(void) {
    }
 
    // Enable ALL interrupts
-   alt_irq_enable_all(context);
+   microblaze_enable_interrupts();
 
    if (gc.trace & CFG_TRACE_ERROR) {
       if (slot == NULL)
@@ -632,12 +630,10 @@ void cm_free(pcm_msg_t msg) {
 
    pcmq_t   slot;
 
-   alt_irq_context context;
-
 // 7.6.5   Code
 
    // Disable ALL interrupts
-   context = alt_irq_disable_all();
+   microblaze_disable_interrupts();
 
    // Release the Slot
    if (msg != NULL) {
@@ -651,7 +647,7 @@ void cm_free(pcm_msg_t msg) {
    }
 
    // Enable ALL interrupts
-   alt_irq_enable_all(context);
+   microblaze_enable_interrupts();
 
 } // end cm_free()
 
@@ -828,7 +824,7 @@ uint32_t cm_msg(pcm_msg_t msg) {
             // Send the Request
             result = cm_send(CM_MSG_DEV_RESP, &ps);
             // Reset Ping Timeout
-            gc.ping_time = alt_timestamp();
+            gc.ping_time = XTmrCtr_GetValue(&gc.freetimer, 0);
             gc.ping_cnt = 0;
             // Machine status to Connected
             gc.status |= CFG_STATUS_CONNECTED;
@@ -846,7 +842,7 @@ uint32_t cm_msg(pcm_msg_t msg) {
          // Machine status to Disconnected
          gc.status &= ~CFG_STATUS_CONNECTED;
          // Reset Ping Timeout
-         gc.ping_time = alt_timestamp();
+         gc.ping_time = XTmrCtr_GetValue(&gc.freetimer, 0);
          gc.ping_cnt = 0;
          // report disconnection
          if (gc.trace & CFG_TRACE_ID) {
@@ -882,7 +878,7 @@ uint32_t cm_msg(pcm_msg_t msg) {
          }
       }
       // Reset Ping Timeout
-      gc.ping_time = alt_timestamp();
+      gc.ping_time = XTmrCtr_GetValue(&gc.freetimer, 0);
       gc.ping_cnt = 0;
       // Machine status to Connected
       gc.status |= CFG_STATUS_CONNECTED;
@@ -927,7 +923,7 @@ uint32_t cm_msg(pcm_msg_t msg) {
    }
 
    // Reset Ping Timeout
-   gc.ping_time = alt_timestamp();
+   gc.ping_time = XTmrCtr_GetValue(&gc.freetimer, 0);
    gc.ping_cnt  = 0;
 
    // Free the Slot
@@ -1917,8 +1913,6 @@ void cm_qmsg(pcm_msg_t msg) {
 
    pcmq_t   slot;
 
-   alt_irq_context context;
-
 // 7.24.5   Code
 
    // Validate Message
@@ -1949,7 +1943,7 @@ void cm_qmsg(pcm_msg_t msg) {
       }
 
       // Disable ALL interrupts
-      context = alt_irq_disable_all();
+      microblaze_disable_interrupts();
 
       // log message
       cm_log(msg);
@@ -1962,7 +1956,7 @@ void cm_qmsg(pcm_msg_t msg) {
       cm.q_msg_cnt = (cm.q_msg_cnt + 1) & (CM_MSGQ_SLOTS - 1);
 
       // Enable ALL interrupts
-      alt_irq_enable_all(context);
+      microblaze_enable_interrupts();
 
    }
    else {
@@ -2001,12 +1995,10 @@ void cm_thread(void) {
    uint32_t    i;
    pcm_msg_t   msg;
 
-   alt_irq_context context;
-
 // 7.25.5   Code
 
    // Disable ALL interrupts
-   context = alt_irq_disable_all();
+   microblaze_disable_interrupts();
 
    // clear previous message
    slot = NULL;
@@ -2029,7 +2021,7 @@ void cm_thread(void) {
    }
 
    // Enable ALL interrupts
-   alt_irq_enable_all(context);
+   microblaze_enable_interrupts();
 
   // Route Message
   if (slot != NULL) {
@@ -2084,7 +2076,7 @@ void cm_log(pcm_msg_t msg) {
 // 7.26.4   Data Structures
 
    char    *dir;
-   char     line[512], cat[64];
+   char     line[512], cat[128];
    uint16_t i,j;
    uint16_t len = msg->h.msglen;
    char    *msgid = "-", *cmid = "-";
@@ -2099,7 +2091,7 @@ void cm_log(pcm_msg_t msg) {
 
     if (!(gc.trace & CFG_TRACE_CM_LOG)) return;
 
-    now = alt_timestamp();
+    now = XTmrCtr_GetValue(&gc.freetimer, 0);
     if (cm.last_us == 0) cm.last_us = now;
     delta = (double)(now - cm.last_us);
     if (delta != 0) delta = delta / 100E6;
@@ -2131,7 +2123,7 @@ void cm_log(pcm_msg_t msg) {
             cmid  = gc.msg_table[i].cmid_str;
          }
       }
-      sprintf(cat, " %6d  %3ld.%04ld  %s:%s\n", msg->h.msglen, delta_secs, delta_us, cmid, msgid);
+      sprintf(cat, " %6d  %3ld.%04ld  %2s:%2s\n", msg->h.msglen, delta_secs, delta_us, cmid, msgid);
       strcat(line, cat);
       xlprint("%s", line);
       // msg_parms_t is 4 bytes + body
@@ -2173,7 +2165,7 @@ void cm_log(pcm_msg_t msg) {
             cmid  = gc.msg_table[i].cmid_str;
          }
       }
-      sprintf(cat, " %6d  %3ld.%04ld  %s:%s\n", 1024, delta_secs, delta_us, cmid, msgid);
+      sprintf(cat, " %6d  %3ld.%04ld  %2s:%2s\n", 1024, delta_secs, delta_us, cmid, msgid);
       strcat(line, cat);
       xlprint("%s", line);
       // the next 48 bytes of pipe

@@ -251,7 +251,7 @@ typedef struct _cm_pipe_fixed_t {
 #define CM_MEDIA_SIM          0x7
 
 // Device Identifiers
-#define CM_DEV_ART            0x0
+#define CM_DEV_ARTY           0x0
 #define CM_DEV_WIN            0x1
 #define CM_DEV_BCAST          0x2
 #define CM_DEV_NULL           0xF

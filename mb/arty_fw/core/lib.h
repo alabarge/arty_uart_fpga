@@ -16,9 +16,9 @@
 #define  LIB_SPACE       0x10
 
 #define  CPU_CYCLES      1
-#define  MICROSECONDS   (SYSTIMER_FREQ / 1000000)
-#define  MILLISECONDS   (SYSTIMER_FREQ / 1000)
-#define  SECONDS        (SYSTIMER_FREQ)
+#define  MICROSECONDS   (XPAR_MB_CPU_FREQ / 1000000)
+#define  MILLISECONDS   (XPAR_MB_CPU_FREQ / 1000)
+#define  SECONDS        (XPAR_MB_CPU_FREQ)
 
 #define  CLK_START      1
 #define  CLK_STOP       2

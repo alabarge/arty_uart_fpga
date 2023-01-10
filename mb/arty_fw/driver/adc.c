@@ -78,7 +78,7 @@
 
 // 6.2  Local Data Structures
 
-   static   volatile padc_regs_t   regs = (volatile padc_regs_t)(XPAR_XADC_WIZ_0_BASEADDR);
+   static   volatile padc_regs_t   regs = (volatile padc_regs_t)(XPAR_AXI_XADC_BASEADDR);
 
 // 7 MODULE CODE
 

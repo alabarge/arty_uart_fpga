@@ -6,6 +6,8 @@
 #include "xil_exception.h"
 #include "xil_printf.h"
 #include "xtmrctr.h"
+#include "xwdttb.h"
+#include "xil_cache.h"
 
 #include "fpga_build.h"
 #include "gpio.h"
