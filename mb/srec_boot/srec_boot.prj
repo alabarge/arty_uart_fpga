@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ASCII"?>
-<sdkproject:SdkProject xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:sdkproject="http://www.xilinx.com/sdkproject" name="srec_boot" location="D:/arty_uart_fpga/mb/srec_boot" platform="D:/arty_uart_fpga/mb/arty_top/export/arty_top/arty_top.xpfm" platformUID="xilinx:arty-s7-50::0.0(custom)" systemProject="srec_boot_system" sysConfig="arty_top" runtime="C/C++" cpu="standalone_mb_cpu" cpuInstance="mb_cpu" os="standalone" mssSignature="a1cc3d4193599d3f86a107a65b2ced93">
-  <configuration name="Debug" id="xilinx.gnu.mb.exe.debug.694496571">
+<sdkproject:SdkProject xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:sdkproject="http://www.xilinx.com/sdkproject" name="srec_boot" location="D:/arty_uart_fpga/mb/srec_boot" platform="D:/arty_uart_fpga/mb/arty_top/export/arty_top/arty_top.xpfm" platformUID="xilinx:arty-s7-50::0.0(custom)" systemProject="srec_boot_system" sysConfig="arty_top" runtime="C/C++" cpu="standalone_mb_cpu" cpuInstance="mb_cpu" os="standalone" mssSignature="54a0776582869c0297e2e46d1f945877">
+  <configuration name="Debug" id="xilinx.gnu.mb.exe.debug.694496571" dirty="true">
     <configBuildOptions xsi:type="sdkproject:SdkOptions"/>
     <lastBuildOptions xsi:type="sdkproject:SdkOptions"/>
   </configuration>
