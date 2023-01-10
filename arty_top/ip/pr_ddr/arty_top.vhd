@@ -114,8 +114,8 @@ begin
    -- COMBINATORIAL OUTPUTS
    --
 
-   led1_rgb(0)          <= heartbeat;
-   led1_rgb(1)          <= '0';
+   led1_rgb(0)          <= '0';
+   led1_rgb(1)          <= heartbeat;
    led1_rgb(2)          <= '0';
    led0_rgb(0)          <= '0';
    led0_rgb(1)          <= '0';

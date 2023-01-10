@@ -41,6 +41,8 @@
 
 # BSP Settings files
 *.bsp
+*.xsa
+*.mmi
 
 # Kernel Module Compile Results
 *.mod*
