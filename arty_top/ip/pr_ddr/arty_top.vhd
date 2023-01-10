@@ -8,9 +8,9 @@ use work.lib_pkg.all;
 entity arty_top is
    port(
       -- Global Signals
-      CLK12MHZ             : in    std_logic;
-      sys_clk_i            : in    std_logic;
-      reset                : in    std_logic;
+      clk12mhz             : in    std_logic;
+      clk100mhz            : in    std_logic;
+      ext_resetn           : in    std_logic;
 
       -- DRAM Interface
       ddr3_sdram_addr      : out   std_logic_vector(13 downto 0);
@@ -102,6 +102,7 @@ signal reset_cnt           : unsigned(10 downto 0);
 signal sys_rst_n           : std_logic;
 signal heartbeat_count     : unsigned(25 downto 0);
 signal heartbeat           : std_logic;
+signal watchdog            : std_logic;
 
 --
 -- MAIN CODE
@@ -130,7 +131,7 @@ begin
    --
    u0 : entity work.mb_design_wrapper
       port map (
-         sys_clk_i                     => sys_clk_i,
+         clk100mhz                     => clk100mhz,
          ddr3_sdram_addr(13 downto 0)  => ddr3_sdram_addr(13 downto 0),
          ddr3_sdram_ba(2 downto 0)     => ddr3_sdram_ba(2 downto 0),
          ddr3_sdram_cas_n              => ddr3_sdram_cas_n,
@@ -158,7 +159,8 @@ begin
          qspi_flash_io2_io             => qspi_flash_io2_io,
          qspi_flash_io3_io             => qspi_flash_io3_io,
          qspi_flash_ss_io              => qspi_flash_ss_io,
-         reset                         => sys_rst_n,
+         resetn                        => sys_rst_n,
+         watchdog                      => watchdog,
          Vp_Vn_0_v_n                   => vn_in,
          Vp_Vn_0_v_p                   => vp_in,
          Vaux0_0_v_n                   => vauxn0,
@@ -184,11 +186,11 @@ begin
    --
    -- System Reset, 12MHZ
    --
-   process(reset, CLK12MHZ) begin
-      if (reset = '0') then
+   process(ext_resetn, clk12mhz) begin
+      if (ext_resetn = '0' or watchdog = '1') then
           reset_cnt        <= (others => '0');
           sys_rst_n        <= '0';
-      elsif (rising_edge(CLK12MHZ)) then
+      elsif (rising_edge(clk12mhz)) then
          -- hold reset low for ~5 microseconds then set high
          if (reset_cnt(8) = '1') then
             sys_rst_n      <= '1';
@@ -202,11 +204,11 @@ begin
    --
    -- Heartbeat, 12MHZ
    --
-   process(sys_rst_n, CLK12MHZ) begin
+   process(sys_rst_n, clk12mhz) begin
       if (sys_rst_n = '0') then
           heartbeat_count     <= (others => '0');
           heartbeat           <= '0';
-      elsif (rising_edge(CLK12MHZ)) then
+      elsif (rising_edge(clk12mhz)) then
           if (heartbeat_count(21) = '1') then
               heartbeat_count <= (others => '0');
               heartbeat       <= not heartbeat;

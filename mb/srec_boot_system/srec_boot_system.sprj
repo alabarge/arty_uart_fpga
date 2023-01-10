@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="ASCII"?>
-<systemproject:SystemProject xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:sdsproject="http://www.xilinx.com/sdsproject" xmlns:systemproject="http://www.xilinx.com/systemproject" name="srec_boot_system" platform="./arty_top/export/arty_top/arty_top.xpfm" platformUID="xilinx:arty-s7-50::0.0(custom)" sysConfig="arty_top" runtime="C/C++" rootFSLocation="" linuxImage="" sysroot="">
-  <configuration name="Debug" id="com.xilinx.sdx.system.managedbuilder.debugConfiguration.937996577">
+<systemproject:SystemProject xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:sdsproject="http://www.xilinx.com/sdsproject" xmlns:systemproject="http://www.xilinx.com/systemproject" name="srec_boot_system" platform="D:/arty_uart_fpga/mb/arty_top/export/arty_top/arty_top.xpfm" platformUID="xilinx:arty-s7-50::0.0(custom)" sysConfig="arty_top" runtime="C/C++" rootFSLocation="" linuxImage="" sysroot="">
+  <configuration name="Debug" id="com.xilinx.sdx.system.managedbuilder.debugConfiguration.993916378">
     <configBuildOptions xsi:type="systemproject:SystemOptions">
-      <applications name="srec_boot" domainName="standalone_microblaze_0" domainPrettyName="standalone_microblaze_0" appBuildConfig="Debug"/>
+      <applications name="srec_boot" domainName="standalone_mb_cpu" domainPrettyName="standalone_mb_cpu" appBuildConfig="Debug"/>
       <options xsi:type="sdsproject:Option" gensdcard="true" dmclkid="0"/>
     </configBuildOptions>
     <lastBuildOptions xsi:type="systemproject:SystemOptions">
-      <applications name="srec_boot" domainName="standalone_microblaze_0" domainPrettyName="standalone_microblaze_0" appBuildConfig="Debug"/>
+      <applications name="srec_boot" domainName="standalone_mb_cpu" domainPrettyName="standalone_mb_cpu" appBuildConfig="Debug"/>
       <options xsi:type="sdsproject:Option" gensdcard="true" dmclkid="0"/>
     </lastBuildOptions>
   </configuration>
-  <configuration name="Release" id="com.xilinx.sdx.system.managedbuilder.releaseConfiguration.14071415">
+  <configuration name="Release" id="com.xilinx.sdx.system.managedbuilder.releaseConfiguration.1221407921">
     <configBuildOptions xsi:type="systemproject:SystemOptions">
-      <applications name="srec_boot" domainName="standalone_microblaze_0" domainPrettyName="standalone_microblaze_0" appBuildConfig="Release"/>
+      <applications name="srec_boot" domainName="standalone_mb_cpu" domainPrettyName="standalone_mb_cpu" appBuildConfig="Release"/>
       <options xsi:type="sdsproject:Option" gensdcard="true" dmclkid="0"/>
     </configBuildOptions>
     <lastBuildOptions xsi:type="systemproject:SystemOptions">
-      <applications name="srec_boot" domainName="standalone_microblaze_0" domainPrettyName="standalone_microblaze_0" appBuildConfig="Release"/>
+      <applications name="srec_boot" domainName="standalone_mb_cpu" domainPrettyName="standalone_mb_cpu" appBuildConfig="Release"/>
       <options xsi:type="sdsproject:Option" gensdcard="true" dmclkid="0"/>
     </lastBuildOptions>
   </configuration>

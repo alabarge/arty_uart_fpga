@@ -1,23 +1,15 @@
 <?xml version="1.0" encoding="ASCII"?>
-<systemproject:SystemProject xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:sdsproject="http://www.xilinx.com/sdsproject" xmlns:systemproject="http://www.xilinx.com/systemproject" name="arty_fw_system" platform="./arty_top/export/arty_top/arty_top.xpfm" platformUID="xilinx:arty-s7-50::0.0(custom)" sysConfig="arty_top" runtime="C/C++" rootFSLocation="" linuxImage="" sysroot="">
-  <configuration name="Debug" id="com.xilinx.sdx.system.managedbuilder.debugConfiguration.318110036">
+<systemproject:SystemProject xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:sdkproject="http://www.xilinx.com/sdkproject" xmlns:systemproject="http://www.xilinx.com/systemproject" name="arty_fw_system" platform="D:/arty_uart_fpga/mb/arty_top/export/arty_top/arty_top.xpfm" platformUID="xilinx:arty-s7-50::0.0(custom)" sysConfig="arty_top" runtime="cpp" rootFSLocation="" linuxImage="" sysroot="">
+  <configuration name="Debug" id="com.xilinx.sdx.system.managedbuilder.debugConfiguration.748456985">
     <configBuildOptions xsi:type="systemproject:SystemOptions">
-      <applications name="arty_fw" domainName="standalone_microblaze_0" domainPrettyName="standalone_microblaze_0" appBuildConfig="Debug"/>
-      <options xsi:type="sdsproject:Option" gensdcard="true" dmclkid="0"/>
+      <applications name="arty_fw" domainName="standalone_mb_cpu" domainPrettyName="standalone_mb_cpu" appBuildConfig="Debug"/>
+      <options xsi:type="sdkproject:SdkOptions" generateSdCard="true"/>
     </configBuildOptions>
-    <lastBuildOptions xsi:type="systemproject:SystemOptions">
-      <applications name="arty_fw" domainName="standalone_microblaze_0" domainPrettyName="standalone_microblaze_0" appBuildConfig="Debug"/>
-      <options xsi:type="sdsproject:Option" gensdcard="true" dmclkid="0"/>
-    </lastBuildOptions>
   </configuration>
-  <configuration name="Release" id="com.xilinx.sdx.system.managedbuilder.releaseConfiguration.766560513">
+  <configuration name="Release" id="com.xilinx.sdx.system.managedbuilder.releaseConfiguration.1118889378">
     <configBuildOptions xsi:type="systemproject:SystemOptions">
-      <applications name="arty_fw" domainName="standalone_microblaze_0" domainPrettyName="standalone_microblaze_0" appBuildConfig="Release"/>
-      <options xsi:type="sdsproject:Option" gensdcard="true" dmclkid="0"/>
+      <applications name="arty_fw" domainName="standalone_mb_cpu" domainPrettyName="standalone_mb_cpu" appBuildConfig="Release"/>
+      <options xsi:type="sdkproject:SdkOptions" generateSdCard="true"/>
     </configBuildOptions>
-    <lastBuildOptions xsi:type="systemproject:SystemOptions">
-      <applications name="arty_fw" domainName="standalone_microblaze_0" domainPrettyName="standalone_microblaze_0" appBuildConfig="Release"/>
-      <options xsi:type="sdsproject:Option" gensdcard="true" dmclkid="0"/>
-    </lastBuildOptions>
   </configuration>
 </systemproject:SystemProject>

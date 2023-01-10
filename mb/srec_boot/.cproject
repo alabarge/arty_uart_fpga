@@ -3,9 +3,9 @@
     	
     <storageModule moduleId="org.eclipse.cdt.core.settings">
         		
-        <cconfiguration id="xilinx.gnu.mb.exe.debug.517956505">
+        <cconfiguration id="xilinx.gnu.mb.exe.debug.694496571">
             			
-            <storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="xilinx.gnu.mb.exe.debug.517956505" moduleId="org.eclipse.cdt.core.settings" name="Debug">
+            <storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="xilinx.gnu.mb.exe.debug.694496571" moduleId="org.eclipse.cdt.core.settings" name="Debug">
                 				
                 <externalSettings/>
                 				
@@ -29,63 +29,63 @@
             			
             <storageModule moduleId="cdtBuildSystem" version="4.0.0">
                 				
-                <configuration artifactExtension="elf" artifactName="${ProjName}" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.exe" buildProperties="org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.exe,org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.debug" cleanCommand="rm -rf" description="" id="xilinx.gnu.mb.exe.debug.517956505" name="Debug" parent="xilinx.gnu.mb.exe.debug">
+                <configuration artifactExtension="elf" artifactName="${ProjName}" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.exe" buildProperties="org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.exe,org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.debug" cleanCommand="rm -rf" description="" id="xilinx.gnu.mb.exe.debug.694496571" name="Debug" parent="xilinx.gnu.mb.exe.debug">
                     					
-                    <folderInfo id="xilinx.gnu.mb.exe.debug.517956505." name="/" resourcePath="">
+                    <folderInfo id="xilinx.gnu.mb.exe.debug.694496571." name="/" resourcePath="">
                         						
-                        <toolChain id="xilinx.gnu.mb.exe.debug.toolchain.389662905" name="Xilinx MicroBlaze GNU Toolchain" superClass="xilinx.gnu.mb.exe.debug.toolchain">
+                        <toolChain id="xilinx.gnu.mb.exe.debug.toolchain.1210881618" name="Xilinx MicroBlaze GNU Toolchain" superClass="xilinx.gnu.mb.exe.debug.toolchain">
                             							
-                            <targetPlatform binaryParser="com.xilinx.sdk.managedbuilder.XELF.mb" id="xilinx.mb.target.gnu.base.debug.766126330" isAbstract="false" name="Debug Platform" superClass="xilinx.mb.target.gnu.base.debug"/>
+                            <targetPlatform binaryParser="com.xilinx.sdk.managedbuilder.XELF.mb" id="xilinx.mb.target.gnu.base.debug.1322345180" isAbstract="false" name="Debug Platform" superClass="xilinx.mb.target.gnu.base.debug"/>
                             							
-                            <builder buildPath="${workspace_loc:/srec_boot}/Debug" enableAutoBuild="true" id="xilinx.gnu.mb.toolchain.builder.debug.1509905798" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="GNU make" superClass="xilinx.gnu.mb.toolchain.builder.debug"/>
+                            <builder buildPath="${workspace_loc:/srec_boot}/Debug" enableAutoBuild="true" id="xilinx.gnu.mb.toolchain.builder.debug.1872948636" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="GNU make" superClass="xilinx.gnu.mb.toolchain.builder.debug"/>
                             							
-                            <tool id="xilinx.gnu.mb.c.toolchain.assembler.debug.113774017" name="MicroBlaze gcc assembler" superClass="xilinx.gnu.mb.c.toolchain.assembler.debug">
+                            <tool id="xilinx.gnu.mb.c.toolchain.assembler.debug.814352008" name="MicroBlaze gcc assembler" superClass="xilinx.gnu.mb.c.toolchain.assembler.debug">
                                 								
-                                <option id="xilinx.gnu.mb.assembler.usele.302734979" name="Produce little endian code (-mlittle-endian)" superClass="xilinx.gnu.mb.assembler.usele" value="true" valueType="boolean"/>
+                                <option id="xilinx.gnu.mb.assembler.usele.732696957" name="Produce little endian code (-mlittle-endian)" superClass="xilinx.gnu.mb.assembler.usele" value="true" valueType="boolean"/>
                                 								
-                                <inputType id="xilinx.gnu.assembler.input.751702270" superClass="xilinx.gnu.assembler.input"/>
+                                <inputType id="xilinx.gnu.assembler.input.725340671" superClass="xilinx.gnu.assembler.input"/>
                                 							
                             </tool>
                             							
-                            <tool id="xilinx.gnu.mb.c.toolchain.compiler.debug.359534665" name="MicroBlaze gcc compiler" superClass="xilinx.gnu.mb.c.toolchain.compiler.debug">
+                            <tool id="xilinx.gnu.mb.c.toolchain.compiler.debug.1986267247" name="MicroBlaze gcc compiler" superClass="xilinx.gnu.mb.c.toolchain.compiler.debug">
                                 								
-                                <option defaultValue="gnu.c.optimization.level.none" id="xilinx.gnu.compiler.option.optimization.level.377128755" name="Optimization Level" superClass="xilinx.gnu.compiler.option.optimization.level" useByScannerDiscovery="false" value="gnu.c.optimization.level.size" valueType="enumerated"/>
+                                <option defaultValue="gnu.c.optimization.level.none" id="xilinx.gnu.compiler.option.optimization.level.674399543" name="Optimization Level" superClass="xilinx.gnu.compiler.option.optimization.level" valueType="enumerated"/>
                                 								
-                                <option id="xilinx.gnu.compiler.option.debugging.level.1666172829" name="Debug Level" superClass="xilinx.gnu.compiler.option.debugging.level" useByScannerDiscovery="false" value="gnu.c.debugging.level.max" valueType="enumerated"/>
+                                <option id="xilinx.gnu.compiler.option.debugging.level.1029159105" name="Debug Level" superClass="xilinx.gnu.compiler.option.debugging.level" useByScannerDiscovery="false" value="gnu.c.debugging.level.max" valueType="enumerated"/>
                                 								
-                                <option id="xilinx.gnu.mb.compiler.inferred.mbversion.1225255158" name="MicroBlaze Version" superClass="xilinx.gnu.mb.compiler.inferred.mbversion" value="11.0" valueType="string"/>
+                                <option id="xilinx.gnu.mb.compiler.inferred.mbversion.803060932" name="MicroBlaze Version" superClass="xilinx.gnu.mb.compiler.inferred.mbversion" value="11.0" valueType="string"/>
                                 								
-                                <option id="xilinx.gnu.mb.compiler.inferred.norelax.385330421" name="No relaxation (-Wl,--no-relax)" superClass="xilinx.gnu.mb.compiler.inferred.norelax" value="true" valueType="boolean"/>
+                                <option id="xilinx.gnu.mb.compiler.inferred.norelax.2111436641" name="No relaxation (-Wl,--no-relax)" superClass="xilinx.gnu.mb.compiler.inferred.norelax" value="true" valueType="boolean"/>
                                 								
-                                <option id="xilinx.gnu.mb.compiler.inferred.garbage.1778356517" name="Enable garbage collector (-ffunction-sections -fdata-sections)" superClass="xilinx.gnu.mb.compiler.inferred.garbage" value="true" valueType="boolean"/>
+                                <option id="xilinx.gnu.mb.compiler.inferred.garbage.1739890680" name="Enable garbage collector (-ffunction-sections -fdata-sections)" superClass="xilinx.gnu.mb.compiler.inferred.garbage" value="true" valueType="boolean"/>
                                 								
-                                <option id="xilinx.gnu.mb.compiler.inferred.usele.460795479" name="Produce little endian code (-mlittle-endian)" superClass="xilinx.gnu.mb.compiler.inferred.usele" value="true" valueType="boolean"/>
+                                <option id="xilinx.gnu.mb.compiler.inferred.usele.331529852" name="Produce little endian code (-mlittle-endian)" superClass="xilinx.gnu.mb.compiler.inferred.usele" value="true" valueType="boolean"/>
                                 								
-                                <option id="xilinx.gnu.compiler.inferred.swplatform.includes.23504358" name="Software Platform Include Path" superClass="xilinx.gnu.compiler.inferred.swplatform.includes" valueType="includePath">
+                                <option id="xilinx.gnu.compiler.inferred.swplatform.includes.840749885" name="Software Platform Include Path" superClass="xilinx.gnu.compiler.inferred.swplatform.includes" valueType="includePath">
                                     									
                                     <listOptionValue builtIn="false" value="${resolvePlatformFile:project=srec_boot,fileType=bspInclude}"/>
                                     								
                                 </option>
                                 								
-                                <inputType id="xilinx.gnu.compiler.input.1987776953" name="C source files" superClass="xilinx.gnu.compiler.input"/>
+                                <inputType id="xilinx.gnu.compiler.input.1472758914" name="C source files" superClass="xilinx.gnu.compiler.input"/>
                                 							
                             </tool>
                             							
-                            <tool id="xilinx.gnu.mb.cxx.toolchain.compiler.debug.1227901574" name="MicroBlaze g++ compiler" superClass="xilinx.gnu.mb.cxx.toolchain.compiler.debug">
+                            <tool id="xilinx.gnu.mb.cxx.toolchain.compiler.debug.912495254" name="MicroBlaze g++ compiler" superClass="xilinx.gnu.mb.cxx.toolchain.compiler.debug">
                                 								
-                                <option defaultValue="gnu.c.optimization.level.none" id="xilinx.gnu.compiler.option.optimization.level.1342451477" name="Optimization Level" superClass="xilinx.gnu.compiler.option.optimization.level" valueType="enumerated"/>
+                                <option defaultValue="gnu.c.optimization.level.none" id="xilinx.gnu.compiler.option.optimization.level.137894461" name="Optimization Level" superClass="xilinx.gnu.compiler.option.optimization.level" valueType="enumerated"/>
                                 								
-                                <option id="xilinx.gnu.compiler.option.debugging.level.1526441691" name="Debug Level" superClass="xilinx.gnu.compiler.option.debugging.level" useByScannerDiscovery="false" value="gnu.c.debugging.level.max" valueType="enumerated"/>
+                                <option id="xilinx.gnu.compiler.option.debugging.level.852841392" name="Debug Level" superClass="xilinx.gnu.compiler.option.debugging.level" useByScannerDiscovery="false" value="gnu.c.debugging.level.max" valueType="enumerated"/>
                                 								
-                                <option id="xilinx.gnu.mb.compiler.inferred.mbversion.1923220820" name="MicroBlaze Version" superClass="xilinx.gnu.mb.compiler.inferred.mbversion" value="11.0" valueType="string"/>
+                                <option id="xilinx.gnu.mb.compiler.inferred.mbversion.1481119025" name="MicroBlaze Version" superClass="xilinx.gnu.mb.compiler.inferred.mbversion" value="11.0" valueType="string"/>
                                 								
-                                <option id="xilinx.gnu.mb.compiler.inferred.norelax.207457493" name="No relaxation (-Wl,--no-relax)" superClass="xilinx.gnu.mb.compiler.inferred.norelax" value="true" valueType="boolean"/>
+                                <option id="xilinx.gnu.mb.compiler.inferred.norelax.1600228793" name="No relaxation (-Wl,--no-relax)" superClass="xilinx.gnu.mb.compiler.inferred.norelax" value="true" valueType="boolean"/>
                                 								
-                                <option id="xilinx.gnu.mb.compiler.inferred.garbage.939099957" name="Enable garbage collector (-ffunction-sections -fdata-sections)" superClass="xilinx.gnu.mb.compiler.inferred.garbage" value="true" valueType="boolean"/>
+                                <option id="xilinx.gnu.mb.compiler.inferred.garbage.1180696777" name="Enable garbage collector (-ffunction-sections -fdata-sections)" superClass="xilinx.gnu.mb.compiler.inferred.garbage" value="true" valueType="boolean"/>
                                 								
-                                <option id="xilinx.gnu.mb.compiler.inferred.usele.752948452" name="Produce little endian code (-mlittle-endian)" superClass="xilinx.gnu.mb.compiler.inferred.usele" value="true" valueType="boolean"/>
+                                <option id="xilinx.gnu.mb.compiler.inferred.usele.1061400724" name="Produce little endian code (-mlittle-endian)" superClass="xilinx.gnu.mb.compiler.inferred.usele" value="true" valueType="boolean"/>
                                 								
-                                <option id="xilinx.gnu.compiler.inferred.swplatform.includes.1951699324" name="Software Platform Include Path" superClass="xilinx.gnu.compiler.inferred.swplatform.includes" valueType="includePath">
+                                <option id="xilinx.gnu.compiler.inferred.swplatform.includes.1728946168" name="Software Platform Include Path" superClass="xilinx.gnu.compiler.inferred.swplatform.includes" valueType="includePath">
                                     									
                                     <listOptionValue builtIn="false" value="${resolvePlatformFile:project=srec_boot,fileType=bspInclude}"/>
                                     								
@@ -93,33 +93,33 @@
                                 							
                             </tool>
                             							
-                            <tool id="xilinx.gnu.mb.toolchain.archiver.74442662" name="MicroBlaze archiver" superClass="xilinx.gnu.mb.toolchain.archiver"/>
+                            <tool id="xilinx.gnu.mb.toolchain.archiver.667687213" name="MicroBlaze archiver" superClass="xilinx.gnu.mb.toolchain.archiver"/>
                             							
-                            <tool id="xilinx.gnu.mb.c.toolchain.linker.debug.1727883723" name="MicroBlaze gcc linker" superClass="xilinx.gnu.mb.c.toolchain.linker.debug">
+                            <tool id="xilinx.gnu.mb.c.toolchain.linker.debug.380846604" name="MicroBlaze gcc linker" superClass="xilinx.gnu.mb.c.toolchain.linker.debug">
                                 								
-                                <option id="xilinx.gnu.mb.linker.inferred.mbversion.1818961135" name="MicroBlaze Version" superClass="xilinx.gnu.mb.linker.inferred.mbversion" value="11.0" valueType="string"/>
+                                <option id="xilinx.gnu.mb.linker.inferred.mbversion.2002608380" name="MicroBlaze Version" superClass="xilinx.gnu.mb.linker.inferred.mbversion" value="11.0" valueType="string"/>
                                 								
-                                <option id="xilinx.gnu.mb.linker.inferred.norelax.490289363" name="No relaxation (-Wl,--no-relax)" superClass="xilinx.gnu.mb.linker.inferred.norelax" value="true" valueType="boolean"/>
+                                <option id="xilinx.gnu.mb.linker.inferred.norelax.198932010" name="No relaxation (-Wl,--no-relax)" superClass="xilinx.gnu.mb.linker.inferred.norelax" value="true" valueType="boolean"/>
                                 								
-                                <option id="xilinx.gnu.mb.linker.inferred.garbage.18443597" name="Enable garbage collector (-Wl,--gc-sections)" superClass="xilinx.gnu.mb.linker.inferred.garbage" value="true" valueType="boolean"/>
+                                <option id="xilinx.gnu.mb.linker.inferred.garbage.144315404" name="Enable garbage collector (-Wl,--gc-sections)" superClass="xilinx.gnu.mb.linker.inferred.garbage" value="true" valueType="boolean"/>
                                 								
-                                <option id="xilinx.gnu.mb.linker.inferred.usele.1867563335" name="Produce little endian artifacts (-mlittle-endian)" superClass="xilinx.gnu.mb.linker.inferred.usele" value="true" valueType="boolean"/>
+                                <option id="xilinx.gnu.mb.linker.inferred.usele.1011432339" name="Produce little endian artifacts (-mlittle-endian)" superClass="xilinx.gnu.mb.linker.inferred.usele" value="true" valueType="boolean"/>
                                 								
-                                <option id="xilinx.gnu.linker.inferred.swplatform.lpath.1329843675" name="Software Platform Library Path" superClass="xilinx.gnu.linker.inferred.swplatform.lpath" valueType="libPaths">
+                                <option id="xilinx.gnu.linker.inferred.swplatform.lpath.2127235792" name="Software Platform Library Path" superClass="xilinx.gnu.linker.inferred.swplatform.lpath" valueType="libPaths">
                                     									
                                     <listOptionValue builtIn="false" value="${resolvePlatformFile:project=srec_boot,fileType=bspLib}"/>
                                     								
                                 </option>
                                 								
-                                <option id="xilinx.gnu.linker.inferred.swplatform.flags.73554275" name="Software Platform Inferred Flags" superClass="xilinx.gnu.linker.inferred.swplatform.flags" valueType="libs">
+                                <option id="xilinx.gnu.linker.inferred.swplatform.flags.173684435" name="Software Platform Inferred Flags" superClass="xilinx.gnu.linker.inferred.swplatform.flags" valueType="libs">
                                     									
                                     <listOptionValue builtIn="false" value="-Wl,--start-group,-lxil,-lgcc,-lc,--end-group"/>
                                     								
                                 </option>
                                 								
-                                <option id="xilinx.gnu.c.linker.option.lscript.1058889210" name="Linker Script" superClass="xilinx.gnu.c.linker.option.lscript" value="../src/lscript.ld" valueType="string"/>
+                                <option id="xilinx.gnu.c.linker.option.lscript.976748598" name="Linker Script" superClass="xilinx.gnu.c.linker.option.lscript" value="../src/lscript.ld" valueType="string"/>
                                 								
-                                <inputType id="xilinx.gnu.linker.input.852183698" superClass="xilinx.gnu.linker.input">
+                                <inputType id="xilinx.gnu.linker.input.2131675270" superClass="xilinx.gnu.linker.input">
                                     									
                                     <additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
                                     									
@@ -127,37 +127,37 @@
                                     								
                                 </inputType>
                                 								
-                                <inputType id="xilinx.gnu.linker.input.lscript.651256932" name="Linker Script" superClass="xilinx.gnu.linker.input.lscript"/>
+                                <inputType id="xilinx.gnu.linker.input.lscript.284069670" name="Linker Script" superClass="xilinx.gnu.linker.input.lscript"/>
                                 							
                             </tool>
                             							
-                            <tool id="xilinx.gnu.mb.cxx.toolchain.linker.debug.1827066530" name="MicroBlaze g++ linker" superClass="xilinx.gnu.mb.cxx.toolchain.linker.debug">
+                            <tool id="xilinx.gnu.mb.cxx.toolchain.linker.debug.58388497" name="MicroBlaze g++ linker" superClass="xilinx.gnu.mb.cxx.toolchain.linker.debug">
                                 								
-                                <option id="xilinx.gnu.mb.linker.inferred.mbversion.1260772187" name="MicroBlaze Version" superClass="xilinx.gnu.mb.linker.inferred.mbversion" value="11.0" valueType="string"/>
+                                <option id="xilinx.gnu.mb.linker.inferred.mbversion.1550599217" name="MicroBlaze Version" superClass="xilinx.gnu.mb.linker.inferred.mbversion" value="11.0" valueType="string"/>
                                 								
-                                <option id="xilinx.gnu.mb.linker.inferred.norelax.1346138623" name="No relaxation (-Wl,--no-relax)" superClass="xilinx.gnu.mb.linker.inferred.norelax" value="true" valueType="boolean"/>
+                                <option id="xilinx.gnu.mb.linker.inferred.norelax.1856864540" name="No relaxation (-Wl,--no-relax)" superClass="xilinx.gnu.mb.linker.inferred.norelax" value="true" valueType="boolean"/>
                                 								
-                                <option id="xilinx.gnu.mb.linker.inferred.garbage.598255016" name="Enable garbage collector (-Wl,--gc-sections)" superClass="xilinx.gnu.mb.linker.inferred.garbage" value="true" valueType="boolean"/>
+                                <option id="xilinx.gnu.mb.linker.inferred.garbage.1421674920" name="Enable garbage collector (-Wl,--gc-sections)" superClass="xilinx.gnu.mb.linker.inferred.garbage" value="true" valueType="boolean"/>
                                 								
-                                <option id="xilinx.gnu.mb.linker.inferred.usele.1241175610" name="Produce little endian artifacts (-mlittle-endian)" superClass="xilinx.gnu.mb.linker.inferred.usele" value="true" valueType="boolean"/>
+                                <option id="xilinx.gnu.mb.linker.inferred.usele.356974070" name="Produce little endian artifacts (-mlittle-endian)" superClass="xilinx.gnu.mb.linker.inferred.usele" value="true" valueType="boolean"/>
                                 								
-                                <option id="xilinx.gnu.linker.inferred.swplatform.lpath.1335665648" name="Software Platform Library Path" superClass="xilinx.gnu.linker.inferred.swplatform.lpath" valueType="libPaths">
+                                <option id="xilinx.gnu.linker.inferred.swplatform.lpath.876724903" name="Software Platform Library Path" superClass="xilinx.gnu.linker.inferred.swplatform.lpath" valueType="libPaths">
                                     									
                                     <listOptionValue builtIn="false" value="${resolvePlatformFile:project=srec_boot,fileType=bspLib}"/>
                                     								
                                 </option>
                                 								
-                                <option id="xilinx.gnu.linker.inferred.swplatform.flags.451602738" name="Software Platform Inferred Flags" superClass="xilinx.gnu.linker.inferred.swplatform.flags" valueType="libs">
+                                <option id="xilinx.gnu.linker.inferred.swplatform.flags.137972087" name="Software Platform Inferred Flags" superClass="xilinx.gnu.linker.inferred.swplatform.flags" valueType="libs">
                                     									
                                     <listOptionValue builtIn="false" value="-Wl,--start-group,-lxil,-lgcc,-lc,--end-group"/>
                                     								
                                 </option>
                                 								
-                                <option id="xilinx.gnu.c.linker.option.lscript.851572467" name="Linker Script" superClass="xilinx.gnu.c.linker.option.lscript" value="../src/lscript.ld" valueType="string"/>
+                                <option id="xilinx.gnu.c.linker.option.lscript.419242839" name="Linker Script" superClass="xilinx.gnu.c.linker.option.lscript" value="../src/lscript.ld" valueType="string"/>
                                 							
                             </tool>
                             							
-                            <tool id="xilinx.gnu.mb.size.debug.1087351472" name="MicroBlaze Print Size" superClass="xilinx.gnu.mb.size.debug"/>
+                            <tool id="xilinx.gnu.mb.size.debug.90073901" name="MicroBlaze Print Size" superClass="xilinx.gnu.mb.size.debug"/>
                             						
                         </toolChain>
                         					
@@ -177,9 +177,9 @@
             		
         </cconfiguration>
         		
-        <cconfiguration id="xilinx.gnu.mb.exe.release.615483967">
+        <cconfiguration id="xilinx.gnu.mb.exe.release.768599653">
             			
-            <storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="xilinx.gnu.mb.exe.release.615483967" moduleId="org.eclipse.cdt.core.settings" name="Release">
+            <storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="xilinx.gnu.mb.exe.release.768599653" moduleId="org.eclipse.cdt.core.settings" name="Release">
                 				
                 <externalSettings/>
                 				
@@ -203,63 +203,63 @@
             			
             <storageModule moduleId="cdtBuildSystem" version="4.0.0">
                 				
-                <configuration artifactExtension="elf" artifactName="${ProjName}" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.exe" buildProperties="org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.exe,org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.release" cleanCommand="rm -rf" description="" id="xilinx.gnu.mb.exe.release.615483967" name="Release" parent="xilinx.gnu.mb.exe.release">
+                <configuration artifactExtension="elf" artifactName="${ProjName}" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.exe" buildProperties="org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.exe,org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.release" cleanCommand="rm -rf" description="" id="xilinx.gnu.mb.exe.release.768599653" name="Release" parent="xilinx.gnu.mb.exe.release">
                     					
-                    <folderInfo id="xilinx.gnu.mb.exe.release.615483967." name="/" resourcePath="">
+                    <folderInfo id="xilinx.gnu.mb.exe.release.768599653." name="/" resourcePath="">
                         						
-                        <toolChain id="xilinx.gnu.mb.exe.release.toolchain.1009669112" name="Xilinx MicroBlaze GNU Toolchain" superClass="xilinx.gnu.mb.exe.release.toolchain">
+                        <toolChain id="xilinx.gnu.mb.exe.release.toolchain.971065759" name="Xilinx MicroBlaze GNU Toolchain" superClass="xilinx.gnu.mb.exe.release.toolchain">
                             							
-                            <targetPlatform binaryParser="com.xilinx.sdk.managedbuilder.XELF.mb" id="xilinx.mb.target.gnu.base.release.1843365892" isAbstract="false" name="Debug Platform" superClass="xilinx.mb.target.gnu.base.release"/>
+                            <targetPlatform binaryParser="com.xilinx.sdk.managedbuilder.XELF.mb" id="xilinx.mb.target.gnu.base.release.160881180" isAbstract="false" name="Debug Platform" superClass="xilinx.mb.target.gnu.base.release"/>
                             							
-                            <builder buildPath="${workspace_loc:/srec_boot}/Release" enableAutoBuild="true" id="xilinx.gnu.mb.toolchain.builder.release.742777220" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="GNU make" superClass="xilinx.gnu.mb.toolchain.builder.release"/>
+                            <builder buildPath="${workspace_loc:/srec_boot}/Release" enableAutoBuild="true" id="xilinx.gnu.mb.toolchain.builder.release.1931471131" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="GNU make" superClass="xilinx.gnu.mb.toolchain.builder.release"/>
                             							
-                            <tool id="xilinx.gnu.mb.c.toolchain.assembler.release.1874917575" name="MicroBlaze gcc assembler" superClass="xilinx.gnu.mb.c.toolchain.assembler.release">
+                            <tool id="xilinx.gnu.mb.c.toolchain.assembler.release.1934183735" name="MicroBlaze gcc assembler" superClass="xilinx.gnu.mb.c.toolchain.assembler.release">
                                 								
-                                <option id="xilinx.gnu.mb.assembler.usele.614237739" name="Produce little endian code (-mlittle-endian)" superClass="xilinx.gnu.mb.assembler.usele" value="true" valueType="boolean"/>
+                                <option id="xilinx.gnu.mb.assembler.usele.457599511" name="Produce little endian code (-mlittle-endian)" superClass="xilinx.gnu.mb.assembler.usele" value="true" valueType="boolean"/>
                                 								
-                                <inputType id="xilinx.gnu.assembler.input.1464347987" superClass="xilinx.gnu.assembler.input"/>
+                                <inputType id="xilinx.gnu.assembler.input.126550450" superClass="xilinx.gnu.assembler.input"/>
                                 							
                             </tool>
                             							
-                            <tool id="xilinx.gnu.mb.c.toolchain.compiler.release.635151849" name="MicroBlaze gcc compiler" superClass="xilinx.gnu.mb.c.toolchain.compiler.release">
+                            <tool id="xilinx.gnu.mb.c.toolchain.compiler.release.456476124" name="MicroBlaze gcc compiler" superClass="xilinx.gnu.mb.c.toolchain.compiler.release">
                                 								
-                                <option defaultValue="gnu.c.optimization.level.more" id="xilinx.gnu.compiler.option.optimization.level.856176889" name="Optimization Level" superClass="xilinx.gnu.compiler.option.optimization.level" useByScannerDiscovery="false" value="gnu.c.optimization.level.size" valueType="enumerated"/>
+                                <option defaultValue="gnu.c.optimization.level.more" id="xilinx.gnu.compiler.option.optimization.level.548449424" name="Optimization Level" superClass="xilinx.gnu.compiler.option.optimization.level" useByScannerDiscovery="false" value="gnu.c.optimization.level.size" valueType="enumerated"/>
                                 								
-                                <option id="xilinx.gnu.compiler.option.debugging.level.1588947989" name="Debug Level" superClass="xilinx.gnu.compiler.option.debugging.level" useByScannerDiscovery="false" value="gnu.c.debugging.level.none" valueType="enumerated"/>
+                                <option id="xilinx.gnu.compiler.option.debugging.level.895958145" name="Debug Level" superClass="xilinx.gnu.compiler.option.debugging.level" useByScannerDiscovery="false" value="gnu.c.debugging.level.none" valueType="enumerated"/>
                                 								
-                                <option id="xilinx.gnu.mb.compiler.inferred.mbversion.1202409090" name="MicroBlaze Version" superClass="xilinx.gnu.mb.compiler.inferred.mbversion" value="11.0" valueType="string"/>
+                                <option id="xilinx.gnu.mb.compiler.inferred.mbversion.1870428017" name="MicroBlaze Version" superClass="xilinx.gnu.mb.compiler.inferred.mbversion" value="11.0" valueType="string"/>
                                 								
-                                <option id="xilinx.gnu.mb.compiler.inferred.norelax.150169231" name="No relaxation (-Wl,--no-relax)" superClass="xilinx.gnu.mb.compiler.inferred.norelax" value="true" valueType="boolean"/>
+                                <option id="xilinx.gnu.mb.compiler.inferred.norelax.564050856" name="No relaxation (-Wl,--no-relax)" superClass="xilinx.gnu.mb.compiler.inferred.norelax" value="true" valueType="boolean"/>
                                 								
-                                <option id="xilinx.gnu.mb.compiler.inferred.garbage.1792827749" name="Enable garbage collector (-ffunction-sections -fdata-sections)" superClass="xilinx.gnu.mb.compiler.inferred.garbage" value="true" valueType="boolean"/>
+                                <option id="xilinx.gnu.mb.compiler.inferred.garbage.485022698" name="Enable garbage collector (-ffunction-sections -fdata-sections)" superClass="xilinx.gnu.mb.compiler.inferred.garbage" value="true" valueType="boolean"/>
                                 								
-                                <option id="xilinx.gnu.mb.compiler.inferred.usele.281015691" name="Produce little endian code (-mlittle-endian)" superClass="xilinx.gnu.mb.compiler.inferred.usele" value="true" valueType="boolean"/>
+                                <option id="xilinx.gnu.mb.compiler.inferred.usele.48121662" name="Produce little endian code (-mlittle-endian)" superClass="xilinx.gnu.mb.compiler.inferred.usele" value="true" valueType="boolean"/>
                                 								
-                                <option id="xilinx.gnu.compiler.inferred.swplatform.includes.41661316" name="Software Platform Include Path" superClass="xilinx.gnu.compiler.inferred.swplatform.includes" valueType="includePath">
+                                <option id="xilinx.gnu.compiler.inferred.swplatform.includes.704275397" name="Software Platform Include Path" superClass="xilinx.gnu.compiler.inferred.swplatform.includes" valueType="includePath">
                                     									
                                     <listOptionValue builtIn="false" value="${resolvePlatformFile:project=srec_boot,fileType=bspInclude}"/>
                                     								
                                 </option>
                                 								
-                                <inputType id="xilinx.gnu.compiler.input.594097282" name="C source files" superClass="xilinx.gnu.compiler.input"/>
+                                <inputType id="xilinx.gnu.compiler.input.1420501914" name="C source files" superClass="xilinx.gnu.compiler.input"/>
                                 							
                             </tool>
                             							
-                            <tool id="xilinx.gnu.mb.cxx.toolchain.compiler.release.985643235" name="MicroBlaze g++ compiler" superClass="xilinx.gnu.mb.cxx.toolchain.compiler.release">
+                            <tool id="xilinx.gnu.mb.cxx.toolchain.compiler.release.951367227" name="MicroBlaze g++ compiler" superClass="xilinx.gnu.mb.cxx.toolchain.compiler.release">
                                 								
-                                <option defaultValue="gnu.c.optimization.level.more" id="xilinx.gnu.compiler.option.optimization.level.8044494" name="Optimization Level" superClass="xilinx.gnu.compiler.option.optimization.level" valueType="enumerated"/>
+                                <option defaultValue="gnu.c.optimization.level.more" id="xilinx.gnu.compiler.option.optimization.level.1615354748" name="Optimization Level" superClass="xilinx.gnu.compiler.option.optimization.level" valueType="enumerated"/>
                                 								
-                                <option id="xilinx.gnu.compiler.option.debugging.level.1388546993" name="Debug Level" superClass="xilinx.gnu.compiler.option.debugging.level" useByScannerDiscovery="false" value="gnu.c.debugging.level.none" valueType="enumerated"/>
+                                <option id="xilinx.gnu.compiler.option.debugging.level.1513008538" name="Debug Level" superClass="xilinx.gnu.compiler.option.debugging.level" useByScannerDiscovery="false" value="gnu.c.debugging.level.none" valueType="enumerated"/>
                                 								
-                                <option id="xilinx.gnu.mb.compiler.inferred.mbversion.1913463941" name="MicroBlaze Version" superClass="xilinx.gnu.mb.compiler.inferred.mbversion" value="11.0" valueType="string"/>
+                                <option id="xilinx.gnu.mb.compiler.inferred.mbversion.2006009330" name="MicroBlaze Version" superClass="xilinx.gnu.mb.compiler.inferred.mbversion" value="11.0" valueType="string"/>
                                 								
-                                <option id="xilinx.gnu.mb.compiler.inferred.norelax.2051093080" name="No relaxation (-Wl,--no-relax)" superClass="xilinx.gnu.mb.compiler.inferred.norelax" value="true" valueType="boolean"/>
+                                <option id="xilinx.gnu.mb.compiler.inferred.norelax.1127239511" name="No relaxation (-Wl,--no-relax)" superClass="xilinx.gnu.mb.compiler.inferred.norelax" value="true" valueType="boolean"/>
                                 								
-                                <option id="xilinx.gnu.mb.compiler.inferred.garbage.906846356" name="Enable garbage collector (-ffunction-sections -fdata-sections)" superClass="xilinx.gnu.mb.compiler.inferred.garbage" value="true" valueType="boolean"/>
+                                <option id="xilinx.gnu.mb.compiler.inferred.garbage.1869434982" name="Enable garbage collector (-ffunction-sections -fdata-sections)" superClass="xilinx.gnu.mb.compiler.inferred.garbage" value="true" valueType="boolean"/>
                                 								
-                                <option id="xilinx.gnu.mb.compiler.inferred.usele.1326520928" name="Produce little endian code (-mlittle-endian)" superClass="xilinx.gnu.mb.compiler.inferred.usele" value="true" valueType="boolean"/>
+                                <option id="xilinx.gnu.mb.compiler.inferred.usele.655789993" name="Produce little endian code (-mlittle-endian)" superClass="xilinx.gnu.mb.compiler.inferred.usele" value="true" valueType="boolean"/>
                                 								
-                                <option id="xilinx.gnu.compiler.inferred.swplatform.includes.157207949" name="Software Platform Include Path" superClass="xilinx.gnu.compiler.inferred.swplatform.includes" valueType="includePath">
+                                <option id="xilinx.gnu.compiler.inferred.swplatform.includes.240150430" name="Software Platform Include Path" superClass="xilinx.gnu.compiler.inferred.swplatform.includes" valueType="includePath">
                                     									
                                     <listOptionValue builtIn="false" value="${resolvePlatformFile:project=srec_boot,fileType=bspInclude}"/>
                                     								
@@ -267,33 +267,33 @@
                                 							
                             </tool>
                             							
-                            <tool id="xilinx.gnu.mb.toolchain.archiver.1702264110" name="MicroBlaze archiver" superClass="xilinx.gnu.mb.toolchain.archiver"/>
+                            <tool id="xilinx.gnu.mb.toolchain.archiver.104112322" name="MicroBlaze archiver" superClass="xilinx.gnu.mb.toolchain.archiver"/>
                             							
-                            <tool id="xilinx.gnu.mb.c.toolchain.linker.release.738027387" name="MicroBlaze gcc linker" superClass="xilinx.gnu.mb.c.toolchain.linker.release">
+                            <tool id="xilinx.gnu.mb.c.toolchain.linker.release.1275749315" name="MicroBlaze gcc linker" superClass="xilinx.gnu.mb.c.toolchain.linker.release">
                                 								
-                                <option id="xilinx.gnu.mb.linker.inferred.mbversion.760857574" name="MicroBlaze Version" superClass="xilinx.gnu.mb.linker.inferred.mbversion" value="11.0" valueType="string"/>
+                                <option id="xilinx.gnu.mb.linker.inferred.mbversion.1428314063" name="MicroBlaze Version" superClass="xilinx.gnu.mb.linker.inferred.mbversion" value="11.0" valueType="string"/>
                                 								
-                                <option id="xilinx.gnu.mb.linker.inferred.norelax.228307653" name="No relaxation (-Wl,--no-relax)" superClass="xilinx.gnu.mb.linker.inferred.norelax" value="true" valueType="boolean"/>
+                                <option id="xilinx.gnu.mb.linker.inferred.norelax.821729164" name="No relaxation (-Wl,--no-relax)" superClass="xilinx.gnu.mb.linker.inferred.norelax" value="true" valueType="boolean"/>
                                 								
-                                <option id="xilinx.gnu.mb.linker.inferred.garbage.1224016832" name="Enable garbage collector (-Wl,--gc-sections)" superClass="xilinx.gnu.mb.linker.inferred.garbage" value="true" valueType="boolean"/>
+                                <option id="xilinx.gnu.mb.linker.inferred.garbage.1572390316" name="Enable garbage collector (-Wl,--gc-sections)" superClass="xilinx.gnu.mb.linker.inferred.garbage" value="true" valueType="boolean"/>
                                 								
-                                <option id="xilinx.gnu.mb.linker.inferred.usele.820029016" name="Produce little endian artifacts (-mlittle-endian)" superClass="xilinx.gnu.mb.linker.inferred.usele" value="true" valueType="boolean"/>
+                                <option id="xilinx.gnu.mb.linker.inferred.usele.275331362" name="Produce little endian artifacts (-mlittle-endian)" superClass="xilinx.gnu.mb.linker.inferred.usele" value="true" valueType="boolean"/>
                                 								
-                                <option id="xilinx.gnu.linker.inferred.swplatform.lpath.731405152" name="Software Platform Library Path" superClass="xilinx.gnu.linker.inferred.swplatform.lpath" valueType="libPaths">
+                                <option id="xilinx.gnu.linker.inferred.swplatform.lpath.255678111" name="Software Platform Library Path" superClass="xilinx.gnu.linker.inferred.swplatform.lpath" valueType="libPaths">
                                     									
                                     <listOptionValue builtIn="false" value="${resolvePlatformFile:project=srec_boot,fileType=bspLib}"/>
                                     								
                                 </option>
                                 								
-                                <option id="xilinx.gnu.linker.inferred.swplatform.flags.1549626389" name="Software Platform Inferred Flags" superClass="xilinx.gnu.linker.inferred.swplatform.flags" valueType="libs">
+                                <option id="xilinx.gnu.linker.inferred.swplatform.flags.612422419" name="Software Platform Inferred Flags" superClass="xilinx.gnu.linker.inferred.swplatform.flags" valueType="libs">
                                     									
                                     <listOptionValue builtIn="false" value="-Wl,--start-group,-lxil,-lgcc,-lc,--end-group"/>
                                     								
                                 </option>
                                 								
-                                <option id="xilinx.gnu.c.linker.option.lscript.2131728402" name="Linker Script" superClass="xilinx.gnu.c.linker.option.lscript" value="../src/lscript.ld" valueType="string"/>
+                                <option id="xilinx.gnu.c.linker.option.lscript.1234239282" name="Linker Script" superClass="xilinx.gnu.c.linker.option.lscript" value="../src/lscript.ld" valueType="string"/>
                                 								
-                                <inputType id="xilinx.gnu.linker.input.548002910" superClass="xilinx.gnu.linker.input">
+                                <inputType id="xilinx.gnu.linker.input.1011633659" superClass="xilinx.gnu.linker.input">
                                     									
                                     <additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
                                     									
@@ -301,37 +301,37 @@
                                     								
                                 </inputType>
                                 								
-                                <inputType id="xilinx.gnu.linker.input.lscript.1848280400" name="Linker Script" superClass="xilinx.gnu.linker.input.lscript"/>
+                                <inputType id="xilinx.gnu.linker.input.lscript.487707306" name="Linker Script" superClass="xilinx.gnu.linker.input.lscript"/>
                                 							
                             </tool>
                             							
-                            <tool id="xilinx.gnu.mb.cxx.toolchain.linker.release.958029885" name="MicroBlaze g++ linker" superClass="xilinx.gnu.mb.cxx.toolchain.linker.release">
+                            <tool id="xilinx.gnu.mb.cxx.toolchain.linker.release.1542471600" name="MicroBlaze g++ linker" superClass="xilinx.gnu.mb.cxx.toolchain.linker.release">
                                 								
-                                <option id="xilinx.gnu.mb.linker.inferred.mbversion.1109336578" name="MicroBlaze Version" superClass="xilinx.gnu.mb.linker.inferred.mbversion" value="11.0" valueType="string"/>
+                                <option id="xilinx.gnu.mb.linker.inferred.mbversion.1828974881" name="MicroBlaze Version" superClass="xilinx.gnu.mb.linker.inferred.mbversion" value="11.0" valueType="string"/>
                                 								
-                                <option id="xilinx.gnu.mb.linker.inferred.norelax.285313730" name="No relaxation (-Wl,--no-relax)" superClass="xilinx.gnu.mb.linker.inferred.norelax" value="true" valueType="boolean"/>
+                                <option id="xilinx.gnu.mb.linker.inferred.norelax.332245460" name="No relaxation (-Wl,--no-relax)" superClass="xilinx.gnu.mb.linker.inferred.norelax" value="true" valueType="boolean"/>
                                 								
-                                <option id="xilinx.gnu.mb.linker.inferred.garbage.1281883665" name="Enable garbage collector (-Wl,--gc-sections)" superClass="xilinx.gnu.mb.linker.inferred.garbage" value="true" valueType="boolean"/>
+                                <option id="xilinx.gnu.mb.linker.inferred.garbage.1740146420" name="Enable garbage collector (-Wl,--gc-sections)" superClass="xilinx.gnu.mb.linker.inferred.garbage" value="true" valueType="boolean"/>
                                 								
-                                <option id="xilinx.gnu.mb.linker.inferred.usele.307467830" name="Produce little endian artifacts (-mlittle-endian)" superClass="xilinx.gnu.mb.linker.inferred.usele" value="true" valueType="boolean"/>
+                                <option id="xilinx.gnu.mb.linker.inferred.usele.1019789339" name="Produce little endian artifacts (-mlittle-endian)" superClass="xilinx.gnu.mb.linker.inferred.usele" value="true" valueType="boolean"/>
                                 								
-                                <option id="xilinx.gnu.linker.inferred.swplatform.lpath.1845842561" name="Software Platform Library Path" superClass="xilinx.gnu.linker.inferred.swplatform.lpath" valueType="libPaths">
+                                <option id="xilinx.gnu.linker.inferred.swplatform.lpath.782899848" name="Software Platform Library Path" superClass="xilinx.gnu.linker.inferred.swplatform.lpath" valueType="libPaths">
                                     									
                                     <listOptionValue builtIn="false" value="${resolvePlatformFile:project=srec_boot,fileType=bspLib}"/>
                                     								
                                 </option>
                                 								
-                                <option id="xilinx.gnu.linker.inferred.swplatform.flags.589274019" name="Software Platform Inferred Flags" superClass="xilinx.gnu.linker.inferred.swplatform.flags" valueType="libs">
+                                <option id="xilinx.gnu.linker.inferred.swplatform.flags.1317589785" name="Software Platform Inferred Flags" superClass="xilinx.gnu.linker.inferred.swplatform.flags" valueType="libs">
                                     									
                                     <listOptionValue builtIn="false" value="-Wl,--start-group,-lxil,-lgcc,-lc,--end-group"/>
                                     								
                                 </option>
                                 								
-                                <option id="xilinx.gnu.c.linker.option.lscript.2103839453" name="Linker Script" superClass="xilinx.gnu.c.linker.option.lscript" value="../src/lscript.ld" valueType="string"/>
+                                <option id="xilinx.gnu.c.linker.option.lscript.1964819487" name="Linker Script" superClass="xilinx.gnu.c.linker.option.lscript" value="../src/lscript.ld" valueType="string"/>
                                 							
                             </tool>
                             							
-                            <tool id="xilinx.gnu.mb.size.release.2049387313" name="MicroBlaze Print Size" superClass="xilinx.gnu.mb.size.release"/>
+                            <tool id="xilinx.gnu.mb.size.release.1676316697" name="MicroBlaze Print Size" superClass="xilinx.gnu.mb.size.release"/>
                             						
                         </toolChain>
                         					
@@ -357,7 +357,7 @@
     	
     <storageModule moduleId="cdtBuildSystem" version="4.0.0">
         		
-        <project id="srec_boot.xilinx.gnu.mb.exe.967729360" name="Xilinx MicroBlaze Executable" projectType="xilinx.gnu.mb.exe"/>
+        <project id="srec_boot.xilinx.gnu.mb.exe.1519359499" name="Xilinx MicroBlaze Executable" projectType="xilinx.gnu.mb.exe"/>
         	
     </storageModule>
     	
@@ -365,25 +365,25 @@
         		
         <autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
         		
-        <scannerConfigBuildInfo instanceId="xilinx.gnu.mb.exe.debug.517956505;xilinx.gnu.mb.exe.debug.517956505.">
+        <scannerConfigBuildInfo instanceId="xilinx.gnu.mb.exe.release.768599653;xilinx.gnu.mb.exe.release.768599653.;xilinx.gnu.mb.c.toolchain.compiler.release.456476124;xilinx.gnu.compiler.input.1420501914">
             			
             <autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="com.xilinx.managedbuilder.ui.MBGCCManagedMakePerProjectProfileC"/>
             		
         </scannerConfigBuildInfo>
         		
-        <scannerConfigBuildInfo instanceId="xilinx.gnu.mb.exe.release.615483967;xilinx.gnu.mb.exe.release.615483967.;xilinx.gnu.mb.c.toolchain.compiler.release.635151849;xilinx.gnu.compiler.input.594097282">
+        <scannerConfigBuildInfo instanceId="xilinx.gnu.mb.exe.debug.694496571;xilinx.gnu.mb.exe.debug.694496571.;xilinx.gnu.mb.c.toolchain.compiler.debug.1986267247;xilinx.gnu.compiler.input.1472758914">
             			
             <autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="com.xilinx.managedbuilder.ui.MBGCCManagedMakePerProjectProfileC"/>
             		
         </scannerConfigBuildInfo>
         		
-        <scannerConfigBuildInfo instanceId="xilinx.gnu.mb.exe.release.615483967;xilinx.gnu.mb.exe.release.615483967.">
+        <scannerConfigBuildInfo instanceId="xilinx.gnu.mb.exe.release.768599653;xilinx.gnu.mb.exe.release.768599653.">
             			
             <autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="com.xilinx.managedbuilder.ui.MBGCCManagedMakePerProjectProfileC"/>
             		
         </scannerConfigBuildInfo>
         		
-        <scannerConfigBuildInfo instanceId="xilinx.gnu.mb.exe.debug.517956505;xilinx.gnu.mb.exe.debug.517956505.;xilinx.gnu.mb.c.toolchain.compiler.debug.359534665;xilinx.gnu.compiler.input.1987776953">
+        <scannerConfigBuildInfo instanceId="xilinx.gnu.mb.exe.debug.694496571;xilinx.gnu.mb.exe.debug.694496571.">
             			
             <autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="com.xilinx.managedbuilder.ui.MBGCCManagedMakePerProjectProfileC"/>
             		

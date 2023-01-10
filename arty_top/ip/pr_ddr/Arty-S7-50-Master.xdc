@@ -4,13 +4,13 @@
 ## - rename the used ports (in each line, after get_ports) according to the top level signal names in the project
 
 ## Clock Signals
-set_property -dict {PACKAGE_PIN F14 IOSTANDARD LVCMOS33} [get_ports CLK12MHZ]
-create_clock -period 83.333 -name sys_clk_pin -waveform {0.000 41.667} -add [get_ports CLK12MHZ]
-set_property -dict {PACKAGE_PIN R2 IOSTANDARD SSTL135} [get_ports sys_clk_i]
-create_clock -period 10.000 -name sys_clk_pin -waveform {0.000 5.000} -add [get_ports sys_clk_i]
+set_property -dict {PACKAGE_PIN F14 IOSTANDARD LVCMOS33} [get_ports clk12mhz]
+create_clock -period 83.333 -name sys_clk_pin -waveform {0.000 41.667} -add [get_ports clk12mhz]
+set_property -dict {PACKAGE_PIN R2 IOSTANDARD SSTL135} [get_ports clk100mhz]
+create_clock -period 10.000 -name sys_clk_pin -waveform {0.000 5.000} -add [get_ports clk100mhz]
 
-set_property -dict {PACKAGE_PIN C18 IOSTANDARD LVCMOS33} [get_ports reset]
-set_property CLOCK_DEDICATED_ROUTE FALSE [get_nets reset_IBUF]
+set_property -dict {PACKAGE_PIN C18 IOSTANDARD LVCMOS33} [get_ports ext_resetn]
+set_property CLOCK_DEDICATED_ROUTE FALSE [get_nets ext_resetn_IBUF]
 
 ## CM UART Interface
 set_property -dict {PACKAGE_PIN N13 IOSTANDARD LVCMOS33} [get_ports oCM_UART_TXD]
