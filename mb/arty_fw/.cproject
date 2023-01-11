@@ -67,6 +67,22 @@
                                     								
                                 </option>
                                 								
+                                <option id="xilinx.gnu.compiler.dircategory.includes.1635831824" name="Include Paths" superClass="xilinx.gnu.compiler.dircategory.includes" useByScannerDiscovery="false" valueType="includePath">
+                                    									
+                                    <listOptionValue builtIn="false" value="../"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="../core"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="../driver"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="../share"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="../cp_srv"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="../daq_srv"/>
+                                    								
+                                </option>
+                                								
                                 <inputType id="xilinx.gnu.compiler.input.318694824" name="C source files" superClass="xilinx.gnu.compiler.input"/>
                                 							
                             </tool>
@@ -118,6 +134,8 @@
                                 </option>
                                 								
                                 <option id="xilinx.gnu.c.linker.option.lscript.240697675" name="Linker Script" superClass="xilinx.gnu.c.linker.option.lscript" value="../lscript.ld" valueType="string"/>
+                                								
+                                <option id="xilinx.gnu.c.link.option.ldflags.1751446784" name="Linker Flags" superClass="xilinx.gnu.c.link.option.ldflags" useByScannerDiscovery="false" value="-Wl,-Map=${ProjName}.map" valueType="string"/>
                                 								
                                 <inputType id="xilinx.gnu.linker.input.1398123948" superClass="xilinx.gnu.linker.input">
                                     									
@@ -247,13 +265,13 @@
                                     									
                                     <listOptionValue builtIn="false" value="&quot;../core&quot;"/>
                                     									
-                                    <listOptionValue builtIn="false" value="&quot;../cp_srv&quot;"/>
-                                    									
-                                    <listOptionValue builtIn="false" value="&quot;../daq_srv&quot;"/>
-                                    									
                                     <listOptionValue builtIn="false" value="&quot;../driver&quot;"/>
                                     									
                                     <listOptionValue builtIn="false" value="&quot;../share&quot;"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="&quot;../cp_srv&quot;"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="&quot;../daq_srv&quot;"/>
                                     								
                                 </option>
                                 								
@@ -309,7 +327,7 @@
                                 								
                                 <option id="xilinx.gnu.c.linker.option.lscript.1989471800" name="Linker Script" superClass="xilinx.gnu.c.linker.option.lscript" value="../lscript.ld" valueType="string"/>
                                 								
-                                <option id="xilinx.gnu.c.link.option.ldflags.160061270" name="Linker Flags" superClass="xilinx.gnu.c.link.option.ldflags" useByScannerDiscovery="false" value="-Wl,-Map=$(LINKER_MAP_NAME)" valueType="string"/>
+                                <option id="xilinx.gnu.c.link.option.ldflags.160061270" name="Linker Flags" superClass="xilinx.gnu.c.link.option.ldflags" useByScannerDiscovery="false" value="-Wl,-Map=${ProjName}.map" valueType="string"/>
                                 								
                                 <inputType id="xilinx.gnu.linker.input.616100898" superClass="xilinx.gnu.linker.input">
                                     									

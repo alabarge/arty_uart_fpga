@@ -24,7 +24,8 @@
 #define  GPIO_KEY_1            2
 #define  GPIO_KEY_2            4
 #define  GPIO_KEY_3            8
-#define  GPIO_KEY_ALL_OFF      0x0F
+#define  GPIO_KEY_ALL_OFF      0x0
+#define  GPIO_KEY_ALL_ON       0xF
 
 // all registers
 typedef struct _gpio_regs_t {

@@ -150,7 +150,7 @@ uint32_t tty_init(uint32_t baudrate, uint8_t port) {
    rxq.n       = 0;
    rxq.state   = TTY_IDLE;
 
-   XIntc_Connect(&gc.intc, XPAR_INTC_0_UARTLITE_1_VEC_ID,
+   XIntc_Connect(&gc.intc, XPAR_INTC_0_UARTLITE_0_VEC_ID,
       (XInterruptHandler)tty_isr, NULL);
 
    // Register the I/O Interface callback for CM
@@ -163,14 +163,14 @@ uint32_t tty_init(uint32_t baudrate, uint8_t port) {
    tty->control = UART_INT_EN;
 
    // enable uart in intc
-   XIntc_Enable(&gc.intc, XPAR_INTC_0_UARTLITE_1_VEC_ID);
+   XIntc_Enable(&gc.intc, XPAR_INTC_0_UARTLITE_0_VEC_ID);
 
    // Report H/W Details
    if (gc.trace & CFG_TRACE_ID) {
-      xlprint("%-13s base:rev:irq %08X:%d:%d\n", "tty", XPAR_AXI_CM_UART_BASEADDR, 0,
+      xlprint("%-16s base:rev:irq %08X:%d:%d\n", "tty", XPAR_AXI_CM_UART_BASEADDR, 0,
          XPAR_INTC_0_UARTLITE_1_VEC_ID);
-      xlprint("%-13s rate:   %d.%d Kbps\n", "tty", baudrate / 1000, baudrate % 1000);
-      xlprint("%-13s port:   %d\n", "tty", cm_port);
+      xlprint("%-16s rate:   %d.%d Kbps\n", "tty", baudrate / 1000, baudrate % 1000);
+      xlprint("%-16s port:   %d\n", "tty", cm_port);
    }
 
    return result;

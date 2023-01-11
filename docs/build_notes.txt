@@ -51,6 +51,11 @@
 # use Tools->Generate Memory Configuration File ...
 # add bitstream and application ELF file (not binary if using the elf bootloader)
 #
-#
+
+# fpga_build.vhd is not updated automatically, it must be updated manually
+# make sure vivado is in the arty_uart_fpga/arty_top directory
+# update fpga_build.vhd, requires IP upgrade, time stamp the design
+source ./ip/pr_ddr/pre_build.tcl
+
 
 

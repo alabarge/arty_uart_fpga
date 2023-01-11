@@ -133,7 +133,7 @@ uint32_t cp_init(void) {
 
    // Display Server ID
    if (gc.trace & CFG_TRACE_ID) {
-      xlprint("%-13s srvid:handle %02X:%02X\n", "/dev/cp", cp.srvid, cp.handle);
+      xlprint("%-16s srvid:handle %02X:%02X\n", "/dev/cp", cp.srvid, cp.handle);
    }
 
    return result;

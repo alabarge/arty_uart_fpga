@@ -54,13 +54,15 @@ set_property -dict {PACKAGE_PIN T12 IOSTANDARD LVCMOS33} [get_ports tp4]
 ## RGB LEDs
 set_property -dict {PACKAGE_PIN J15 IOSTANDARD LVCMOS33} [get_ports {led0_rgb[0]}]
 set_property -dict {PACKAGE_PIN G17 IOSTANDARD LVCMOS33} [get_ports {led0_rgb[1]}]
-set_property -dict {PACKAGE_PIN F15 IOSTANDARD LVCMOS33} [get_ports {led0_rgb[2]}]
+#set_property -dict {PACKAGE_PIN F15 IOSTANDARD LVCMOS33} [get_ports {led0_rgb[2]}]
+set_property -dict {PACKAGE_PIN E18 IOSTANDARD LVCMOS33} [get_ports {led0_rgb[2]}]
 set_property -dict {PACKAGE_PIN E15 IOSTANDARD LVCMOS33} [get_ports {led1_rgb[0]}]
 set_property -dict {PACKAGE_PIN F18 IOSTANDARD LVCMOS33} [get_ports {led1_rgb[1]}]
 set_property -dict {PACKAGE_PIN E14 IOSTANDARD LVCMOS33} [get_ports {led1_rgb[2]}]
 
 ## LEDs
-set_property -dict { PACKAGE_PIN E18   IOSTANDARD LVCMOS33 } [get_ports { led_tri_o[0] }]; #IO_L16N_T2_A27_15 Sch=led[2]
+#set_property -dict { PACKAGE_PIN E18   IOSTANDARD LVCMOS33 } [get_ports { led_tri_o[0] }]; #IO_L16N_T2_A27_15 Sch=led[2]
+set_property -dict { PACKAGE_PIN F15   IOSTANDARD LVCMOS33 } [get_ports { led_tri_o[0] }]; #IO_L16N_T2_A27_15 Sch=led[2]
 set_property -dict { PACKAGE_PIN F13   IOSTANDARD LVCMOS33 } [get_ports { led_tri_o[1] }]; #IO_L17P_T2_A26_15 Sch=led[3]
 set_property -dict { PACKAGE_PIN E13   IOSTANDARD LVCMOS33 } [get_ports { led_tri_o[2] }]; #IO_L17N_T2_A25_15 Sch=led[4]
 set_property -dict { PACKAGE_PIN H15   IOSTANDARD LVCMOS33 } [get_ports { led_tri_o[3] }]; #IO_L18P_T2_A24_15 Sch=led[5]

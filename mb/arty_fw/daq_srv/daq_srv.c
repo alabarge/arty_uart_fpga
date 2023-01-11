@@ -134,7 +134,7 @@ uint32_t daq_init(void) {
 
    // Display Server ID
    if (gc.trace & CFG_TRACE_ID) {
-      xlprint("%-13s srvid:handle %02X:%02X\n", "/dev/daq", daq.srvid, daq.handle);
+      xlprint("%-16s srvid:handle %02X:%02X\n", "/dev/daq", daq.srvid, daq.handle);
    }
 
    return result;

@@ -176,7 +176,7 @@ void dump(uint8_t *pBuf, uint32_t len, uint8_t options, uint32_t offset) {
       for (i=0;i<len;i+=4) {
          xlprint(fmt,i+k);
          for (j=0;j<4;j++) {
-            if ((i+j) == len) xlprint("         ");
+            if ((i+j) >= len) xlprint("         ");
             else xlprint(" %08X", p32[i+j]);
          }
          xlprint("\n");
@@ -188,7 +188,7 @@ void dump(uint8_t *pBuf, uint32_t len, uint8_t options, uint32_t offset) {
       for (i=0;i<len;i+=8) {
          xlprint(fmt,i+k);
          for (j=0;j<8;j++) {
-            if ((i+j) == len) xlprint("     ");
+            if ((i+j) >= len) xlprint("     ");
             else xlprint(" %04X", p16[i+j]);
          }
          xlprint("\n");

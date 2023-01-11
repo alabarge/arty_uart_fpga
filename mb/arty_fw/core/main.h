@@ -98,6 +98,8 @@ typedef struct _gc_t {
    XTmrCtr        systimer;
    XTmrCtr        freetimer;
    XWdtTb         watchdog;
+   XUartLite      stdio_uart;
+   XUartLite      cm_uart;
    struct stat    st;
    uint32_t       ping_time;
    uint8_t        ping_cnt;
@@ -117,10 +119,10 @@ extern   gc_t gc;
 
 extern   uint8_t __bss_start;
 extern   uint8_t __bss_end;
-extern   uint8_t __alt_stack_limit;
-extern   uint8_t __alt_stack_pointer;
-extern   uint8_t __alt_heap_start;
-extern   uint8_t __alt_heap_limit;
+extern   uint8_t __stack;
+extern   uint8_t __stack_end;
+extern   uint8_t __heap_start;
+extern   uint8_t __heap_end;
 
 void     systimer(void *CallBackRef, u8 TmrCtrNumber);
 void     version(void);

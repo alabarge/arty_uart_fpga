@@ -132,16 +132,6 @@ int main() {
 
 // 7.1.5   Code
 
-   // Open Debug Port
-   xlprint_open(XPAR_AXI_STDIO_UART_BASEADDR);
-
-   // Clear the Terminal Screen and Home the Cursor
-   xlprint(clr_scrn);
-   xlprint(cur_home);
-
-   // Display the Startup Banner
-   xlprint("\nARTY-I MICROBLAZE, %s\n\n", BUILD_HI);
-
    // Clear GC
    memset(&gc, 0, sizeof(gc_t));
 
@@ -157,18 +147,12 @@ int main() {
    gc.int_flag  = FALSE;
    gc.sw_reset  = FALSE;
    gc.sys_time  = 0;
-   gc.ping_time = XTmrCtr_GetValue(&gc.freetimer, 0);
+   gc.ping_time = 0;
    gc.ping_cnt  = 0;
    gc.led_cycle = CFG_LED_CYCLE;
    gc.month     = month_table;
    gc.msg_table = msg_table;
    gc.msg_table_len = DIM(msg_table);
-
-   sprintf(gc.dev_str, "ARTY-I MICROBLAZE, %s", BUILD_STR);
-
-   // Initialize the Configurable Items DataBase
-   gc.error |= ci_init();
-   gc.error |= ci_read();
 
    //
    // INIT THE HARDWARE
@@ -177,12 +161,28 @@ int main() {
    // Interrupt Controller Init
    gc.error |= XIntc_Initialize(&gc.intc, XPAR_INTC_0_DEVICE_ID);
 
+   // Open Debug Port
+   xlprint_open(XPAR_AXI_STDIO_UART_BASEADDR);
+
+   // Clear the Terminal Screen and Home the Cursor
+   xlprint(clr_scrn);
+   xlprint(cur_home);
+
+   // Display the Startup Banner
+   xlprint("\nARTY-I MICROBLAZE, %s\n\n", BUILD_HI);
+   sprintf(gc.dev_str, "ARTY-I MICROBLAZE, %s", BUILD_STR);
+
+   // Initialize the Configurable Items DataBase
+   gc.error |= ci_init();
+   gc.error |= ci_read();
+
    // System Timer Init
    gc.error |= XTmrCtr_Initialize(&gc.systimer, XPAR_AXI_SYSTIMER_DEVICE_ID);
    XTmrCtr_SetOptions(&gc.systimer, 0, XTC_INT_MODE_OPTION | XTC_AUTO_RELOAD_OPTION);
    XTmrCtr_SetHandler(&gc.systimer, systimer, &gc.systimer);
    gc.error |= XIntc_Connect(&gc.intc, XPAR_INTC_0_TMRCTR_1_VEC_ID,
             (XInterruptHandler)XTmrCtr_InterruptHandler, (void *)&gc.systimer);
+   XIntc_Enable(&gc.intc, XPAR_INTC_0_TMRCTR_1_VEC_ID);
    // 10 mS roll-over, timer counts up
    XTmrCtr_SetResetValue(&gc.systimer, 0, 0xFFF39A40);
    XTmrCtr_Start(&gc.systimer, 0);
@@ -191,6 +191,8 @@ int main() {
    gc.error |= XTmrCtr_Initialize(&gc.freetimer, XPAR_AXI_FREETIMER_DEVICE_ID);
    XTmrCtr_SetOptions(&gc.freetimer, 0, XTC_AUTO_RELOAD_OPTION);
    XTmrCtr_Start(&gc.systimer, 0);
+
+   gc.ping_time = XTmrCtr_GetValue(&gc.freetimer, 0);
 
    // GPIO Init
    gc.error |= gpio_init();
@@ -219,7 +221,7 @@ int main() {
    xlprint("ticks/sec: %d\n", CFG_TICKS_PER_SECOND);
 
    // Report Timestamp Frequency
-   xlprint("timestamp.freq: %d.%d MHz\n", XPAR_CPU_CORE_CLOCK_FREQ_HZ / 1000000,
+   xlprint("timestamp.freq:  %d.%d MHz\n", XPAR_CPU_CORE_CLOCK_FREQ_HZ / 1000000,
          XPAR_CPU_CORE_CLOCK_FREQ_HZ % 1000000);
 
    // Report Microblaze Frequency
@@ -246,7 +248,7 @@ int main() {
    dump((uint8_t *)XPAR_MIG7SERIES_0_BASEADDR, 64, LIB_ADDR | LIB_ASCII, 0);
 
    // Partial Block RAM Dump
-   xlprint("\nbram partial ...\n\n");
+   xlprint("\nmb_bram partial ...\n\n");
    dump((uint8_t *)XPAR_BRAM_0_BASEADDR, 64, LIB_ADDR | LIB_ASCII, 0);
 
    // Power-On Self Test
@@ -291,7 +293,7 @@ int main() {
    Xil_ExceptionEnable();
 
    // Start the Watchdog
-   XWdtTb_Start(&gc.watchdog);
+//   XWdtTb_Start(&gc.watchdog);
 
    // Initialization Finished so
    // start Running
@@ -405,26 +407,26 @@ void systimer(void *CallBackRef, u8 TmrCtrNumber) {
          switch (key & (1 << i)) {
          case GPIO_KEY_0 :
             // PB Down
-            if ((gc.key & GPIO_KEY_0) == 0) {
+            if (gc.key & GPIO_KEY_0) {
                xlprint("key0 pressed\n");
             }
             break;
          case GPIO_KEY_1 :
             // PB Down
-            if ((gc.key & GPIO_KEY_1) == 0) {
+            if (gc.key & GPIO_KEY_1) {
                xlprint("key1 pressed\n");
             }
             break;
          case GPIO_KEY_2 :
             // PB Down
-            if ((gc.key & GPIO_KEY_2) == 0) {
-               xlprint("key0 pressed\n");
+            if (gc.key & GPIO_KEY_2) {
+               xlprint("key2 pressed\n");
             }
             break;
          case GPIO_KEY_3 :
             // PB Down
-            if ((gc.key & GPIO_KEY_3) == 0) {
-               xlprint("key1 pressed\n");
+            if (gc.key & GPIO_KEY_3) {
+               xlprint("key3 pressed\n");
             }
             break;
          }
@@ -461,20 +463,20 @@ void version(void) {
 
    // Hardware Devices
    xlprint("\n");
-   xlprint("%-13s base:irq %08X:%d:%d\n", "sdram", XPAR_SDRAM_BASEADDR, -1);
-   xlprint("%-13s base:irq %08X:%d:%d\n", "mb_bram", XPAR_BRAM_0_BASEADDR, -1);
-   xlprint("%-13s base:irq %08X:%d:%d\n", "axi_qspi", XPAR_AXI_QSPI_BASEADDR, XPAR_INTC_0_SPI_0_VEC_ID);
-   xlprint("%-13s base:irq %08X:%d:%d\n", "axi_systimer", XPAR_AXI_SYSTIMER_BASEADDR, XPAR_INTC_0_TMRCTR_1_VEC_ID);
-   xlprint("%-13s base:irq %08X:%d:%d\n", "axi_freetimer", XPAR_AXI_FREETIMER_BASEADDR, -1);
-   xlprint("%-13s base:irq %08X:%d:%d\n", "axi_wdttb", XPAR_AXI_WATCHDOG_BASEADDR, -1);
-   xlprint("%-13s base:irq %08X:%d:%d\n", "axi_xadc", XPAR_AXI_XADC_BASEADDR, XPAR_INTC_0_SYSMON_0_VEC_ID);
-   xlprint("%-13s base:irq %08X:%d:%d\n", "axi_stamp", XPAR_AXI_STAMP_BASEADDR, -1);
-   xlprint("%-13s base:irq %08X:%d:%d\n", "axi_button", XPAR_AXI_BUTTON_BASEADDR, -1);
-   xlprint("%-13s base:irq %08X:%d:%d\n", "axi_led", XPAR_AXI_LED_BASEADDR, -1);
-   xlprint("%-13s base:irq %08X:%d:%d\n", "axi_intc", XPAR_AXI_INTC_BASEADDR, XIL_EXCEPTION_ID_INT);
-   xlprint("%-13s base:irq %08X:%d:%d\n", "axi_oled", XPAR_AXI_OLED_BASEADDR, -1);
-   xlprint("%-13s base:irq %08X:%d\n", "stdio_uart", XPAR_AXI_STDIO_UART_BASEADDR, XPAR_INTC_0_UARTLITE_1_VEC_ID);
-   xlprint("%-13s base:irq %08X:%d\n", "cmd_uart", XPAR_AXI_CM_UART_BASEADDR, XPAR_INTC_0_UARTLITE_0_VEC_ID);
+   xlprint("%-16s base:irq %08X:%d\n", "mb_bram", XPAR_BRAM_0_BASEADDR, -1);
+   xlprint("%-16s base:irq %08X:%d\n", "axi_led", XPAR_AXI_LED_BASEADDR, -1);
+   xlprint("%-16s base:irq %08X:%d\n", "axi_oled", XPAR_AXI_OLED_BASEADDR, -1);
+   xlprint("%-16s base:irq %08X:%d\n", "axi_button", XPAR_AXI_BUTTON_BASEADDR, -1);
+   xlprint("%-16s base:irq %08X:%d\n", "axi_stdio_uart", XPAR_AXI_STDIO_UART_BASEADDR, XPAR_INTC_0_UARTLITE_1_VEC_ID);
+   xlprint("%-16s base:irq %08X:%d\n", "axi_cm_uart", XPAR_AXI_CM_UART_BASEADDR, XPAR_INTC_0_UARTLITE_0_VEC_ID);
+   xlprint("%-16s base:irq %08X:%d\n", "axi_intc", XPAR_AXI_INTC_BASEADDR, XIL_EXCEPTION_ID_INT);
+   xlprint("%-16s base:irq %08X:%d\n", "axi_wdttb", XPAR_AXI_WATCHDOG_BASEADDR, -1);
+   xlprint("%-16s base:irq %08X:%d\n", "axi_systimer", XPAR_AXI_SYSTIMER_BASEADDR, XPAR_INTC_0_TMRCTR_1_VEC_ID);
+   xlprint("%-16s base:irq %08X:%d\n", "axi_freetimer", XPAR_AXI_FREETIMER_BASEADDR, -1);
+   xlprint("%-16s base:irq %08X:%d\n", "axi_qspi", XPAR_AXI_QSPI_BASEADDR, XPAR_INTC_0_SPI_0_VEC_ID);
+   xlprint("%-16s base:irq %08X:%d\n", "axi_stamp", XPAR_AXI_STAMP_BASEADDR, -1);
+   xlprint("%-16s base:irq %08X:%d\n", "axi_xadc", XPAR_AXI_XADC_BASEADDR, XPAR_INTC_0_SYSMON_0_VEC_ID);
+   xlprint("%-16s base:irq %08X:%d\n", "sdram", XPAR_SDRAM_BASEADDR, -1);
    xlprint("\n");
 
    xlprint("hw/sw stamp.id: %d %d\n", gc.sysid, FPGA_SYSID);

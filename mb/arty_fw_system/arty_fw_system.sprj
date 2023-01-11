@@ -5,6 +5,10 @@
       <applications name="arty_fw" domainName="standalone_mb_cpu" domainPrettyName="standalone_mb_cpu" appBuildConfig="Debug"/>
       <options xsi:type="sdkproject:SdkOptions" generateSdCard="true"/>
     </configBuildOptions>
+    <lastBuildOptions xsi:type="systemproject:SystemOptions">
+      <applications name="arty_fw" domainName="standalone_mb_cpu" domainPrettyName="standalone_mb_cpu" appBuildConfig="Debug"/>
+      <options xsi:type="sdkproject:SdkOptions" generateSdCard="true"/>
+    </lastBuildOptions>
   </configuration>
   <configuration name="Release" id="com.xilinx.sdx.system.managedbuilder.releaseConfiguration.1118889378">
     <configBuildOptions xsi:type="systemproject:SystemOptions">
