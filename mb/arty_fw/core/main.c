@@ -178,21 +178,21 @@ int main() {
 
    // System Timer Init
    gc.error |= XTmrCtr_Initialize(&gc.systimer, XPAR_AXI_SYSTIMER_DEVICE_ID);
-   XTmrCtr_SetOptions(&gc.systimer, 0, XTC_INT_MODE_OPTION | XTC_AUTO_RELOAD_OPTION);
+   XTmrCtr_SetOptions(&gc.systimer, 0, XTC_INT_MODE_OPTION | XTC_AUTO_RELOAD_OPTION | XTC_DOWN_COUNT_OPTION);
    XTmrCtr_SetHandler(&gc.systimer, systimer, &gc.systimer);
    gc.error |= XIntc_Connect(&gc.intc, XPAR_INTC_0_TMRCTR_1_VEC_ID,
             (XInterruptHandler)XTmrCtr_InterruptHandler, (void *)&gc.systimer);
    XIntc_Enable(&gc.intc, XPAR_INTC_0_TMRCTR_1_VEC_ID);
    // 10 mS roll-over, timer counts up
-   XTmrCtr_SetResetValue(&gc.systimer, 0, 0xFFF39A40);
+   XTmrCtr_SetResetValue(&gc.systimer, 0, 0x000C65BF);
    XTmrCtr_Start(&gc.systimer, 0);
 
    // Free Running Timer Init
    gc.error |= XTmrCtr_Initialize(&gc.freetimer, XPAR_AXI_FREETIMER_DEVICE_ID);
    XTmrCtr_SetOptions(&gc.freetimer, 0, XTC_AUTO_RELOAD_OPTION);
-   XTmrCtr_Start(&gc.systimer, 0);
+   XTmrCtr_Start(&gc.freetimer, 0);
 
-   gc.ping_time = XTmrCtr_GetValue(&gc.freetimer, 0);
+   gc.ping_time = FREE_TCR0;
 
    // GPIO Init
    gc.error |= gpio_init();
@@ -229,11 +229,11 @@ int main() {
          XPAR_CPU_CORE_CLOCK_FREQ_HZ % 1000000);
 
    // System ID and Unique Build time stamp
-   gc.sysid = stamp_sysid();
+   gc.sysid     = stamp_sysid();
    gc.timestamp = (time_t)stamp_epoch();
    gc.fpga_time = stamp_time();
    gc.fpga_date = stamp_date();
-   gc.fpga_ver = stamp_version();
+   gc.fpga_ver  = stamp_version();
 
    // Check System IDs
    if (gc.sysid != FPGA_SYSID || gc.timestamp != FPGA_EPOCH) {
@@ -276,9 +276,6 @@ int main() {
    // All LEDs Off
    gpio_set_val(0, GPIO_LED_ALL_OFF);
 
-   // Init the Command Line Interpreter
-   cli_gen();
-
    // start interrupt controller
    gc.status |= XIntc_Start(&gc.intc, XIN_REAL_MODE);
 
@@ -308,6 +305,9 @@ int main() {
       xlprint("error   :  %08X\n", gc.error);
    }
 
+   // Init the Command Line Interpreter
+   cli_init();
+
    //
    // BACKGROUND PROCESSING
    //
@@ -336,7 +336,7 @@ int main() {
       //
       // UPDATE WATCHDOG
       //
-      if (gc.sw_reset != TRUE) XWdtTb_RestartWdt(&gc.watchdog);
+//      if (gc.sw_reset != TRUE) XWdtTb_RestartWdt(&gc.watchdog);
    }
 
    // Unreachable code

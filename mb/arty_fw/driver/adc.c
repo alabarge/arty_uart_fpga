@@ -107,7 +107,14 @@ uint32_t adc_init(void) {
 
    uint32_t    result = CFG_STATUS_OK;
 
+   XSysMon_Config *config;
+
+
 // 7.1.5   Code
+
+   config = XSysMon_LookupConfig(XPAR_SYSMON_0_DEVICE_ID);
+   XSysMon_CfgInitialize(&gc.sysmon, config, config->BaseAddress);
+   XSysMon_SetSequencerMode(&gc.sysmon, XSM_SEQ_MODE_SAFE);
 
    return result;
 

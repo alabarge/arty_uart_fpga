@@ -8,6 +8,8 @@
 #include "xtmrctr.h"
 #include "xwdttb.h"
 #include "xil_cache.h"
+#include "xsysmon.h"
+#include "xstatus.h"
 
 #include "fpga_build.h"
 #include "gpio.h"

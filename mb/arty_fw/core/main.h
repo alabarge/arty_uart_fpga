@@ -100,6 +100,7 @@ typedef struct _gc_t {
    XWdtTb         watchdog;
    XUartLite      stdio_uart;
    XUartLite      cm_uart;
+   XSysMon        sysmon;
    struct stat    st;
    uint32_t       ping_time;
    uint8_t        ping_cnt;

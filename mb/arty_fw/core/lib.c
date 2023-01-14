@@ -56,8 +56,8 @@
         7.2   crc()
         7.3   srand_32()
         7.4   rand_32()
-        7.5   clkSleep()
-        7.6   clkTime()
+        7.5   clk_sleep()
+        7.6   clk_time()
         7.7   utick()
         7.8   sleep()
 
@@ -426,9 +426,9 @@ void clk_sleep(uint32_t delay, uint32_t units) {
    // Cycles to Wait
    j = delay * units;
    // Read current system count
-   i = XTmrCtr_GetValue(&gc.freetimer, 0);
+   i = FREE_TCR0;
    // Spin
-   while ((XTmrCtr_GetValue(&gc.freetimer, 0) - i) < j);
+   while ((FREE_TCR0 - i) < j);
 
 }  // end clk_sleep()
 
@@ -467,12 +467,12 @@ uint32_t clk_time(uint8_t op, uint32_t units, uint32_t *tNow) {
    // Start the Count,
    // Read the 32-Bit Time Base Register
    if (op & CLK_START) {
-      *tNow = XTmrCtr_GetValue(&gc.freetimer, 0);
+      *tNow = FREE_TCR0;
    }
    // Report the Count,
    // Read the 32-Bit Time Base Register
    else if (op & CLK_STOP) {
-      tEnd = XTmrCtr_GetValue(&gc.freetimer, 0);
+      tEnd = FREE_TCR0;
       switch (units) {
          case MICROSECONDS:
             result = (uint32_t)(tEnd - *tNow) / MICROSECONDS;
@@ -511,7 +511,7 @@ void utick(uint32_t microseconds) {
 /* 7.7.1   Functional Description
 
    The processor reads the system clock and waits until the time-out
-   has been reached.
+   has been reached. 20 uS overhead.
 
    7.7.2   Parameters:
 
@@ -530,12 +530,14 @@ void utick(uint32_t microseconds) {
 
 // 7.7.5   Code
 
+   // account for overhead
+   if (microseconds < 20) return;
    // Cycles to Wait
    j = microseconds * MICROSECONDS;
    // Read current system count
-   i = XTmrCtr_GetValue(&gc.freetimer, 0);
+   i = FREE_TCR0;
    // Spin
-   while ((XTmrCtr_GetValue(&gc.freetimer, 0) - i) < j);
+   while ((FREE_TCR0 - i) < j);
 
 }  // end utick()
 
@@ -571,8 +573,8 @@ void stick(uint32_t seconds) {
    // Cycles to Wait
    j = seconds * SECONDS;
    // Read current system count
-   i = XTmrCtr_GetValue(&gc.freetimer, 0);
+   i = FREE_TCR0;
    // Spin
-   while ((XTmrCtr_GetValue(&gc.freetimer, 0) - i) < j);
+   while ((FREE_TCR0 - i) < j);
 
 }  // end stick()

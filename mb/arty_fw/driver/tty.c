@@ -216,9 +216,9 @@ void tty_isr(void *arg) {
    }
 
    //
-   // RX INTERRUPT, PER CHARACTER
+   // RX INTERRUPT, PER FIFO VALID
    //
-   if (tty->status & UART_RX_VALID) {
+   while (tty->status & UART_RX_VALID) {
       // reading clears interrupt
       ch = tty->rx_dat;
       switch (rxq.state) {

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stddef.h>
+#include <stdint.h>
 
 #define MAX_BUF_SIZE        128     /* Maximum size of CLI Rx buffer */
 
@@ -35,4 +36,16 @@ typedef struct {
     println_func_ptr_t println; /* Function pointer to user defined println function.      */
     cmd_t *cmd_tbl;             /* Pointer to series of commands which are to be accepted. */
     size_t cmd_cnt;             /* Number of commands in cmd_tbl.                          */
+    uint8_t looping;
+    uint8_t loop_end;
+    uint32_t loop_ms;
+    uint32_t loop_snap;
+    uint32_t loop_cnt;
+    uint32_t loop_addr;
+    uint32_t loop_val;
+    uint32_t loop_len;
+    uint32_t loop_flags;
+    cmd_func_ptr_t loop_fn;
+    uint8_t argc;
+    char *argv[32];
 } cli_t;

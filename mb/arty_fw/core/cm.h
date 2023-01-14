@@ -8,7 +8,7 @@
 #define CM_CHECK_CRC          TRUE
 
 #define CM_MSGQ_SLOTS         128
-#define CM_MSGQ_BUF_LEN       256
+#define CM_MSGQ_BUF_LEN       512
 
 #define CM_OK                 0x00000000
 #define CM_ERROR              0x80000001

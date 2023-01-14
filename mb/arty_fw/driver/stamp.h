@@ -15,6 +15,7 @@ typedef struct _stamp_regs_t {
    uint32_t       date;
    uint32_t       time;
    uint32_t       version;
+   uint32_t       test;
 } stamp_regs_t, *pstamp_regs_t;
 
 uint32_t  stamp_init(void);

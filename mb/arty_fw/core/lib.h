@@ -24,6 +24,8 @@
 #define  CLK_STOP       2
 #define  CLK_PRINT      4
 
+#define  FREE_TCR0 *(volatile uint32_t *)(XPAR_AXI_FREETIMER_BASEADDR + 0x08)
+
 void     dump(uint8_t *pBuf, uint32_t len, uint8_t options, uint32_t offset);
 uint32_t crc(pcm_msg_t msg, BOOLEAN crcChk);
 void     srand_32(uint32_t _seed);

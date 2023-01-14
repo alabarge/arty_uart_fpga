@@ -1,4 +1,4 @@
 #pragma once
 
-void cli_gen(void);
+void cli_init(void);
 

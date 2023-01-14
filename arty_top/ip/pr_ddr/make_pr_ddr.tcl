@@ -498,13 +498,13 @@ proc create_hier_cell_mb_bram { parentCell nameHier } {
 
   set Vp_Vn_0 [ create_bd_intf_port -mode Slave -vlnv xilinx.com:interface:diff_analog_io_rtl:1.0 Vp_Vn_0 ]
 
-  set btn [ create_bd_intf_port -mode Master -vlnv xilinx.com:interface:gpio_rtl:1.0 btn ]
-
   set cm_uart [ create_bd_intf_port -mode Master -vlnv xilinx.com:interface:uart_rtl:1.0 cm_uart ]
 
   set ddr3_sdram [ create_bd_intf_port -mode Master -vlnv xilinx.com:interface:ddrx_rtl:1.0 ddr3_sdram ]
 
-  set led [ create_bd_intf_port -mode Master -vlnv xilinx.com:interface:gpio_rtl:1.0 led ]
+  set gpi [ create_bd_intf_port -mode Master -vlnv xilinx.com:interface:gpio_rtl:1.0 gpi ]
+
+  set gpo [ create_bd_intf_port -mode Master -vlnv xilinx.com:interface:gpio_rtl:1.0 gpo ]
 
   set oled [ create_bd_intf_port -mode Master -vlnv xilinx.com:interface:gpio_rtl:1.0 oled ]
 
@@ -564,7 +564,7 @@ proc create_hier_cell_mb_bram { parentCell nameHier } {
   set axi_led [ create_bd_cell -type ip -vlnv xilinx.com:ip:axi_gpio:2.0 axi_led ]
   set_property -dict [list \
     CONFIG.C_ALL_OUTPUTS {1} \
-    CONFIG.C_GPIO_WIDTH {4} \
+    CONFIG.C_GPIO_WIDTH {8} \
     CONFIG.GPIO_BOARD_INTERFACE {Custom} \
     CONFIG.USE_BOARD_FLOW {true} \
   ] $axi_led
@@ -648,8 +648,13 @@ proc create_hier_cell_mb_bram { parentCell nameHier } {
     CONFIG.C_D_AXI {1} \
     CONFIG.C_D_LMB {1} \
     CONFIG.C_I_LMB {1} \
+    CONFIG.C_USE_BARREL {1} \
     CONFIG.C_USE_DCACHE {1} \
+    CONFIG.C_USE_DIV {1} \
+    CONFIG.C_USE_HW_MUL {1} \
     CONFIG.C_USE_ICACHE {1} \
+    CONFIG.C_USE_MSR_INSTR {1} \
+    CONFIG.C_USE_PCMP_INSTR {1} \
   ] $mb_cpu
 
 
@@ -688,9 +693,9 @@ proc create_hier_cell_mb_bram { parentCell nameHier } {
   connect_bd_intf_net -intf_net axi_crossbar_0_M09_AXI [get_bd_intf_pins axi_crossbar/M09_AXI] [get_bd_intf_pins axi_oled/S_AXI]
   connect_bd_intf_net -intf_net axi_crossbar_0_M10_AXI [get_bd_intf_pins axi_button/S_AXI] [get_bd_intf_pins axi_crossbar/M10_AXI]
   connect_bd_intf_net -intf_net axi_crossbar_0_M11_AXI [get_bd_intf_pins axi_crossbar/M11_AXI] [get_bd_intf_pins axi_watchdog/S_AXI]
-  connect_bd_intf_net -intf_net axi_gpio_0_GPIO [get_bd_intf_ports led] [get_bd_intf_pins axi_led/GPIO]
+  connect_bd_intf_net -intf_net axi_gpio_0_GPIO [get_bd_intf_ports gpo] [get_bd_intf_pins axi_led/GPIO]
   connect_bd_intf_net -intf_net axi_gpio_1_GPIO [get_bd_intf_ports oled] [get_bd_intf_pins axi_oled/GPIO]
-  connect_bd_intf_net -intf_net axi_gpio_2_GPIO [get_bd_intf_ports btn] [get_bd_intf_pins axi_button/GPIO]
+  connect_bd_intf_net -intf_net axi_gpio_2_GPIO [get_bd_intf_ports gpi] [get_bd_intf_pins axi_button/GPIO]
   connect_bd_intf_net -intf_net axi_interconnect_0_M00_AXI [get_bd_intf_pins axi_interconnect/M00_AXI] [get_bd_intf_pins sdram/S_AXI]
   connect_bd_intf_net -intf_net axi_quad_spi_0_SPI_0 [get_bd_intf_ports qspi_flash] [get_bd_intf_pins axi_qspi/SPI_0]
   connect_bd_intf_net -intf_net axi_uartlite_0_UART [get_bd_intf_ports stdio_uart] [get_bd_intf_pins axi_stdio_uart/UART]

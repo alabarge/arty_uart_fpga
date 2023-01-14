@@ -45,8 +45,8 @@ entity arty_top is
       qspi_flash_ss_io     : inout std_logic;
 
       -- GPIO
-      led_tri_o            : out   std_logic_vector(3 downto 0);
-      btn_tri_i            : in    std_logic_vector(3 downto 0);
+      gpo_tri_o            : out   std_logic_vector(7 downto 0);
+      gpi_tri_i            : in    std_logic_vector(3 downto 0);
       led0_rgb             : out   std_logic_vector(2 downto 0);
       led1_rgb             : out   std_logic_vector(2 downto 0);
 
@@ -76,10 +76,7 @@ entity arty_top is
       vauxn11              : in    std_logic;
 
       -- Test Points
-      tp1                  : out   std_logic;
-      tp2                  : out   std_logic;
-      tp3                  : out   std_logic;
-      tp4                  : out   std_logic
+      hw_tp                : out   std_logic_vector(3 downto 0)
 
    );
 end arty_top;
@@ -121,10 +118,10 @@ begin
    led0_rgb(1)          <= '0';
    led0_rgb(2)          <= '0';
 
-   tp1                  <= heartbeat;
-   tp2                  <= '0';
-   tp3                  <= '0';
-   tp4                  <= '0';
+   hw_tp(0)             <= heartbeat;
+   hw_tp(1)             <= watchdog;
+   hw_tp(2)             <= '0';
+   hw_tp(3)             <= '0';
 
    --
    -- VIVADO BLOCK DESIGN
@@ -147,8 +144,8 @@ begin
          ddr3_sdram_ras_n              => ddr3_sdram_ras_n,
          ddr3_sdram_reset_n            => ddr3_sdram_reset_n,
          ddr3_sdram_we_n               => ddr3_sdram_we_n,
-         led_tri_o(3 downto 0)         => led_tri_o,
-         btn_tri_i(3 downto 0)         => btn_tri_i,
+         gpo_tri_o                     => gpo_tri_o,
+         gpi_tri_i                     => gpi_tri_i,
          oled_tri_o(0)                 => oOLED_SCK,
          oled_tri_o(1)                 => oOLED_MOSI,
          oled_tri_o(2)                 => oOLED_SS,
@@ -187,7 +184,7 @@ begin
    -- System Reset, 12MHZ
    --
    process(ext_resetn, clk12mhz) begin
-      if (ext_resetn = '0' or watchdog = '1') then
+      if (ext_resetn = '0' and watchdog = '1') then
           reset_cnt        <= (others => '0');
           sys_rst_n        <= '0';
       elsif (rising_edge(clk12mhz)) then

@@ -376,7 +376,7 @@ void xlprint_isr(void *arg) {
 // 7.3.5   Code
 
    // handle receive interrupt only
-   if (uart->status & UART_RX_VALID) {
+   while (uart->status & UART_RX_VALID) {
       // read the incoming character
       ch = uart->rx_dat;
       if (isprint(ch) || ch == 0x0a)

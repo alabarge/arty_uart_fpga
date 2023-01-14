@@ -81,6 +81,7 @@
 
    static   volatile pgpio_regs_t   leds = (volatile pgpio_regs_t)XPAR_AXI_LED_BASEADDR;
    static   volatile pgpio_regs_t   btns = (volatile pgpio_regs_t)XPAR_AXI_BUTTON_BASEADDR;
+   static   uint32_t leds_dat;
 
 // 7 MODULE CODE
 
@@ -116,9 +117,10 @@ uint32_t gpio_init(void) {
 
    // set gpio_1 all off
    leds->dat = 0x0;
+   leds_dat  = 0x0;
 
    // set gpio_2 direction, all in
-   btns->tri = 0xF;
+   btns->tri = ~0x0;
 
    return result;
 
@@ -177,32 +179,36 @@ void gpio_set_val(uint8_t gpio, uint8_t state) {
 
 // 7.3.4   Data Structures
 
-   uint32_t   dat;
-
 // 7.3.5   Code
 
-   // Read Current Port Value
-   dat = leds->dat;
-
    switch(state) {
-      case GPIO_LED_OFF :
-         dat &= ~gpio;
-         break;
       case GPIO_LED_ON :
-         dat |=  gpio;
+         leds_dat |=  gpio;
+         break;
+      case GPIO_LED_OFF :
+         leds_dat &= ~gpio;
          break;
       case GPIO_LED_TOGGLE :
-         dat ^=  gpio;
+         leds_dat ^=  gpio;
          break;
       case GPIO_LED_ALL_OFF :
-         dat  =  0x0;
+         leds_dat  &=  0xF0;
          break;
       case GPIO_LED_ALL_ON :
-         dat  =  0xF;
+         leds_dat  |=  0x0F;
+         break;
+      case GPIO_TP_ON :
+         leds_dat |=  gpio;
+         break;
+      case GPIO_TP_OFF :
+         leds_dat &= ~gpio;
+         break;
+      case GPIO_TP_TOGGLE :
+         leds_dat ^=  gpio;
          break;
    }
 
-   leds->dat = dat;
+   leds->dat = leds_dat;
 
 }  // end gpio_val_set()
 
