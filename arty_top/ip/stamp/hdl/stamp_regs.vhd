@@ -54,6 +54,7 @@ signal wrCE                : std_logic_vector(C_NUM_REG-1 downto 0);
 signal rdCE                : std_logic_vector(C_NUM_REG-1 downto 0);
 
 signal stamp_TEST          : std_logic_vector(31 downto 0);
+signal stamp_cnt           : unsigned(31 downto 0);
 
 --
 -- MAIN CODE
@@ -182,8 +183,21 @@ begin
          s_axi_rdata    <= C_BUILD_MAJOR & C_BUILD_MINOR & C_BUILD_NUM & C_BUILD_INC;
       elsif (rdCE(5) = '1') then
          s_axi_rdata    <= stamp_TEST;
+      elsif (rdCE(6) = '1') then
+         s_axi_rdata    <= std_logic_vector(stamp_cnt);
       else
          s_axi_rdata    <= (others => '0');
+      end if;
+   end process;
+
+   --
+   -- FREE RUNNING COUNTER, USED FOR SOFTWARE TIMERS
+   --
+   process (all) begin
+      if (s_axi_aresetn = '0') then
+         stamp_cnt      <= (others => '0');
+      elsif (rising_edge(s_axi_aclk)) then
+         stamp_cnt      <= stamp_cnt + 1;
       end if;
    end process;
 

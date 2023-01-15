@@ -486,8 +486,6 @@ VOID CMainFrame::ReportStartup()
    // Report Hardware System ID and Timestamp
    str.Format(_T("Associated Firmware System ID : %d, Timestamp : %d\n"), FPGA_SYSID, FPGA_EPOCH);
    Log(str);
-   str.Format(_T("System Name : %s, Device Family : %s\n"), _T(ALT_SYSTEM_NAME), _T(ALT_DEVICE_FAMILY));
-   Log(str);
    str.Format(_T("Hardware Baudrate : %dbps\n"), CFG_BAUD_RATE);
    Log(str);
 

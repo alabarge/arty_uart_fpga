@@ -279,8 +279,7 @@ void regs_f(int argc, char **argv) {
    xlprint("%-16s base:irq %08X:%d\n", "axi_cm_uart", XPAR_AXI_CM_UART_BASEADDR, XPAR_INTC_0_UARTLITE_0_VEC_ID);
    xlprint("%-16s base:irq %08X:%d\n", "axi_intc", XPAR_AXI_INTC_BASEADDR, XIL_EXCEPTION_ID_INT);
    xlprint("%-16s base:irq %08X:%d\n", "axi_wdttb", XPAR_AXI_WATCHDOG_BASEADDR, -1);
-   xlprint("%-16s base:irq %08X:%d\n", "axi_systimer", XPAR_AXI_SYSTIMER_BASEADDR, XPAR_INTC_0_TMRCTR_1_VEC_ID);
-   xlprint("%-16s base:irq %08X:%d\n", "axi_freetimer", XPAR_AXI_FREETIMER_BASEADDR, -1);
+   xlprint("%-16s base:irq %08X:%d\n", "axi_systimer", XPAR_AXI_SYSTIMER_BASEADDR, XPAR_INTC_0_TMRCTR_0_VEC_ID);
    xlprint("%-16s base:irq %08X:%d\n", "axi_qspi", XPAR_AXI_QSPI_BASEADDR, XPAR_INTC_0_SPI_0_VEC_ID);
    xlprint("%-16s base:irq %08X:%d\n", "axi_stamp", XPAR_AXI_STAMP_BASEADDR, -1);
    xlprint("%-16s base:irq %08X:%d\n", "axi_xadc", XPAR_AXI_XADC_BASEADDR, XPAR_INTC_0_SYSMON_0_VEC_ID);
@@ -353,7 +352,7 @@ void md_loop_f(int argc, char **argv) {
       gc.cli.loop_end = 0;
       gc.cli.loop_fn = md_loop_f;
       gc.cli.loop_ms = MILLISECONDS * loop_ms;
-      gc.cli.loop_snap = FREE_TCR0;
+      gc.cli.loop_snap = STAMP_TCR;
       gc.cli.loop_cnt = 0;
       gc.cli.loop_addr = 0x80400000;
       gc.cli.loop_val = 0x0;
@@ -379,7 +378,7 @@ void mw_loop_f(int argc, char **argv) {
       gc.cli.loop_end = 0;
       gc.cli.loop_fn = mw_loop_f;
       gc.cli.loop_ms = MILLISECONDS * loop_ms;
-      gc.cli.loop_snap = FREE_TCR0;
+      gc.cli.loop_snap = STAMP_TCR;
       gc.cli.loop_cnt = 0;
       gc.cli.loop_addr = 0x80400000;
       gc.cli.loop_val = 0x0;
@@ -409,7 +408,7 @@ void reg_test_f(int argc, char **argv) {
       gc.cli.loop_end = 0;
       gc.cli.loop_fn = reg_test_f;
       gc.cli.loop_ms = MILLISECONDS * loop_ms;
-      gc.cli.loop_snap = FREE_TCR0;
+      gc.cli.loop_snap = STAMP_TCR;
       gc.cli.loop_cnt = 0;
       gc.cli.loop_addr = XPAR_AXI_STAMP_BASEADDR + 0x14;
       gc.cli.loop_val = 0x0;
@@ -454,7 +453,7 @@ void mem_test_f(int argc, char **argv) {
       gc.cli.loop_end = 0;
       gc.cli.loop_fn = mem_test_f;
       gc.cli.loop_ms = MILLISECONDS * loop_ms;
-      gc.cli.loop_snap = FREE_TCR0;
+      gc.cli.loop_snap = STAMP_TCR;
       gc.cli.loop_cnt = 0;
       gc.cli.loop_addr = 0x80400000;
       gc.cli.loop_val = 0x100;

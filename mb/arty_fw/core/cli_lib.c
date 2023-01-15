@@ -130,8 +130,8 @@ cli_status_t cli_process(cli_t *cli) {
     }
     // command looping
     else if (cli->looping == 1) {
-       if ((FREE_TCR0 - cli->loop_snap) > cli->loop_ms) {
-          cli->loop_snap = FREE_TCR0;
+       if ((STAMP_TCR - cli->loop_snap) > cli->loop_ms) {
+          cli->loop_snap = STAMP_TCR;
           if (cli->loop_fn != NULL) {
              cli->loop_cnt++;
              cli->loop_fn(cli->argc, cli->argv);

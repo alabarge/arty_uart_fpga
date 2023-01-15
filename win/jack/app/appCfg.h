@@ -110,7 +110,7 @@
 #define  APP_CON_UDP             4
 #define  APP_CON_TCP             5
 
-#define  APP_DEVID               CM_DEV_DE0
+#define  APP_DEVID               CM_DEV_ARTY
 
 #define  APP_PORT_NONE          -1
 #define  APP_SPEED_NONE         -1

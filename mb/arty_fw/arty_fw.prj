@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ASCII"?>
-<sdkproject:SdkProject xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:sdkproject="http://www.xilinx.com/sdkproject" name="arty_fw" location="./arty_fw" platform="./arty_top/export/arty_top/arty_top.xpfm" platformUID="xilinx:arty-s7-50::0.0(custom)" systemProject="arty_fw_system" sysConfig="arty_top" runtime="cpp" cpu="standalone_mb_cpu" cpuInstance="mb_cpu" os="standalone" mssSignature="54a0776582869c0297e2e46d1f945877">
+<sdkproject:SdkProject xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:sdkproject="http://www.xilinx.com/sdkproject" name="arty_fw" location="./arty_fw" platform="./arty_top/export/arty_top/arty_top.xpfm" platformUID="xilinx:arty-s7-50::0.0(custom)" systemProject="arty_fw_system" sysConfig="arty_top" runtime="cpp" cpu="standalone_mb_cpu" cpuInstance="mb_cpu" os="standalone" mssSignature="f31770d0d9e1b187b353e17b736d03f4">
   <configuration name="Debug" id="xilinx.gnu.mb.exe.debug.982349386">
     <configBuildOptions xsi:type="sdkproject:SdkOptions"/>
     <lastBuildOptions xsi:type="sdkproject:SdkOptions"/>

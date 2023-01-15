@@ -44,10 +44,12 @@
 //#define VERBOSE
 
 /* Declarations */
+static void display_progress (uint32_t lines);
 static uint8_t load_exec ();
 static uint8_t flash_get_srec_line (uint8_t *buf);
 extern void init_stdout();
 uint8  grab_hex_byte (uint8 *buf);
+int FlashReadID(void);
 
 /*
  * The following constant defines the slave select signal that is used to
@@ -92,16 +94,6 @@ uint8  grab_hex_byte (uint8 *buf);
 
 #define	READ_CMD	0x03
 
-/* Declarations */
-#ifdef VERBOSE
-	static void display_progress (uint32_t lines);
-#endif
-static uint8_t load_exec ();
-static uint8_t flash_get_srec_line (uint8_t *buf);
-extern void init_stdout();
-uint8  grab_hex_byte (uint8 *buf);
-int FlashReadID(void);
-
 #define SPI_DEVICE_ID		XPAR_SPI_0_DEVICE_ID
 
 /*
@@ -141,15 +133,13 @@ static uint8_t sr_data_buf[SREC_DATA_MAX_BYTES];
 
 u32 flbuf;
 
-#ifdef VERBOSE
-static int8_t *errors[] = {
+static char *errors[] = {
 	"",
 	"Error while copying executable image into RAM",
 	"Error while reading an SREC line from flash",
 	"SREC line is corrupted",
 	"SREC has invalid checksum."
 };
-#endif
 
 /* We don't use interrupts/exceptions.
    Dummy definitions to reduce code size on MicroBlaze */
@@ -165,9 +155,7 @@ int main()
 	int Status;
 	uint8_t ret;
 
-#ifdef VERBOSE
 	print ("\r\nSREC SPI Bootloader\r\n");
-#endif
 
 	/*
 	 * Initialize the SPI driver so that it's ready to use,
@@ -212,18 +200,15 @@ int main()
 		return XST_FAILURE;
 	}
 
-#ifdef VERBOSE
 	print ("Loading SREC image from flash @ address: ");
 	putnum (FLASH_IMAGE_BASEADDR);
 	print ("\r\n");
-#endif
 
 	flbuf = (u32)FLASH_IMAGE_BASEADDR;
 	ret = load_exec ();
 
 	/* If we reach here, we are in error */
 
-#ifdef VERBOSE
 	if (ret > LD_SREC_LINE_ERROR) {
 		print ("ERROR in SREC line: ");
 		putnum (srec_line);
@@ -232,7 +217,6 @@ int main()
 		print ("ERROR: ");
 		print (errors[ret]);
 	}
-#endif
 
 	return ret;
 }
@@ -342,14 +326,12 @@ int FlashReadID(void)
 
 	for(i = 0; i < 3; i++)
 		FlashID[i] = ReadBuffer[i + 1];
-#ifdef VERBOSE
 	xil_printf("FlashID=0x%x 0x%x 0x%x\n\r", ReadBuffer[1], ReadBuffer[2],
 			ReadBuffer[3]);
-#endif
+
 	return XST_SUCCESS;
 }
 
-#ifdef VERBOSE
 static void display_progress (uint32_t count)
 {
 	/* Send carriage return */
@@ -358,7 +340,6 @@ static void display_progress (uint32_t count)
 	putnum (count);
 	print (" S-records");
 }
-#endif
 
 static uint8_t load_exec ()
 {
@@ -383,9 +364,6 @@ static uint8_t load_exec ()
 		if ((ret = decode_srec_line (sr_buf, &srinfo)) != 0)
 			return ret;
 
-#ifdef VERBOSE
-		display_progress (srec_line);
-#endif
 		switch (srinfo.type) {
 			case SREC_TYPE_0:
 				break;
@@ -413,11 +391,12 @@ static uint8_t load_exec ()
 		}
 		mode = READ_WRITE_EXTRA_BYTES;
 	}
-#ifdef VERBOSE
+
+   display_progress (srec_line);
+
 	print ("\r\nExecuting program starting at address: ");
 	putnum ((uint32_t)laddr);
 	print ("\r\n");
-#endif
 	(*laddr)();
 
 	/* We will be dead at this point */

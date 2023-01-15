@@ -11,7 +11,7 @@
 
 #include "appCfg.h"
 #include "appType.h"
-#include "system.h"
+#include "xparameters.h"
 #include "MainFrm.h"
 
 // CappApp:

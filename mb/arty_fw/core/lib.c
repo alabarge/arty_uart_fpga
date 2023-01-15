@@ -426,9 +426,9 @@ void clk_sleep(uint32_t delay, uint32_t units) {
    // Cycles to Wait
    j = delay * units;
    // Read current system count
-   i = FREE_TCR0;
+   i = STAMP_TCR;
    // Spin
-   while ((FREE_TCR0 - i) < j);
+   while ((STAMP_TCR - i) < j);
 
 }  // end clk_sleep()
 
@@ -467,12 +467,12 @@ uint32_t clk_time(uint8_t op, uint32_t units, uint32_t *tNow) {
    // Start the Count,
    // Read the 32-Bit Time Base Register
    if (op & CLK_START) {
-      *tNow = FREE_TCR0;
+      *tNow = STAMP_TCR;
    }
    // Report the Count,
    // Read the 32-Bit Time Base Register
    else if (op & CLK_STOP) {
-      tEnd = FREE_TCR0;
+      tEnd = STAMP_TCR;
       switch (units) {
          case MICROSECONDS:
             result = (uint32_t)(tEnd - *tNow) / MICROSECONDS;
@@ -535,9 +535,9 @@ void utick(uint32_t microseconds) {
    // Cycles to Wait
    j = microseconds * MICROSECONDS;
    // Read current system count
-   i = FREE_TCR0;
+   i = STAMP_TCR;
    // Spin
-   while ((FREE_TCR0 - i) < j);
+   while ((STAMP_TCR - i) < j);
 
 }  // end utick()
 
@@ -573,8 +573,8 @@ void stick(uint32_t seconds) {
    // Cycles to Wait
    j = seconds * SECONDS;
    // Read current system count
-   i = FREE_TCR0;
+   i = STAMP_TCR;
    // Spin
-   while ((FREE_TCR0 - i) < j);
+   while ((STAMP_TCR - i) < j);
 
 }  // end stick()

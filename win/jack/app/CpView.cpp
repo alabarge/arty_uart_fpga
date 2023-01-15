@@ -166,62 +166,26 @@ void CCpView::OnInitialUpdate()
    m_Edit.SetParaFormat(pf);
 
    // Report the NIOS Address Map from the "system.h" header.
-   str.Format(_T("NIOS Address Map, from system.h :\r\n")); str1 += str;
+   str.Format(_T("Microblaze Address Map, from system.h :\r\n")); str1 += str;
    str.Format(_T("Module            Address   \r\n")); str1 += str;
    str.Format(_T("============      ==========\r\n")); str1 += str;
 
-#ifdef SDRAM_BASE
-   str.Format(_T("  sdram           0x%08X\r\n"), SDRAM_BASE); str1 += str;
-   str.Format(_T("                  0x%08X\r\n"), (UINT)SDRAM_BASE + (UINT)SDRAM_SPAN - 1); str1 += str;
-#endif
-
-#ifdef SDRAM_FIFO_REGION_BASE
-   str.Format(_T("  sdram_fifo      0x%08X\r\n"), SDRAM_FIFO_REGION_BASE); str1 += str;
-   str.Format(_T("                  0x%08X\r\n"), (UINT)SDRAM_FIFO_REGION_BASE + (UINT)SDRAM_FIFO_REGION_SPAN - 1); str1 += str;
-#endif
-
-#ifdef ONCHIP_CPU_BASE
-   str.Format(_T("  onchip_cpu      0x%08X\r\n"), ONCHIP_CPU_BASE); str1 += str;
-   str.Format(_T("                  0x%08X\r\n"), (UINT)ONCHIP_CPU_BASE + (UINT)ONCHIP_CPU_SPAN - 1); str1 += str;
-#endif
-
-#ifdef ONCHIP_BASE
-   str.Format(_T("  onchip          0x%08X\r\n"), ONCHIP_CPU_BASE); str1 += str;
-   str.Format(_T("                  0x%08X\r\n"), (UINT)ONCHIP_CPU_BASE + (UINT)ONCHIP_CPU_SPAN - 1); str1 += str;
-#endif
-
-#ifdef ONCHIP_ADC_BASE
-   str.Format(_T("  onchip_adc      0x%08X\r\n"), ONCHIP_ADC_BASE); str1 += str;
-   str.Format(_T("                  0x%08X\r\n"), (UINT)ONCHIP_ADC_BASE + (UINT)ONCHIP_ADC_SPAN - 1); str1 += str;
-#endif
-
-   str.Format(_T("  stamp           0x%08X\r\n"), STAMP_BASE); str1 += str;
-   str.Format(_T("  gpx             0x%08X\r\n"), GPX_BASE); str1 += str;
-   str.Format(_T("  gpi             0x%08X\r\n"), GPI_BASE); str1 += str;
-
-#ifdef COM_BASE
-   str.Format(_T("  com             0x%08X\r\n"), COM_BASE); str1 += str;
-   str.Format(_T("                  0x%08X\r\n"), COM_BASE + COM_SPAN - 1); str1 += str;
-#endif
-#ifdef OPTO_BASE
-   str.Format(_T("  opto            0x%08X\r\n"), OPTO_BASE); str1 += str;
-   str.Format(_T("                  0x%08X\r\n"), OPTO_BASE + OPTO_SPAN - 1); str1 += str;
-#endif
-#ifdef FIFO_BASE
-   str.Format(_T("  fifo            0x%08X\r\n"), FIFO_BASE); str1 += str;
-   str.Format(_T("                  0x%08X\r\n"), FIFO_BASE + FIFO_SPAN - 1); str1 += str;
-#endif
-#ifdef LAN_BASE
-   str.Format(_T("  lan             0x%08X\r\n"), LAN_BASE); str1 += str;
-   str.Format(_T("                  0x%08X\r\n"), LAN_BASE + LAN_SPAN - 1); str1 += str;
-#endif
-
-   str.Format(_T("  adc             0x%08X\r\n"), ADC_BASE); str1 += str;
-
-#ifdef UPDATE_BASE
-   str.Format(_T("  update          0x%08X\r\n"), UPDATE_BASE); str1 += str;
-   str.Format(_T("                  0x%08X\r\n"), UPDATE_BASE + UPDATE_SPAN - 1); str1 += str;
-#endif
+   str.Format(_T("  mb_ram          0x%08X\r\n"), XPAR_BRAM_0_BASEADDR); str1 += str;
+   str.Format(_T("                  0x%08X\r\n"), (UINT)XPAR_BRAM_0_BASEADDR + (UINT)XPAR_BRAM_0_HIGHADDR); str1 += str;
+   str.Format(_T("  axi_led         0x%08X\r\n"), XPAR_AXI_LED_BASEADDR); str1 += str;
+   str.Format(_T("  axi_oled        0x%08X\r\n"), XPAR_AXI_OLED_BASEADDR); str1 += str;
+   str.Format(_T("  axi_button      0x%08X\r\n"), XPAR_AXI_BUTTON_BASEADDR); str1 += str;
+   str.Format(_T("  axi_stdio_uart  0x%08X\r\n"), XPAR_AXI_STDIO_UART_BASEADDR); str1 += str;
+   str.Format(_T("  axi_cm_uart     0x%08X\r\n"), XPAR_AXI_CM_UART_BASEADDR); str1 += str;
+   str.Format(_T("  axi_intc        0x%08X\r\n"), XPAR_INTC_0_BASEADDR); str1 += str;
+   str.Format(_T("  axi_wdttb       0x%08X\r\n"), XPAR_AXI_WATCHDOG_BASEADDR); str1 += str;
+   str.Format(_T("  axi_systimer    0x%08X\r\n"), XPAR_AXI_SYSTIMER_BASEADDR); str1 += str;
+   str.Format(_T("  axi_freetimer   0x%08X\r\n"), XPAR_AXI_FREETIMER_BASEADDR); str1 += str;
+   str.Format(_T("  axi_qspi        0x%08X\r\n"), XPAR_AXI_QSPI_BASEADDR); str1 += str;
+   str.Format(_T("  axi_stamp       0x%08X\r\n"), XPAR_AXI_STAMP_BASEADDR); str1 += str;
+   str.Format(_T("  axi_xadc        0x%08X\r\n"), XPAR_AXI_XADC_BASEADDR); str1 += str;
+   str.Format(_T("  sdram           0x%08X\r\n"), XPAR_SDRAM_BASEADDR); str1 += str;
+   str.Format(_T("                  0x%08X\r\n"), (UINT)XPAR_SDRAM_BASEADDR + (UINT)XPAR_SDRAM_HIGHADDR); str1 += str;
 
    str.Format(_T("  sysid           %d\r\n"), FPGA_SYSID); str1 += str;
    str.Format(_T("  stamp           %d\r\n"), FPGA_EPOCH); str1 += str;

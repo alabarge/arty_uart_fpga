@@ -180,19 +180,14 @@ int main() {
    gc.error |= XTmrCtr_Initialize(&gc.systimer, XPAR_AXI_SYSTIMER_DEVICE_ID);
    XTmrCtr_SetOptions(&gc.systimer, 0, XTC_INT_MODE_OPTION | XTC_AUTO_RELOAD_OPTION | XTC_DOWN_COUNT_OPTION);
    XTmrCtr_SetHandler(&gc.systimer, systimer, &gc.systimer);
-   gc.error |= XIntc_Connect(&gc.intc, XPAR_INTC_0_TMRCTR_1_VEC_ID,
+   gc.error |= XIntc_Connect(&gc.intc, XPAR_INTC_0_TMRCTR_0_VEC_ID,
             (XInterruptHandler)XTmrCtr_InterruptHandler, (void *)&gc.systimer);
-   XIntc_Enable(&gc.intc, XPAR_INTC_0_TMRCTR_1_VEC_ID);
+   XIntc_Enable(&gc.intc, XPAR_INTC_0_TMRCTR_0_VEC_ID);
    // 10 mS roll-over, timer counts up
    XTmrCtr_SetResetValue(&gc.systimer, 0, 0x000C65BF);
    XTmrCtr_Start(&gc.systimer, 0);
 
-   // Free Running Timer Init
-   gc.error |= XTmrCtr_Initialize(&gc.freetimer, XPAR_AXI_FREETIMER_DEVICE_ID);
-   XTmrCtr_SetOptions(&gc.freetimer, 0, XTC_AUTO_RELOAD_OPTION);
-   XTmrCtr_Start(&gc.freetimer, 0);
-
-   gc.ping_time = FREE_TCR0;
+   gc.ping_time = STAMP_TCR;
 
    // GPIO Init
    gc.error |= gpio_init();
@@ -471,8 +466,7 @@ void version(void) {
    xlprint("%-16s base:irq %08X:%d\n", "axi_cm_uart", XPAR_AXI_CM_UART_BASEADDR, XPAR_INTC_0_UARTLITE_0_VEC_ID);
    xlprint("%-16s base:irq %08X:%d\n", "axi_intc", XPAR_AXI_INTC_BASEADDR, XIL_EXCEPTION_ID_INT);
    xlprint("%-16s base:irq %08X:%d\n", "axi_wdttb", XPAR_AXI_WATCHDOG_BASEADDR, -1);
-   xlprint("%-16s base:irq %08X:%d\n", "axi_systimer", XPAR_AXI_SYSTIMER_BASEADDR, XPAR_INTC_0_TMRCTR_1_VEC_ID);
-   xlprint("%-16s base:irq %08X:%d\n", "axi_freetimer", XPAR_AXI_FREETIMER_BASEADDR, -1);
+   xlprint("%-16s base:irq %08X:%d\n", "axi_systimer", XPAR_AXI_SYSTIMER_BASEADDR, XPAR_INTC_0_TMRCTR_0_VEC_ID);
    xlprint("%-16s base:irq %08X:%d\n", "axi_qspi", XPAR_AXI_QSPI_BASEADDR, XPAR_INTC_0_SPI_0_VEC_ID);
    xlprint("%-16s base:irq %08X:%d\n", "axi_stamp", XPAR_AXI_STAMP_BASEADDR, -1);
    xlprint("%-16s base:irq %08X:%d\n", "axi_xadc", XPAR_AXI_XADC_BASEADDR, XPAR_INTC_0_SYSMON_0_VEC_ID);

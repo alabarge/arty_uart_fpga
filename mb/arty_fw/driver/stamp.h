@@ -8,6 +8,8 @@
 #define  STAMP_ERR_NODEV       0x80000004
 #define  STAMP_ERR_MMAP        0x80000008
 
+#define  STAMP_TCR *(volatile uint32_t *)(XPAR_AXI_STAMP_BASEADDR + 0x18)
+
 // all registers
 typedef struct _stamp_regs_t {
    uint32_t       sysid;
@@ -16,6 +18,7 @@ typedef struct _stamp_regs_t {
    uint32_t       time;
    uint32_t       version;
    uint32_t       test;
+   uint32_t       count;
 } stamp_regs_t, *pstamp_regs_t;
 
 uint32_t  stamp_init(void);
