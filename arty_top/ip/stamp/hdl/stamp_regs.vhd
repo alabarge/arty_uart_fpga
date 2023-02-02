@@ -56,6 +56,8 @@ signal rdCE                : std_logic_vector(C_NUM_REG-1 downto 0);
 signal stamp_TEST          : std_logic_vector(31 downto 0);
 signal stamp_cnt           : unsigned(31 downto 0);
 
+signal axi_rvalid_cnt      : integer range 0 to 3;
+
 --
 -- MAIN CODE
 --
@@ -73,6 +75,9 @@ begin
    --
    --  AXI-LITE WRITE SIGNALING
    --
+
+   s_axi_wready      <= s_axi_awready;
+
    --
    --  WRITE ADDRESS AND DATA READY SIGNAL
    --
@@ -89,8 +94,6 @@ begin
          end if;
       end if;
    end process;
-
-   s_axi_wready      <= s_axi_awready;
 
    --
    --  WRITE RETURN READY
@@ -114,16 +117,23 @@ begin
    s_axi_arready     <= not s_axi_rvalid;
 
    --
-   --  READ VALID
+   --  READ VALID, DELAYED BY TWO CLOCKS
    --
    process(all) begin
       if (s_axi_aresetn = '0') then
          s_axi_rvalid      <= '0';
+         axi_rvalid_cnt    <= 0;
       elsif rising_edge(s_axi_aclk) then
-         if (s_axi_arvalid = '1' and s_axi_arready = '1') then
-            s_axi_rvalid   <= '1';
-         elsif (s_axi_rready = '1') then
-            s_axi_rvalid   <= '0';
+         if (s_axi_arvalid = '1' and s_axi_arready = '1' and
+             axi_rvalid_cnt = 0) then
+            axi_rvalid_cnt  <= axi_rvalid_cnt + 1;
+         elsif (axi_rvalid_cnt = 1) then
+            axi_rvalid_cnt  <= axi_rvalid_cnt + 1;
+         elsif (axi_rvalid_cnt = 2) then
+            s_axi_rvalid    <= '1';
+            axi_rvalid_cnt  <= 0;
+         else
+            s_axi_rvalid    <= '0';
          end if;
      end if;
    end process;

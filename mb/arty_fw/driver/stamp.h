@@ -27,4 +27,5 @@ uint32_t  stamp_epoch(void);
 uint32_t  stamp_date(void);
 uint32_t  stamp_time(void);
 uint32_t  stamp_version(void);
+uint32_t  stamp_count(void);
 

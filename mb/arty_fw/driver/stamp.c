@@ -58,7 +58,7 @@
          7.4   stamp_date()
          7.5   stamp_time()
          7.6   stamp_version()
-		 7.7   stamp_count()
+		   7.7   stamp_count()
 
 -----------------------------------------------------------------------------*/
 
@@ -278,24 +278,24 @@ uint32_t stamp_version(void) {
 
 uint32_t stamp_count(void) {
 
-/* 7.6.1   Functional Description
+/* 7.7.1   Functional Description
 
    This routine will return the timestamp count register value.
 
-   7.6.2   Parameters:
+   7.7.2   Parameters:
 
    NONE
 
-   7.6.3   Return Values:
+   7.7.3   Return Values:
 
    return   count register
 
 -----------------------------------------------------------------------------
 */
 
-// 7.6.4   Data Structures
+// 7.7.4   Data Structures
 
-// 7.6.5   Code
+// 7.7.5   Code
 
    return regs->count;
 

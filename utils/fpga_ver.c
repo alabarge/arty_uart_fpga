@@ -7,7 +7,6 @@
 #include <time.h>
 #include <limits.h>
 #include <sys/types.h>
-#include <sys/utime.h>
 
 // Windows does not define the S_ISREG and S_ISDIR macros in stat.h, so we do.
 // We have to define _CRT_INTERNAL_NONSTDC_NAMES 1 before #including sys/stat.h
@@ -29,8 +28,6 @@ int main(int argc, char *argv[]) {
    struct tm *now;
    time_t clock;
 
-   uint32_t file_exist  = 0;
-
    uint32_t build_major = 0;
    uint32_t build_minor = 0;
    uint32_t build_inc   = 0;
@@ -38,6 +35,11 @@ int main(int argc, char *argv[]) {
    uint32_t build_hex   = 0;
    uint32_t build_sysid = 0;
    uint32_t error       = 0;
+
+   uint32_t build_pid   = 0;
+   uint32_t build_map   = 0;
+   uint32_t build_logic = 0;
+   uint32_t build_map_date = 0;
 
    uint32_t build_inc_found = 0;
    uint32_t j, ret;
@@ -65,7 +67,7 @@ int main(int argc, char *argv[]) {
             "SEP", "OCT", "NOV", "DEC"
           };
 
-   printf("\nFirmware Version Utility 1.11\n");
+   printf("\nFirmware Version Utility 1.12\n");
 
    // command Line
    printf("cmd : ");
@@ -83,13 +85,14 @@ int main(int argc, char *argv[]) {
    }
 
    //
-   // If build.h exists then parse for BUILD_INC
+   // If fpga_build.h exists then parse for BUILD_INC and increment
    //
    if  ((ver = fopen(argv[2],"rt")) != NULL) {
       while (fgets(in_line, sizeof(in_line), ver) != NULL) {
          token = strtok(in_line, " ");
          token = strtok(NULL, " ");
          if (token == NULL) continue;
+         printf("%s\n", token);
          if (strcmp(token, "FPGA_INC") == 0) {
             token = strtok(NULL, "\n");
             sscanf(token, "%d", &build_inc);
@@ -102,100 +105,73 @@ int main(int argc, char *argv[]) {
    }
 
    //
-   // Parse build.inc
+   // Parse fpga_build.inc file
    //
    if  ((ver = fopen(argv[1],"rt")) != NULL) {
-      if (fgets(in_line, sizeof(in_line), ver) != NULL) {
+      while (fgets(in_line, sizeof(in_line), ver) != NULL) {
          token = strtok(in_line, " ");
          token = strtok(NULL, " ");
+         if (token == NULL) continue;
          if (strcmp(token, "BUILD_MAJOR") == 0) {
             token = strtok(NULL, "\n");
             sscanf(token, "%d", &build_major);
             build_major &= 0x00FF;
+            continue;
          }
-         else {
-            error = 1;
-            goto ERROR;
-         }
-      }
-      else {
-         error = 1;
-         goto ERROR;
-      }
-      if (fgets(in_line, sizeof(in_line), ver) != NULL) {
-         token = strtok(in_line, " ");
-         token = strtok(NULL, " ");
-         if (strcmp(token, "BUILD_MINOR") == 0) {
+         else if (strcmp(token, "BUILD_MINOR") == 0) {
             token = strtok(NULL, "\n");
             sscanf(token, "%d", &build_minor);
             build_minor &= 0x00FF;
+            continue;
          }
-         else {
-            error = 2;
-            goto ERROR;
-         }
-      }
-      else {
-         error = 3;
-         goto ERROR;
-      }
-      if (fgets(in_line, sizeof(in_line), ver) != NULL) {
-         token = strtok(in_line, " ");
-         token = strtok(NULL, " ");
-         if (strcmp(token, "BUILD_NUM") == 0) {
+         else if (strcmp(token, "BUILD_NUM") == 0) {
             token = strtok(NULL, "\n");
             sscanf(token, "%d", &build_num);
             build_num &= 0x00FF;
+            continue;
          }
-         else {
-            error = 4;
-            goto ERROR;
-         }
-      }
-      else {
-         error = 5;
-         goto ERROR;
-      }
-      if (fgets(in_line, sizeof(in_line), ver) != NULL) {
-         token = strtok(in_line, " ");
-         token = strtok(NULL, " ");
-         if (strcmp(token, "BUILD_INC") == 0) {
+         else if (strcmp(token, "BUILD_INC") == 0) {
             token = strtok(NULL, "\n");
-            // If build_inc not found in build.h
+            // If build_inc not found in fpga_build.h
             if (build_inc_found == 0) {
                sscanf(token, "%d", &build_inc);
                build_inc &= 0x00FF;
             }
+            continue;
          }
-         else {
-            error = 6;
-            goto ERROR;
-         }
-      }
-      else {
-         error = 7;
-         goto ERROR;
-      }
-      if (fgets(in_line, sizeof(in_line), ver) != NULL) {
-         token = strtok(in_line, " ");
-         token = strtok(NULL, " ");
-         if (strcmp(token, "BUILD_SYSID") == 0) {
+         else if (strcmp(token, "BUILD_SYSID") == 0) {
             token = strtok(NULL, "\n");
             sscanf(token, "%x", &build_sysid);
+            continue;
          }
-         else {
-            error = 8;
-            goto ERROR;
+         else if (strcmp(token, "BUILD_PID") == 0) {
+            token = strtok(NULL, "\n");
+            sscanf(token, "%x", &build_pid);
+               build_pid &= 0x00FF;
+            continue;
          }
-      }
-      else {
-         error = 9;
-         goto ERROR;
+         else if (strcmp(token, "BUILD_MAP") == 0) {
+            token = strtok(NULL, "\n");
+            sscanf(token, "%d", &build_map);
+               build_map &= 0x0FFF;
+            continue;
+         }
+         else if (strcmp(token, "BUILD_LOGIC") == 0) {
+            token = strtok(NULL, "\n");
+            sscanf(token, "%d", &build_logic);
+               build_logic &= 0x0FFF;
+            continue;
+         }
+         else if (strcmp(token, "BUILD_MAP_DATE") == 0) {
+            token = strtok(NULL, "\n");
+            sscanf(token, "%x", &build_map_date);
+            continue;
+         }
       }
       fclose(ver);
    }
-
-   ERROR:
+   printf("status      = %02X%03X%03X\n", build_pid, build_map, build_logic);
+   printf("status_date = %08X\n", build_map_date);
 
    if (error == 1) {
       fclose(ver);
@@ -328,6 +304,10 @@ int main(int argc, char *argv[]) {
    fprintf(ver, "#define FPGA_NUM        %d\n", build_num);
    fprintf(ver, "#define FPGA_INC        %d\n", build_inc);
    fprintf(ver, "#define FPGA_SYSID      0x%08X\n", build_sysid);
+   fprintf(ver, "#define FPGA_PID        0x%02X\n", build_pid);
+   fprintf(ver, "#define FPGA_MAP        %d\n",     build_map);
+   fprintf(ver, "#define FPGA_LOGIC      %d\n",     build_logic);
+   fprintf(ver, "#define FPGA_MAP_DATE   0x%08X\n", build_map_date);
    fprintf(ver, "#define FPGA_VER_HEX    0x%08X\n", build_hex);
    fprintf(ver, "#define FPGA_TIME       \"%s\"\n", build_time);
    fprintf(ver, "#define FPGA_DATE       \"%s\"\n", build_date);
@@ -348,16 +328,9 @@ int main(int argc, char *argv[]) {
    fclose(ver);
    fflush(ver);
 
-
-   // Check if version file exists?
-   if (stat(argv[3], &status) == 0) {
-      file_exist = 1;
-   }
-
    //
    // Create FPGA VHDL Version File
    //
-
    // Open File for Writing
    if  ((ver = fopen(argv[3],"wt")) == NULL) {
       printf("Error: Unable to open %s for writing\n", argv[3]);
@@ -373,6 +346,10 @@ int main(int argc, char *argv[]) {
    fprintf(ver, "   constant C_BUILD_NUM       : std_logic_vector(7 downto 0)   := X\"%02X\";\n", build_num);
    fprintf(ver, "   constant C_BUILD_INC       : std_logic_vector(7 downto 0)   := X\"%02X\";\n", build_inc);
    fprintf(ver, "   constant C_BUILD_SYSID     : std_logic_vector(31 downto 0)  := X\"%08X\";\n", build_sysid);
+   fprintf(ver, "   constant C_BUILD_PID       : std_logic_vector(7 downto 0)   := X\"%02X\";\n", build_pid);
+   fprintf(ver, "   constant C_BUILD_MAP       : std_logic_vector(11 downto 0)  := X\"%03X\";\n", build_map);
+   fprintf(ver, "   constant C_BUILD_LOGIC     : std_logic_vector(11 downto 0)  := X\"%03X\";\n", build_logic);
+   fprintf(ver, "   constant C_BUILD_MAP_DATE  : std_logic_vector(31 downto 0)  := X\"%08X\";\n", build_map_date);
    fprintf(ver, "   constant C_BUILD_VER_HEX   : std_logic_vector(31 downto 0)  := X\"%08X\";\n", build_hex);
    fprintf(ver, "   constant C_BUILD_TIME      : string                         := \"%s\";\n", build_time);
    fprintf(ver, "   constant C_BUILD_DATE      : string                         := \"%s\";\n", build_date);
@@ -394,11 +371,6 @@ int main(int argc, char *argv[]) {
 
    fclose(ver);
    fflush(ver);
-
-//   if (file_exist == 1) {
-//      struct _utimbuf ut = {.actime = status.st_atime, .modtime = status.st_mtime};
-//      _utime(argv[3], &ut);
-//   }
 
    //
    // Open build.h and read BUILD_HI, sanity check
