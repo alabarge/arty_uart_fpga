@@ -33,6 +33,12 @@ set_property -dict { PACKAGE_PIN L18 IOSTANDARD LVCMOS33} [get_ports gpo_tri_o[5
 set_property -dict { PACKAGE_PIN M14 IOSTANDARD LVCMOS33} [get_ports gpo_tri_o[6]]
 set_property -dict { PACKAGE_PIN N14 IOSTANDARD LVCMOS33} [get_ports gpo_tri_o[7]]
 
+## Pmod Header JB
+set_property -dict { PACKAGE_PIN P17 IOSTANDARD LVCMOS33} [get_ports sw_tp[0]]
+set_property -dict { PACKAGE_PIN P18 IOSTANDARD LVCMOS33} [get_ports sw_tp[1]]
+set_property -dict { PACKAGE_PIN R18 IOSTANDARD LVCMOS33} [get_ports sw_tp[2]]
+set_property -dict { PACKAGE_PIN T18 IOSTANDARD LVCMOS33} [get_ports sw_tp[3]]
+
 ## Pmod Header JD
 set_property -dict { PACKAGE_PIN V15 IOSTANDARD LVCMOS33} [get_ports hw_tp[0]]
 set_property -dict { PACKAGE_PIN U12 IOSTANDARD LVCMOS33} [get_ports hw_tp[1]]

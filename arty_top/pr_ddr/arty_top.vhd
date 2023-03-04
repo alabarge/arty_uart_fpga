@@ -76,7 +76,8 @@ entity arty_top is
       vauxn11              : in    std_logic;
 
       -- Test Points
-      hw_tp                : out   std_logic_vector(3 downto 0)
+      hw_tp                : out   std_logic_vector(3 downto 0);
+      sw_tp                : out   std_logic_vector(3 downto 0)
 
    );
 end arty_top;
@@ -151,6 +152,7 @@ begin
          oled_tri_o(2)                 => oOLED_SS,
          oled_tri_o(3)                 => oOLED_RST,
          oled_tri_o(4)                 => oOLED_DC,
+         sw_tp_tri_o                   => sw_tp,
          qspi_flash_io0_io             => qspi_flash_io0_io,
          qspi_flash_io1_io             => qspi_flash_io1_io,
          qspi_flash_io2_io             => qspi_flash_io2_io,

@@ -66,9 +66,11 @@ File->Export->Export Hardware (select export bitsream)
 # run Vitis
 Tools->Launch Vitis IDE
 
-# run write_project_tcl make_pr_ddr.tcl
+# update make_pr_ddr.tcl
+# run write_project_tcl -force make_pr_ddr.tcl from arty_top/pr_ddr directory
 # rename local files by removing pr_ddr.srcs/sources_1/imports/ and
-                                 pr_ddr.srcs/utils_1/imports/
+#                                pr_ddr.srcs/utils_1/imports/
+# update block design, around line 315 starts with "proc cr_bd_mb_design"
 
 
 # MISCELLANEOUS NOTES

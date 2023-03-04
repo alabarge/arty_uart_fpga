@@ -1,1 +1,1 @@
-exec ./ip/pr_ddr/pre_build.bat
+exec ../../script/pre_build.bat

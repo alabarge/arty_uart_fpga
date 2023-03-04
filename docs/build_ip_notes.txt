@@ -1,0 +1,3 @@
+1.    double-click create_fpga.bat to create a vivado project to synthesize and simulate this IP.
+2.    synthesize design
+3.    from the vivado project, source ../script/create_ip.tcl in order to package the IP.
