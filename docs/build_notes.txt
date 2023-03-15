@@ -9,23 +9,27 @@
 
 # select arty_uart_fpga\mb directory, close welcome screen
 
+# select Window->Preferences... Import preferences, example d:\arty_uart_fpga\utils\eclipse.epf
+  restart eclipse
+
 # select File->Import Eclipse workspace or zip file
 
 # unselect Copy projects into workspace and Browse to arty_uart_fpga\mb directory
 
 # not all projects need to be selected, just the ones for change
+# for example if you select arty_fw you also need to select arty_fw_system and arty_top
 
 # select Release for all projects from the Assistant, only release builds can be flashed
 
 # select right-click arty_top and Update Hardware Specification
-# select right-click arty_top Build Project
+# select right-click arty_top Build Project (creates libxil.a library)
 
-# select right_click arty_fw Build Project
+# select right_click arty_fw Build Project (creates arty_fw.elf and arty_fw.srec files)
 
 #
 # FLASH ORDER MATTERS HERE, IF THE ELF FILE CHANGES THE BIT FILE MUST ALSO BE FLASHED
 #
-# ONLY FLASH RELEASED BUILDS
+# ONLY FLASH RELEASED BUILDS!
 #
 
 # program flash, Xilinx->Program Flash, Browse for arty_fw.elf
@@ -55,7 +59,7 @@
 # fpga_build.vhd is not updated automatically, it must be updated manually
 # make sure vivado is in the arty_uart_fpga/arty_top directory
 # update fpga_build.vhd, requires IP upgrade, time stamp the design
-source ./ip/pr_ddr/pre_build.tcl
+source ../../script/pre_build.tcl
 
 
 

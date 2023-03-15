@@ -14,7 +14,7 @@
 #include "fpga_build.h"
 #include "gpio.h"
 #include "adc.h"
-#include "tty.h"
+#include "uart.h"
 #include "stamp.h"
 #include "xlprint.h"
 #include "lib.h"

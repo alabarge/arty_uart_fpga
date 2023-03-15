@@ -115,7 +115,7 @@ uint32_t stamp_init(void) {
 
    // Report H/W Details
    if (gc.trace & CFG_TRACE_ID) {
-      xlprint("%-16s base:rev:irq %08X:%08X:%d\n", "stamp", XPAR_STAMP_0_BASEADDR, regs->version, -1);
+      xlprint("%-16s base:rev:irq %08X:%08X:%d\n", "stamp", XPAR_AXI_STAMP_BASEADDR, regs->version, -1);
    }
 
    return result;

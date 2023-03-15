@@ -5,7 +5,7 @@ use ieee.numeric_std.all;
 entity uart_top is
    generic (
       C_S_AXI_DATA_WIDTH   : integer   := 32;
-      C_S_AXI_ADDR_WIDTH   : integer   := 8
+      C_S_AXI_ADDR_WIDTH   : integer   := 16
    );
    port (
       s_axi_aclk           : in    std_logic;
@@ -45,11 +45,13 @@ architecture rtl of uart_top is
    signal uart_INT_ACK     : std_logic_vector(2 downto 0);
    signal uart_STATUS      : std_logic_vector(31 downto 0);
    signal uart_TICKS       : std_logic_vector(15 downto 0);
+   signal uart_PTR_STA     : std_logic_vector(31 downto 0);
+   signal uart_PTR_CTL     : std_logic_vector(31 downto 0);
    signal uart_int         : std_logic_vector(2 downto 0);
 
-   signal cpu_RXD          : std_logic_vector(31 downto 0);
-   signal cpu_TXD          : std_logic_vector(31 downto 0);
-   signal cpu_ADDR         : std_logic_vector(6 downto 0);
+   signal cpu_RXD          : std_logic_vector(7 downto 0);
+   signal cpu_TXD          : std_logic_vector(7 downto 0);
+   signal cpu_ADDR         : std_logic_vector(11 downto 0);
    signal cpu_WE           : std_logic;
    signal cpu_RE           : std_logic;
 
@@ -97,8 +99,10 @@ begin
       uart_INT_REQ         => uart_INT_REQ,
       uart_INT_ACK         => uart_INT_ACK,
       uart_STATUS          => uart_STATUS,
-      uart_TICKS           => uart_TICKS
-   );
+      uart_TICKS           => uart_TICKS,
+      uart_PTR_STA         => uart_PTR_STA,
+      uart_PTR_CTL         => uart_PTR_CTL
+);
 
    --
    -- UART TX-RX STATE MACHINE
@@ -116,6 +120,8 @@ begin
       uart_CONTROL         => uart_CONTROL,
       uart_STATUS          => uart_STATUS,
       uart_TICKS           => uart_TICKS,
+      uart_PTR_STA         => uart_PTR_STA,
+      uart_PTR_CTL         => uart_PTR_CTL,
       rxd                  => rxd,
       txd                  => txd
    );

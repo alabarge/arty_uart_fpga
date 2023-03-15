@@ -195,8 +195,8 @@ int main() {
    // CM Init
    gc.error |= cm_init();
 
-   // TTY Port
-   gc.error |= tty_init(CFG_BAUD_RATE, gc.com_port);
+   // UART Port
+   gc.error |= uart_init(CFG_BAUD_RATE, gc.com_port);
 
    // ADC Init
    gc.error |= adc_init();
@@ -324,6 +324,10 @@ int main() {
       // DAQ THREAD
       //
       daq_thread();
+      //
+      // UART TX THREAD
+      //
+      uart_msgtx();
       //
       // CLI THREAD
       //
@@ -462,8 +466,8 @@ void version(void) {
    xlprint("%-16s base:irq %08X:%d\n", "axi_led", XPAR_AXI_LED_BASEADDR, -1);
    xlprint("%-16s base:irq %08X:%d\n", "axi_oled", XPAR_AXI_OLED_BASEADDR, -1);
    xlprint("%-16s base:irq %08X:%d\n", "axi_button", XPAR_AXI_BUTTON_BASEADDR, -1);
-   xlprint("%-16s base:irq %08X:%d\n", "axi_stdio_uart", XPAR_AXI_STDIO_UART_BASEADDR, XPAR_INTC_0_UARTLITE_1_VEC_ID);
-   xlprint("%-16s base:irq %08X:%d\n", "axi_cm_uart", XPAR_AXI_CM_UART_BASEADDR, XPAR_INTC_0_UARTLITE_0_VEC_ID);
+   xlprint("%-16s base:irq %08X:%d\n", "axi_stdio_uart", XPAR_AXI_STDIO_UART_BASEADDR, XPAR_INTC_0_UARTLITE_0_VEC_ID);
+   xlprint("%-16s base:irq %08X:%d\n", "axi_cm_uart", XPAR_AXI_CM_UART_BASEADDR, XPAR_AXI_INTC_AXI_CM_UART_IRQ_INTR);
    xlprint("%-16s base:irq %08X:%d\n", "axi_intc", XPAR_AXI_INTC_BASEADDR, XIL_EXCEPTION_ID_INT);
    xlprint("%-16s base:irq %08X:%d\n", "axi_wdttb", XPAR_AXI_WATCHDOG_BASEADDR, -1);
    xlprint("%-16s base:irq %08X:%d\n", "axi_systimer", XPAR_AXI_SYSTIMER_BASEADDR, XPAR_INTC_0_TMRCTR_0_VEC_ID);

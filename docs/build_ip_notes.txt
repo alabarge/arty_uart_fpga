@@ -1,3 +1,13 @@
-1.    double-click create_fpga.bat to create a vivado project to synthesize and simulate this IP.
+1.    from the ip\script directory: double-click create_fpga.bat to create a vivado
+      project to synthesize and simulate this IP, it will delete any existing vivado folder.
 2.    synthesize design
 3.    from the vivado project, source ../script/create_ip.tcl in order to package the IP.
+
+4.    simulation with modelsim requires that vivado build the xilinx libraries using modelsim,
+      if you're using the intel version of modelsim then copy the entire directory and
+      use the copy for xilinx, copy C:/intelFPGA/modelsim_ae C:/intelFPGA/modelsim_xe
+      Tools->Compile Simualation Libraries ... (choose desired family, this takes about 1.5 hours)
+      compiled libarary location : C:/intelFPGA/modelsim_xe/xilinx_compiled/2022.2
+      simulator executable path : C:/intelFPGA/modelsim_xe/win32aloem
+5.    as an example, launch modelsim and open uart\tesbench\uart_TB.mpf
+6.    at the command line in modelsim : do run.do

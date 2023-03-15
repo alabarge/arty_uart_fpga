@@ -7,14 +7,16 @@ entity uart_ctl is
       clk                  : in    std_logic;
       reset_n              : in    std_logic;
       int                  : out   std_logic_vector(2 downto 0);
-      cpu_RXD              : out   std_logic_vector(31 downto 0);
-      cpu_TXD              : in    std_logic_vector(31 downto 0);
-      cpu_ADDR             : in    std_logic_vector(6 downto 0);
+      cpu_RXD              : out   std_logic_vector(7 downto 0);
+      cpu_TXD              : in    std_logic_vector(7 downto 0);
+      cpu_ADDR             : in    std_logic_vector(11 downto 0);
       cpu_WE               : in    std_logic;
       cpu_RE               : in    std_logic;
       uart_CONTROL         : in    std_logic_vector(31 downto 0);
       uart_TICKS           : in    std_logic_vector(15 downto 0);
       uart_STATUS          : out   std_logic_vector(31 downto 0);
+      uart_PTR_STA         : out   std_logic_vector(31 downto 0);
+      uart_PTR_CTL         : in    std_logic_vector(31 downto 0);
       rxd                  : in    std_logic;
       txd                  : out   std_logic
    );
@@ -31,8 +33,7 @@ type rx_state_t    is (IDLE, RX_OCTET);
 type  TX_SV_t is record
    state       : tx_state_t;
    data        : std_logic_vector(7 downto 0);
-   head        : unsigned(8 downto 0);
-   tail        : unsigned(8 downto 0);
+   tail        : unsigned(11 downto 0);
    irq         : std_logic;
    wr          : std_logic;
 end record TX_SV_t;
@@ -40,11 +41,11 @@ end record TX_SV_t;
 type  RX_SV_t is record
    state       : rx_state_t;
    data        : std_logic_vector(7 downto 0);
-   head        : unsigned(8 downto 0);
-   tail        : unsigned(8 downto 0);
+   head        : unsigned(11 downto 0);
    timeout     : unsigned(7 downto 0);
+   count       : unsigned(11 downto 0);
    msg         : std_logic;
-   irq         : std_logic;
+   irq         : std_logic_vector(1 downto 0);
    wr          : std_logic;
    rd          : std_logic;
 end record RX_SV_t;
@@ -59,7 +60,6 @@ constant C_CNTR_1KHZ    : unsigned(31 downto 0) := X"0001869F";
 constant C_TX_SV_INIT : TX_SV_t := (
    state       => IDLE,
    data        => (others => '0'),
-   head        => (others => '0'),
    tail        => (others => '0'),
    irq         => '0',
    wr          => '0'
@@ -70,10 +70,10 @@ constant C_RX_SV_INIT : RX_SV_t := (
    state       => IDLE,
    data        => (others => '0'),
    head        => (others => '0'),
-   tail        => (others => '0'),
    timeout     => (others => '0'),
+   count       => (others => '0'),
    msg         => '0',
-   irq         => '0',
+   irq         => "00",
    wr          => '0',
    rd          => '0'
 );
@@ -86,29 +86,30 @@ constant C_RX_SV_INIT : RX_SV_t := (
 signal tx               : TX_SV_t;
 signal rx               : RX_SV_t;
 
--- 32-Bit State Machine Status
-alias  xl_TX_TAIL       : std_logic_vector(8 downto 0) is uart_STATUS(8 downto 0);
-alias  xl_RX_HEAD       : std_logic_vector(8 downto 0) is uart_STATUS(17 downto 9);
+-- 32-Bit Head Tail Status
+alias  xl_TX_TAIL       : std_logic_vector(11 downto 0) is uart_PTR_STA(11 downto 0);
+alias  xl_RX_HEAD       : std_logic_vector(11 downto 0) is uart_PTR_STA(27 downto 16);
+
+-- 32-Bit Head Tail Control
+alias  xl_TX_HEAD       : std_logic_vector(11 downto 0) is uart_PTR_CTL(11 downto 0);
+alias  xl_RX_TAIL       : std_logic_vector(11 downto 0) is uart_PTR_CTL(27 downto 16);
 
 
 -- 32-Bit Control Register
-alias  xl_TX_HEAD       : std_logic_vector(8 downto 0) is uart_CONTROL(8 downto 0);
-alias  xl_RX_TAIL       : std_logic_vector(8 downto 0) is uart_CONTROL(17 downto 9);
-alias  xl_TIMEOUT       : std_logic_vector(7 downto 0) is uart_CONTROL(25 downto 18);
-alias  xl_RX_INT        : std_logic is uart_CONTROL(27);
-alias  xl_TX_INT        : std_logic is uart_CONTROL(28);
-alias  xl_TERM          : std_logic is uart_CONTROL(29);
-alias  xl_TX_EN         : std_logic is uart_CONTROL(30);
+alias  xl_CHAR_CNT      : std_logic_vector(11 downto 0) is uart_CONTROL(11 downto 0);
+alias  xl_TIMEOUT       : std_logic_vector(7 downto 0) is uart_CONTROL(19 downto 12);
+alias  xl_RX_INT        : std_logic is uart_CONTROL(29);
+alias  xl_TX_INT        : std_logic is uart_CONTROL(30);
 alias  xl_ENABLE        : std_logic is uart_CONTROL(31);
 
 signal ctr1ms_cnt       : unsigned(31 downto 0);
 signal ctr1ms           : std_logic;
 
 signal tx_data          : std_logic_vector(7 downto 0);
-signal tx_addr          : std_logic_vector(8 downto 0);
+signal tx_addr          : std_logic_vector(11 downto 0);
 signal tx_rdy           : std_logic;
 signal rx_data          : std_logic_vector(7 downto 0);
-signal rx_addr          : std_logic_vector(8 downto 0);
+signal rx_addr          : std_logic_vector(11 downto 0);
 signal rx_rdy           : std_logic;
 
 --
@@ -120,32 +121,35 @@ begin
    -- COMBINATORIAL OUTPUTS
    --
    int(0)               <= tx.irq and xl_TX_INT;
-   int(1)               <= rx.irq and xl_RX_INT;
-   int(2)               <= '0';
+   int(1)               <= rx.irq(0) and xl_RX_INT;
+   int(2)               <= rx.irq(1) and xl_RX_INT;
 
    xl_TX_TAIL           <= std_logic_vector(tx.tail);
    xl_RX_HEAD           <= std_logic_vector(rx.head);
 
-   uart_STATUS(29 downto 18) <= (others => '0');
+   uart_STATUS(29 downto 0) <= (others => '0');
    uart_STATUS(30)      <= tx_rdy;
    uart_STATUS(31)      <= xl_ENABLE;
+
+   uart_PTR_STA(15 downto 12) <= (others => '0');
+   uart_PTR_STA(31 downto 28) <= (others => '0');
 
    --
    --   THIS BRAM IS USED FOR TX ONLY
    --
-   --   PORT A 128x32 CPU SIDE,  WRITE
-   --   PORT B 512x8  UART SIDE, READ
+   --   PORT A 4096x8 CPU SIDE,  WRITE
+   --   PORT B 4096x8 UART SIDE, READ
    --
    UART_TX_RAM : entity work.uart_tx_ram
       port map (
       clka           => clk,
-      addra          => "000" & tx_addr,
+      addra          => tx_addr,
       dina           => cpu_TXD,
       wea(0)         => cpu_WE,
       douta          => tx_data
    );
 
-   tx_addr           <= ("00" & cpu_ADDR) when cpu_WE = '1' else std_logic_vector(tx.tail);
+   tx_addr           <= cpu_ADDR when cpu_WE = '1' else std_logic_vector(tx.tail);
 
    --
    --   UART TX
@@ -172,8 +176,6 @@ begin
 
       elsif (rising_edge(clk)) then
 
-         tx.head        <= unsigned(xl_TX_HEAD);
-
          case tx.state is
 
             --
@@ -181,7 +183,7 @@ begin
             --
             when IDLE =>
                -- head not equal to tail then transmit
-               if (tx.head /= tx.tail and tx_rdy = '1') then
+               if (unsigned(xl_TX_HEAD) /= tx.tail and tx_rdy = '1') then
                   tx.state    <= TX_OCTET;
                   tx.wr       <= '1';
                   tx.data     <= tx_data;
@@ -207,7 +209,7 @@ begin
             -- TRANSMITTER EMPTY IRQ
             --
             when TX_IRQ =>
-               if (tx.head = tx.tail) then
+               if (unsigned(xl_TX_HEAD) = tx.tail) then
                   tx.state    <= IDLE;
                   tx.irq      <= '1';
                else
@@ -225,20 +227,19 @@ begin
    --
    --   THIS BRAM IS USED FOR RX ONLY
    --
-   --   PORT A 512x8 UART SIDE,  WRITE
-   --   PORT B 64x8  CPU SIDE,   READ
+   --   PORT A 4096x8 UART SIDE,  WRITE
+   --   PORT B 4096x8 CPU SIDE,   READ
    --
    UART_RX_RAM : entity work.uart_rx_ram
       port map (
       clka           => clk,
-      ena            => '1',
-      addra          => "000" & rx_addr,
+      addra          => rx_addr,
       dina           => rx.data,
       wea(0)         => rx.wr,
       douta          => cpu_RXD
    );
 
-   rx_addr           <= ("00" & cpu_ADDR) when cpu_RE = '1' else std_logic_vector(rx.head);
+   rx_addr           <= cpu_ADDR when cpu_RE = '1' else std_logic_vector(rx.head);
 
    --
    --   UART RX
@@ -265,8 +266,6 @@ begin
 
       elsif (rising_edge(clk)) then
 
-         rx.tail        <= unsigned(xl_RX_TAIL);
-
          case rx.state is
 
             --
@@ -274,18 +273,19 @@ begin
             --
             when IDLE =>
                -- (head + 1) not equal to tail then receive
-               if ((rx.head + 1) /= rx.tail and rx_rdy = '1') then
+               if ((rx.head + 1) /= unsigned(xl_RX_TAIL) and rx_rdy = '1') then
                   rx.state    <= RX_OCTET;
                   rx.rd       <= '1';
                   rx.wr       <= '1';
                   rx.msg      <= '1';
                   rx.timeout  <= (others => '0');
                   rx.data     <= rx_data;
+                  rx.count    <= rx.count + 1;
                elsif (ctr1ms = '1' and rx.msg = '1' and xl_TIMEOUT /= X"00" and
                       rx.timeout = unsigned(xl_TIMEOUT)) then
                   rx.state    <= IDLE;
                   rx.timeout  <= (others => '0');
-                  rx.irq      <= '1';
+                  rx.irq(1)   <= '1';
                   rx.msg      <= '0';
                elsif (ctr1ms = '1' and rx.msg = '1' and xl_TIMEOUT /= X"00" and
                       rx.timeout /= unsigned(xl_TIMEOUT)) then
@@ -293,26 +293,27 @@ begin
                   rx.timeout  <= rx.timeout + 1;
                else
                   rx.state    <= IDLE;
-                  rx.irq      <= '0';
+                  rx.irq      <= "00";
                end if;
 
             --
             -- RECEIVER IRQ
             --
             when RX_OCTET =>
-               -- generate interrupt per character received
-               if (xl_TIMEOUT = X"00") then
+               -- generate interrupt per character count received
+               if (xl_CHAR_CNT /= X"000" and rx.count >= unsigned(xl_CHAR_CNT)) then
                   rx.state       <= IDLE;
                   rx.rd          <= '0';
                   rx.wr          <= '0';
-                  rx.irq         <= '1';
+                  rx.irq(0)      <= '1';
                   rx.head        <= rx.head + 1;
+                  rx.count       <= (others => '0');
                -- generate interrupt based on timeout
                else
                   rx.state       <= IDLE;
                   rx.rd          <= '0';
                   rx.wr          <= '0';
-                  rx.irq         <= '0';
+                  rx.irq         <= "00";
                   rx.head        <= rx.head + 1;
                end if;
 

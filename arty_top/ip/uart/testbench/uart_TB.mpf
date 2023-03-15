@@ -9,14 +9,6 @@
 [Library]
 others = $MODEL_TECH/../modelsim.ini
 
-; Altera Primitive libraries
-;
-; VHDL Section
-;
-;
-; Verilog Section
-;
-
 work = rtl_work
 [vcom]
 ; VHDL93 variable selects language version as the default. 
@@ -141,7 +133,7 @@ Resolution = ps
 UserTimeUnit = default
 
 ; Default run length
-RunLength = 5 ms
+RunLength = 15 ms
 
 ; Maximum iterations that can be run without advancing simulation time
 IterationLimit = 5000

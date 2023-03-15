@@ -211,7 +211,7 @@ uint32_t daq_msg(pcm_msg_t msg) {
       // Packet Ready Indication, Only when not using Head/Tail from hardware
       if (msg->p.flags & DAQ_INT_FLAG_PKT) {
          // send ADC_POOL_CNT packets
-          tty_pipe(sv.adc_index, sv.blklen);
+          uart_pipe(sv.adc_index, sv.blklen);
          // next location in circular memory
 //         if (++sv.adc_index > (ADC_FIFO_SPAN / (ADC_POOL_CNT * sizeof(cm_pipe_daq_t)))) {
 //            sv.adc_index = 0;

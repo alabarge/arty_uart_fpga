@@ -1,4 +1,4 @@
-source ../scripts/settings.tcl
+source ../script/settings.tcl
 
 set ip_dir ../../$ip_name
 
@@ -16,7 +16,7 @@ ipx::edit_ip_in_project -upgrade true -name tmp_edit_project -directory $ip_dir 
 set_property display_name $display_name [ipx::current_core]
 set_property description $display_name [ipx::current_core]
 
-set_property core_revision 1 [ipx::current_core]
+set_property core_revision 2 [ipx::current_core]
 ipx::create_xgui_files [ipx::current_core]
 ipx::update_checksums [ipx::current_core]
 ipx::save_core [ipx::current_core]

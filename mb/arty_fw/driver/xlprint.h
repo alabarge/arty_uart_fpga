@@ -16,12 +16,12 @@
 #define  UART_PARITY_ERR   0x0080
 
 // all registers
-typedef struct _uart_regs_t {
+typedef struct _uart_lite_regs_t {
    uint32_t       rx_dat;
    uint32_t       tx_dat;
    uint32_t       status;
    uint32_t       control;
-} uart_regs_t, *puart_regs_t;
+} uart_lite_regs_t, *puart_lite_regs_t;
 
 int  xlprint(const char *format, ...);
 int  xlprints(char *buf, const char *format, ...);

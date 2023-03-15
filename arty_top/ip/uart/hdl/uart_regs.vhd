@@ -5,7 +5,7 @@ use ieee.numeric_std.all;
 entity uart_regs is
    generic (
       C_S_AXI_DATA_WIDTH   : integer   := 32;
-      C_S_AXI_ADDR_WIDTH   : integer   := 8
+      C_S_AXI_ADDR_WIDTH   : integer   := 16
    );
    port (
       s_axi_aclk           : in    std_logic;
@@ -29,16 +29,18 @@ entity uart_regs is
       s_axi_rresp          : out   std_logic_vector(1 downto 0);
       s_axi_rvalid         : out   std_logic;
       s_axi_rready         : in    std_logic;
-      cpu_RXD              : in    std_logic_vector(31 downto 0);
-      cpu_TXD              : out   std_logic_vector(31 downto 0);
-      cpu_ADDR             : out   std_logic_vector(6 downto 0);
+      cpu_RXD              : in    std_logic_vector(7 downto 0);
+      cpu_TXD              : out   std_logic_vector(7 downto 0);
+      cpu_ADDR             : out   std_logic_vector(11 downto 0);
       cpu_WE               : out   std_logic;
       cpu_RE               : out   std_logic;
       uart_CONTROL         : out   std_logic_vector(31 downto 0);
       uart_INT_REQ         : in    std_logic_vector(2 downto 0);
       uart_INT_ACK         : out   std_logic_vector(2 downto 0);
       uart_STATUS          : in    std_logic_vector(31 downto 0);
-      uart_TICKS           : out   std_logic_vector(15 downto 0)
+      uart_TICKS           : out   std_logic_vector(15 downto 0);
+      uart_PTR_STA         : in    std_logic_vector(31 downto 0);
+      uart_PTR_CTL         : out   std_logic_vector(31 downto 0)
    );
 end uart_regs;
 
@@ -48,7 +50,11 @@ architecture rtl of uart_regs is
 -- CONSTANTS
 --
 constant C_UART_VERSION    : std_logic_vector(7 downto 0)  := X"01";
+
+-- default is enable
 constant C_UART_CONTROL    : std_logic_vector(31 downto 0) := X"80000000";
+
+-- 81.247969MHz / 115200 baudrate
 constant C_UART_TICKS      : std_logic_vector(15 downto 0) := X"02C1";
 
 constant C_NUM_REG         : integer := 8;
@@ -72,11 +78,11 @@ begin
    --
 
    -- Read/Write BlockRAM
-   cpu_TXD              <= s_axi_wdata;
-   cpu_ADDR             <= s_axi_awaddr(6 downto 0);
+   cpu_TXD              <= s_axi_wdata(7 downto 0);
+   cpu_ADDR             <= s_axi_awaddr(11 downto 0);
 
-   cpu_WE               <= '1' when (s_axi_awaddr(7)  = '1' and s_axi_awready = '1') else '0';
-   cpu_RE               <= '1' when (s_axi_awaddr(7)  = '1' and (s_axi_rvalid = '1' or s_axi_rready = '1')) else '0';
+   cpu_WE               <= '1' when (s_axi_awaddr(12) = '1' and s_axi_awready = '1') else '0';
+   cpu_RE               <= '1' when (s_axi_araddr(12) = '1' and (s_axi_rvalid = '1' or s_axi_rready = '1')) else '0';
 
    -- unsued AXI-Lite signals :
    -- s_axi_awprot, s_axi_arprot, s_axi_wstrb and
@@ -179,17 +185,21 @@ begin
          uart_CONTROL         <= C_UART_CONTROL;
          uart_INT_ACK         <= (others => '0');
          uart_TICKS           <= C_UART_TICKS;
+         uart_PTR_CTL         <= (others => '0');
       elsif (rising_edge(s_axi_aclk)) then
          if (wrCE(0) = '1') then
             uart_CONTROL      <= s_axi_wdata;
-         elsif (wrCE(2) = '1') then
-            uart_INT_ACK      <= s_axi_wdata(2 downto 0);
          elsif (wrCE(3) = '1') then
+            uart_INT_ACK      <= s_axi_wdata(2 downto 0);
+         elsif (wrCE(4) = '1') then
             uart_TICKS        <= s_axi_wdata(15 downto 0);
+         elsif (wrCE(6) = '1') then
+            uart_PTR_CTL      <= s_axi_wdata;
          else
             uart_CONTROL      <= uart_CONTROL;
             uart_INT_ACK      <= (others => '0');
             uart_TICKS        <= uart_TICKS;
+            uart_PTR_CTL      <= uart_PTR_CTL;
          end if;
       end if;
    end process;
@@ -203,18 +213,22 @@ begin
       elsif (rdCE(0) = '1') then
          s_axi_rdata       <= uart_CONTROL;
       elsif (rdCE(1) = '1') then
-         s_axi_rdata       <= X"000000" & C_UART_VERSION;
-      elsif (rdCE(2) = '1') then
-         s_axi_rdata       <= X"0000000" & '0' & uart_INT_REQ;
-      elsif (rdCE(3) = '1') then
          s_axi_rdata       <= uart_STATUS;
+      elsif (rdCE(2) = '1') then
+         s_axi_rdata       <= X"000000" & C_UART_VERSION;
+      elsif (rdCE(3) = '1') then
+         s_axi_rdata       <= X"0000000" & '0' & uart_INT_REQ;
       elsif (rdCE(4) = '1') then
          s_axi_rdata       <= X"0000" & uart_TICKS;
+      elsif (rdCE(5) = '1') then
+         s_axi_rdata       <= uart_PTR_STA;
+      elsif (rdCE(6) = '1') then
+         s_axi_rdata       <= uart_PTR_CTL;
       --
       -- READ BLOCKRAM
       --
       elsif (cpu_RE = '1') then
-         s_axi_rdata       <= cpu_RXD;
+         s_axi_rdata       <= X"000000" & cpu_RXD;
       else
          s_axi_rdata       <= (others => '0');
       end if;

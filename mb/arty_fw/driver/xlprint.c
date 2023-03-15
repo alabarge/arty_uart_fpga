@@ -85,7 +85,7 @@
    static int  printi(char **out, int i, int b, int sg, int width, int pad, int letbase);
    static int  print_uart(char **out, const char *format, va_list args);
 
-   static volatile puart_regs_t   uart = (volatile puart_regs_t)XPAR_AXI_STDIO_UART_BASEADDR;
+   static volatile puart_lite_regs_t   uart = (volatile puart_lite_regs_t)XPAR_AXI_STDIO_UART_BASEADDR;
 
 
 // 6.2  Local Data Structures
@@ -181,17 +181,17 @@ int xlprints(char *buf, const char *format, ...) {
 */
 
 void xlprint_open(uint32_t dev_addr) {
-   uart = (volatile puart_regs_t)dev_addr;
+   uart = (volatile puart_lite_regs_t)dev_addr;
 
    // clear FIFOs
    uart->control = UART_RST_TX_FIFO | UART_RST_RX_FIFO;
 
    // assign handler
-   XIntc_Connect(&gc.intc, XPAR_INTC_0_UARTLITE_1_VEC_ID,
+   XIntc_Connect(&gc.intc, XPAR_INTC_0_UARTLITE_0_VEC_ID,
       (XInterruptHandler)xlprint_isr, NULL);
 
    // enable interrupts
-   XIntc_Enable(&gc.intc, XPAR_INTC_0_UARTLITE_1_VEC_ID);
+   XIntc_Enable(&gc.intc, XPAR_INTC_0_UARTLITE_0_VEC_ID);
    uart->control = UART_INT_EN;
 }
 
