@@ -10,7 +10,7 @@ set_property -dict {PACKAGE_PIN R2 IOSTANDARD SSTL135} [get_ports clk100mhz]
 create_clock -period 10.000 -name sys_clk_pin -waveform {0.000 5.000} -add [get_ports clk100mhz]
 
 set_property -dict {PACKAGE_PIN C18 IOSTANDARD LVCMOS33} [get_ports ext_resetn]
-set_property CLOCK_DEDICATED_ROUTE FALSE [get_nets ext_resetn_IBUF]
+#set_property CLOCK_DEDICATED_ROUTE FALSE [get_nets ext_resetn_IBUF]
 
 ## CM UART Interface
 set_property -dict {PACKAGE_PIN N13 IOSTANDARD LVCMOS33} [get_ports oCM_UART_TXD]

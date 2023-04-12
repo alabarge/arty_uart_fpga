@@ -1,3 +1,7 @@
+#
+# NOTE: INSTALL BOARD FILES FROM DIGILENT INTO VIVADO DIRECTORY
+#
+
 # choose place and route from arty_uart_fpga\ip
 # double-click create_proj.bat file, this will delete existing PR directory
 
