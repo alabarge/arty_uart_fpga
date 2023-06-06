@@ -1,3 +1,8 @@
+echo off
+if exist ..\vivado (
+   echo Warning, The ..\vivado folder will be deleted - CTRL+C to exit
+   pause
+)
 rmdir /s /q ..\vivado
 mkdir ..\vivado
 cd ..\vivado
