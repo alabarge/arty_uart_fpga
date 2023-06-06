@@ -292,9 +292,11 @@ proc cr_bd_mb_design { parentCell } {
   if { $bCheckIPs == 1 } {
      set list_check_ips "\ 
   xilinx.com:ip:axi_gpio:2.0\
+  omniware.com:user:uart_top:1.0\
   xilinx.com:ip:axi_crossbar:2.1\
   xilinx.com:ip:axi_intc:4.1\
   xilinx.com:ip:axi_quad_spi:3.2\
+  omniware.com:user:stamp_top:1.0\
   xilinx.com:ip:axi_uartlite:2.0\
   xilinx.com:ip:axi_timer:2.0\
   xilinx.com:ip:axi_timebase_wdt:3.0\
@@ -304,8 +306,6 @@ proc cr_bd_mb_design { parentCell } {
   xilinx.com:ip:mdm:3.2\
   xilinx.com:ip:proc_sys_reset:5.0\
   xilinx.com:ip:mig_7series:4.2\
-  omniware.com:user:stamp_top:1.0\
-  omniware.com:user:uart_top:1.0\
   xilinx.com:ip:lmb_bram_if_cntlr:4.0\
   xilinx.com:ip:lmb_v10:3.0\
   xilinx.com:ip:blk_mem_gen:8.4\
@@ -497,6 +497,9 @@ proc create_hier_cell_mb_bram { parentCell nameHier } {
   ] $axi_button
 
 
+  # Create instance: axi_cm_uart, and set properties
+  set axi_cm_uart [ create_bd_cell -type ip -vlnv omniware.com:user:uart_top:1.0 axi_cm_uart ]
+
   # Create instance: axi_crossbar, and set properties
   set axi_crossbar [ create_bd_cell -type ip -vlnv xilinx.com:ip:axi_crossbar:2.1 axi_crossbar ]
   set_property CONFIG.NUM_MI {12} $axi_crossbar
@@ -540,6 +543,9 @@ proc create_hier_cell_mb_bram { parentCell nameHier } {
     CONFIG.USE_BOARD_FLOW {true} \
   ] $axi_qspi
 
+
+  # Create instance: axi_stamp, and set properties
+  set axi_stamp [ create_bd_cell -type ip -vlnv omniware.com:user:stamp_top:1.0 axi_stamp ]
 
   # Create instance: axi_stdio_uart, and set properties
   set axi_stdio_uart [ create_bd_cell -type ip -vlnv xilinx.com:ip:axi_uartlite:2.0 axi_stdio_uart ]
@@ -634,12 +640,6 @@ proc create_hier_cell_mb_bram { parentCell nameHier } {
   ] $sdram
 
 
-  # Create instance: stamp, and set properties
-  set stamp [ create_bd_cell -type ip -vlnv omniware.com:user:stamp_top:1.0 stamp ]
-
-  # Create instance: uart_top_0, and set properties
-  set uart_top_0 [ create_bd_cell -type ip -vlnv omniware.com:user:uart_top:1.0 uart_top_0 ]
-
   # Create interface connections
   connect_bd_intf_net -intf_net Vaux0_0_1 [get_bd_intf_ports Vaux0_0] [get_bd_intf_pins axi_xadc/Vaux0]
   connect_bd_intf_net -intf_net Vaux10_0_1 [get_bd_intf_ports Vaux10_0] [get_bd_intf_pins axi_xadc/Vaux10]
@@ -658,8 +658,8 @@ proc create_hier_cell_mb_bram { parentCell nameHier } {
   connect_bd_intf_net -intf_net axi_crossbar_0_M09_AXI [get_bd_intf_pins axi_crossbar/M09_AXI] [get_bd_intf_pins axi_oled/S_AXI]
   connect_bd_intf_net -intf_net axi_crossbar_0_M10_AXI [get_bd_intf_pins axi_button/S_AXI] [get_bd_intf_pins axi_crossbar/M10_AXI]
   connect_bd_intf_net -intf_net axi_crossbar_M05_AXI [get_bd_intf_pins axi_crossbar/M05_AXI] [get_bd_intf_pins axi_watchdog/S_AXI]
-  connect_bd_intf_net -intf_net axi_crossbar_M06_AXI [get_bd_intf_pins axi_crossbar/M06_AXI] [get_bd_intf_pins stamp/s_axi]
-  connect_bd_intf_net -intf_net axi_crossbar_M07_AXI [get_bd_intf_pins axi_crossbar/M07_AXI] [get_bd_intf_pins uart_top_0/s_axi]
+  connect_bd_intf_net -intf_net axi_crossbar_M06_AXI [get_bd_intf_pins axi_crossbar/M06_AXI] [get_bd_intf_pins axi_stamp/s_axi]
+  connect_bd_intf_net -intf_net axi_crossbar_M07_AXI [get_bd_intf_pins axi_cm_uart/s_axi] [get_bd_intf_pins axi_crossbar/M07_AXI]
   connect_bd_intf_net -intf_net axi_crossbar_M11_AXI [get_bd_intf_pins axi_crossbar/M11_AXI] [get_bd_intf_pins axi_sw_tp/S_AXI]
   connect_bd_intf_net -intf_net axi_gpio_0_GPIO [get_bd_intf_ports gpo] [get_bd_intf_pins axi_led/GPIO]
   connect_bd_intf_net -intf_net axi_gpio_1_GPIO [get_bd_intf_ports oled] [get_bd_intf_pins axi_oled/GPIO]
@@ -682,20 +682,20 @@ proc create_hier_cell_mb_bram { parentCell nameHier } {
   connect_bd_net -net axi_timebase_wdt_0_wdt_reset [get_bd_ports watchdog] [get_bd_pins axi_watchdog/wdt_reset]
   connect_bd_net -net axi_timer_0_interrupt [get_bd_pins axi_systimer/interrupt] [get_bd_pins intc_concat/In2]
   connect_bd_net -net axi_uartlite_0_interrupt [get_bd_pins axi_stdio_uart/interrupt] [get_bd_pins intc_concat/In0]
-  connect_bd_net -net cm_uart_rxd_1 [get_bd_ports cm_uart_rxd] [get_bd_pins uart_top_0/rxd]
+  connect_bd_net -net cm_uart_irq [get_bd_pins axi_cm_uart/irq] [get_bd_pins intc_concat/In3]
+  connect_bd_net -net cm_uart_rxd_1 [get_bd_ports cm_uart_rxd] [get_bd_pins axi_cm_uart/rxd]
+  connect_bd_net -net cm_uart_txd [get_bd_ports cm_uart_txd] [get_bd_pins axi_cm_uart/txd]
   connect_bd_net -net ddr_clock_1 [get_bd_ports clk100mhz] [get_bd_pins sdram/sys_clk_i]
   connect_bd_net -net mdm_1_debug_sys_rst [get_bd_pins mb_debug/Debug_SYS_Rst] [get_bd_pins proc_sys_reset/mb_debug_sys_rst]
   connect_bd_net -net microblaze_0_intr [get_bd_pins axi_intc/intr] [get_bd_pins intc_concat/dout]
   connect_bd_net -net mig_7series_0_mmcm_locked [get_bd_pins proc_sys_reset/dcm_locked] [get_bd_pins sdram/mmcm_locked]
   connect_bd_net -net mig_7series_0_ui_addn_clk_0 [get_bd_pins sdram/clk_ref_i] [get_bd_pins sdram/ui_addn_clk_0]
-  connect_bd_net -net mig_7series_0_ui_clk [get_bd_pins axi_button/s_axi_aclk] [get_bd_pins axi_crossbar/aclk] [get_bd_pins axi_intc/processor_clk] [get_bd_pins axi_intc/s_axi_aclk] [get_bd_pins axi_interconnect/ACLK] [get_bd_pins axi_interconnect/M00_ACLK] [get_bd_pins axi_interconnect/S00_ACLK] [get_bd_pins axi_interconnect/S01_ACLK] [get_bd_pins axi_led/s_axi_aclk] [get_bd_pins axi_oled/s_axi_aclk] [get_bd_pins axi_qspi/ext_spi_clk] [get_bd_pins axi_qspi/s_axi_aclk] [get_bd_pins axi_stdio_uart/s_axi_aclk] [get_bd_pins axi_sw_tp/s_axi_aclk] [get_bd_pins axi_systimer/s_axi_aclk] [get_bd_pins axi_watchdog/s_axi_aclk] [get_bd_pins axi_xadc/s_axi_aclk] [get_bd_pins mb_bram/LMB_Clk] [get_bd_pins mb_cpu/Clk] [get_bd_pins proc_sys_reset/slowest_sync_clk] [get_bd_pins sdram/ui_clk] [get_bd_pins stamp/s_axi_aclk] [get_bd_pins uart_top_0/s_axi_aclk]
+  connect_bd_net -net mig_7series_0_ui_clk [get_bd_pins axi_button/s_axi_aclk] [get_bd_pins axi_cm_uart/s_axi_aclk] [get_bd_pins axi_crossbar/aclk] [get_bd_pins axi_intc/processor_clk] [get_bd_pins axi_intc/s_axi_aclk] [get_bd_pins axi_interconnect/ACLK] [get_bd_pins axi_interconnect/M00_ACLK] [get_bd_pins axi_interconnect/S00_ACLK] [get_bd_pins axi_interconnect/S01_ACLK] [get_bd_pins axi_led/s_axi_aclk] [get_bd_pins axi_oled/s_axi_aclk] [get_bd_pins axi_qspi/ext_spi_clk] [get_bd_pins axi_qspi/s_axi_aclk] [get_bd_pins axi_stamp/s_axi_aclk] [get_bd_pins axi_stdio_uart/s_axi_aclk] [get_bd_pins axi_sw_tp/s_axi_aclk] [get_bd_pins axi_systimer/s_axi_aclk] [get_bd_pins axi_watchdog/s_axi_aclk] [get_bd_pins axi_xadc/s_axi_aclk] [get_bd_pins mb_bram/LMB_Clk] [get_bd_pins mb_cpu/Clk] [get_bd_pins proc_sys_reset/slowest_sync_clk] [get_bd_pins sdram/ui_clk]
   connect_bd_net -net mig_7series_0_ui_clk_sync_rst [get_bd_pins proc_sys_reset/ext_reset_in] [get_bd_pins sdram/ui_clk_sync_rst]
   connect_bd_net -net reset_1 [get_bd_ports resetn] [get_bd_pins sdram/sys_rst]
   connect_bd_net -net rst_mig_7series_0_81M_bus_struct_reset [get_bd_pins mb_bram/SYS_Rst] [get_bd_pins proc_sys_reset/bus_struct_reset]
   connect_bd_net -net rst_mig_7series_0_81M_mb_reset [get_bd_pins axi_intc/processor_rst] [get_bd_pins mb_cpu/Reset] [get_bd_pins proc_sys_reset/mb_reset]
-  connect_bd_net -net rst_mig_7series_0_81M_peripheral_aresetn [get_bd_pins axi_button/s_axi_aresetn] [get_bd_pins axi_crossbar/aresetn] [get_bd_pins axi_intc/s_axi_aresetn] [get_bd_pins axi_interconnect/ARESETN] [get_bd_pins axi_interconnect/M00_ARESETN] [get_bd_pins axi_interconnect/S00_ARESETN] [get_bd_pins axi_interconnect/S01_ARESETN] [get_bd_pins axi_led/s_axi_aresetn] [get_bd_pins axi_oled/s_axi_aresetn] [get_bd_pins axi_qspi/s_axi_aresetn] [get_bd_pins axi_stdio_uart/s_axi_aresetn] [get_bd_pins axi_sw_tp/s_axi_aresetn] [get_bd_pins axi_systimer/s_axi_aresetn] [get_bd_pins axi_watchdog/s_axi_aresetn] [get_bd_pins axi_xadc/s_axi_aresetn] [get_bd_pins proc_sys_reset/peripheral_aresetn] [get_bd_pins sdram/aresetn] [get_bd_pins stamp/s_axi_aresetn] [get_bd_pins uart_top_0/s_axi_aresetn]
-  connect_bd_net -net uart_top_0_irq [get_bd_pins intc_concat/In3] [get_bd_pins uart_top_0/irq]
-  connect_bd_net -net uart_top_0_txd [get_bd_ports cm_uart_txd] [get_bd_pins uart_top_0/txd]
+  connect_bd_net -net rst_mig_7series_0_81M_peripheral_aresetn [get_bd_pins axi_button/s_axi_aresetn] [get_bd_pins axi_cm_uart/s_axi_aresetn] [get_bd_pins axi_crossbar/aresetn] [get_bd_pins axi_intc/s_axi_aresetn] [get_bd_pins axi_interconnect/ARESETN] [get_bd_pins axi_interconnect/M00_ARESETN] [get_bd_pins axi_interconnect/S00_ARESETN] [get_bd_pins axi_interconnect/S01_ARESETN] [get_bd_pins axi_led/s_axi_aresetn] [get_bd_pins axi_oled/s_axi_aresetn] [get_bd_pins axi_qspi/s_axi_aresetn] [get_bd_pins axi_stamp/s_axi_aresetn] [get_bd_pins axi_stdio_uart/s_axi_aresetn] [get_bd_pins axi_sw_tp/s_axi_aresetn] [get_bd_pins axi_systimer/s_axi_aresetn] [get_bd_pins axi_watchdog/s_axi_aresetn] [get_bd_pins axi_xadc/s_axi_aresetn] [get_bd_pins proc_sys_reset/peripheral_aresetn] [get_bd_pins sdram/aresetn]
   connect_bd_net -net xadc_wiz_0_ip2intc_irpt [get_bd_pins axi_xadc/ip2intc_irpt] [get_bd_pins intc_concat/In4]
   connect_bd_net -net xadc_wiz_0_temp_out [get_bd_pins axi_xadc/temp_out] [get_bd_pins sdram/device_temp_i]
 
@@ -710,10 +710,10 @@ proc create_hier_cell_mb_bram { parentCell nameHier } {
   assign_bd_address -offset 0x41C00000 -range 0x00010000 -target_address_space [get_bd_addr_spaces mb_cpu/Data] [get_bd_addr_segs axi_systimer/S_AXI/Reg] -force
   assign_bd_address -offset 0x41A00000 -range 0x00010000 -target_address_space [get_bd_addr_spaces mb_cpu/Data] [get_bd_addr_segs axi_watchdog/S_AXI/Reg] -force
   assign_bd_address -offset 0x44A20000 -range 0x00010000 -target_address_space [get_bd_addr_spaces mb_cpu/Data] [get_bd_addr_segs axi_xadc/s_axi_lite/Reg] -force
+  assign_bd_address -offset 0x00010000 -range 0x00001000 -target_address_space [get_bd_addr_spaces mb_cpu/Data] [get_bd_addr_segs axi_cm_uart/s_axi/reg0] -force
   assign_bd_address -offset 0x00000000 -range 0x00004000 -target_address_space [get_bd_addr_spaces mb_cpu/Data] [get_bd_addr_segs mb_bram/dlmb_bram_if_cntlr/SLMB/Mem] -force
   assign_bd_address -offset 0x80000000 -range 0x10000000 -target_address_space [get_bd_addr_spaces mb_cpu/Data] [get_bd_addr_segs sdram/memmap/memaddr] -force
-  assign_bd_address -offset 0x00004000 -range 0x00001000 -target_address_space [get_bd_addr_spaces mb_cpu/Data] [get_bd_addr_segs stamp/s_axi/reg0] -force
-  assign_bd_address -offset 0x00010000 -range 0x00001000 -target_address_space [get_bd_addr_spaces mb_cpu/Data] [get_bd_addr_segs uart_top_0/s_axi/reg0] -force
+  assign_bd_address -offset 0x00004000 -range 0x00001000 -target_address_space [get_bd_addr_spaces mb_cpu/Data] [get_bd_addr_segs axi_stamp/s_axi/reg0] -force
   assign_bd_address -offset 0x00000000 -range 0x00004000 -target_address_space [get_bd_addr_spaces mb_cpu/Instruction] [get_bd_addr_segs mb_bram/ilmb_bram_if_cntlr/SLMB/Mem] -force
   assign_bd_address -offset 0x80000000 -range 0x10000000 -target_address_space [get_bd_addr_spaces mb_cpu/Instruction] [get_bd_addr_segs sdram/memmap/memaddr] -force
 
