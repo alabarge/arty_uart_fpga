@@ -285,7 +285,7 @@ int main() {
    Xil_ExceptionEnable();
 
    // Start the Watchdog
-//   XWdtTb_Start(&gc.watchdog);
+   XWdtTb_Start(&gc.watchdog);
 
    // Initialization Finished so
    // start Running
@@ -329,13 +329,17 @@ int main() {
       //
       uart_msgtx();
       //
+      // RX TERMINAL CHAR
+      //
+      xlprint_isr(NULL);
+      //
       // CLI THREAD
       //
       cli_process(&gc.cli);
       //
       // UPDATE WATCHDOG
       //
-//      if (gc.sw_reset != TRUE) XWdtTb_RestartWdt(&gc.watchdog);
+      XWdtTb_RestartWdt(&gc.watchdog);
    }
 
    // Unreachable code

@@ -50,6 +50,7 @@
 
 # use write_project_tcl -force make_pr_ddr.tcl to capture changes to block design
 # use beyond compare to move changes into the IP PR directory
+# incidental changes based on build, layout and GUI do not need to be updated
 
 # in order to use vitis debugger the mb_bootloop.elf file must be selected for association
 # in vivado and the bitstream rebuilt
@@ -65,5 +66,10 @@
 # update fpga_build.vhd, requires IP upgrade, time stamp the design
 source ../../script/pre_build.tcl
 
+#
+# NOTE: IF ANYTHING MOVES IN THE ADDRESS MAP THAT AFFECTS SREC BOOT THEN THE
+#       SREC BOOT PROJECT MUST BE REBUILT AND VIVADO RE-RUN TO CAPTURE THE
+#       CHANGED SREC_BOOT.ELF FILE!
+#
 
 

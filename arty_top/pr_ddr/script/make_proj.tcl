@@ -546,6 +546,8 @@ proc create_hier_cell_mb_bram { parentCell nameHier } {
 
   # Create instance: axi_stamp, and set properties
   set axi_stamp [ create_bd_cell -type ip -vlnv omniware.com:user:stamp_top:1.0 axi_stamp ]
+  set_property CONFIG.C_S_AXI_ADDR_WIDTH {16} $axi_stamp
+
 
   # Create instance: axi_stdio_uart, and set properties
   set axi_stdio_uart [ create_bd_cell -type ip -vlnv xilinx.com:ip:axi_uartlite:2.0 axi_stdio_uart ]
@@ -701,19 +703,19 @@ proc create_hier_cell_mb_bram { parentCell nameHier } {
 
   # Create address segments
   assign_bd_address -offset 0x40020000 -range 0x00010000 -target_address_space [get_bd_addr_spaces mb_cpu/Data] [get_bd_addr_segs axi_button/S_AXI/Reg] -force
+  assign_bd_address -offset 0x40040000 -range 0x00010000 -target_address_space [get_bd_addr_spaces mb_cpu/Data] [get_bd_addr_segs axi_cm_uart/s_axi/reg0] -force
   assign_bd_address -offset 0x41200000 -range 0x00010000 -target_address_space [get_bd_addr_spaces mb_cpu/Data] [get_bd_addr_segs axi_intc/S_AXI/Reg] -force
   assign_bd_address -offset 0x40000000 -range 0x00010000 -target_address_space [get_bd_addr_spaces mb_cpu/Data] [get_bd_addr_segs axi_led/S_AXI/Reg] -force
   assign_bd_address -offset 0x40010000 -range 0x00010000 -target_address_space [get_bd_addr_spaces mb_cpu/Data] [get_bd_addr_segs axi_oled/S_AXI/Reg] -force
   assign_bd_address -offset 0x44A00000 -range 0x00010000 -target_address_space [get_bd_addr_spaces mb_cpu/Data] [get_bd_addr_segs axi_qspi/AXI_LITE/Reg] -force
+  assign_bd_address -offset 0x40050000 -range 0x00010000 -target_address_space [get_bd_addr_spaces mb_cpu/Data] [get_bd_addr_segs axi_stamp/s_axi/reg0] -force
   assign_bd_address -offset 0x40600000 -range 0x00010000 -target_address_space [get_bd_addr_spaces mb_cpu/Data] [get_bd_addr_segs axi_stdio_uart/S_AXI/Reg] -force
   assign_bd_address -offset 0x40030000 -range 0x00010000 -target_address_space [get_bd_addr_spaces mb_cpu/Data] [get_bd_addr_segs axi_sw_tp/S_AXI/Reg] -force
   assign_bd_address -offset 0x41C00000 -range 0x00010000 -target_address_space [get_bd_addr_spaces mb_cpu/Data] [get_bd_addr_segs axi_systimer/S_AXI/Reg] -force
   assign_bd_address -offset 0x41A00000 -range 0x00010000 -target_address_space [get_bd_addr_spaces mb_cpu/Data] [get_bd_addr_segs axi_watchdog/S_AXI/Reg] -force
   assign_bd_address -offset 0x44A20000 -range 0x00010000 -target_address_space [get_bd_addr_spaces mb_cpu/Data] [get_bd_addr_segs axi_xadc/s_axi_lite/Reg] -force
-  assign_bd_address -offset 0x00010000 -range 0x00001000 -target_address_space [get_bd_addr_spaces mb_cpu/Data] [get_bd_addr_segs axi_cm_uart/s_axi/reg0] -force
   assign_bd_address -offset 0x00000000 -range 0x00004000 -target_address_space [get_bd_addr_spaces mb_cpu/Data] [get_bd_addr_segs mb_bram/dlmb_bram_if_cntlr/SLMB/Mem] -force
   assign_bd_address -offset 0x80000000 -range 0x10000000 -target_address_space [get_bd_addr_spaces mb_cpu/Data] [get_bd_addr_segs sdram/memmap/memaddr] -force
-  assign_bd_address -offset 0x00004000 -range 0x00001000 -target_address_space [get_bd_addr_spaces mb_cpu/Data] [get_bd_addr_segs axi_stamp/s_axi/reg0] -force
   assign_bd_address -offset 0x00000000 -range 0x00004000 -target_address_space [get_bd_addr_spaces mb_cpu/Instruction] [get_bd_addr_segs mb_bram/ilmb_bram_if_cntlr/SLMB/Mem] -force
   assign_bd_address -offset 0x80000000 -range 0x10000000 -target_address_space [get_bd_addr_spaces mb_cpu/Instruction] [get_bd_addr_segs sdram/memmap/memaddr] -force
 

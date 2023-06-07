@@ -190,9 +190,9 @@ void xlprint_open(uint32_t dev_addr) {
    XIntc_Connect(&gc.intc, XPAR_INTC_0_UARTLITE_0_VEC_ID,
       (XInterruptHandler)xlprint_isr, NULL);
 
-   // enable interrupts
+   // disable interrupts
    XIntc_Enable(&gc.intc, XPAR_INTC_0_UARTLITE_0_VEC_ID);
-   uart->control = UART_INT_EN;
+   // uart->control = UART_INT_EN;
 }
 
 static void printchar(char **str, int c) {
