@@ -92,6 +92,7 @@
    static void recon_f(int argc, char **argv);
    static void rpc_f(int argc, char **argv);
    static void irq_f(int argc, char **argv);
+   static void oled_f(int argc, char **argv);
    static void md_loop_f(int argc, char **argv);
    static void mw_loop_f(int argc, char **argv);
    static void reg_test_f(int argc, char **argv);
@@ -112,6 +113,7 @@
       {.cmd = "recon",     .func = recon_f      },
       {.cmd = "rpc",       .func = rpc_f        },
       {.cmd = "irq",       .func = irq_f        },
+      {.cmd = "oled",      .func = oled_f       },
       {.cmd = "md_loop",   .func = md_loop_f    },
       {.cmd = "mw_loop",   .func = mw_loop_f    },
       {.cmd = "reg_test",  .func = reg_test_f   },
@@ -190,6 +192,7 @@ void help_f(int argc, char **argv) {
    xlprint("   recon,      reconfigure FPGA\n");
    xlprint("   rpc,        remote procedure call, project specific for debug\n");
    xlprint("   irq,        toggle IRQ trace\n");
+   xlprint("   oled,       initialize the oled module\n");
    xlprint("   md_loop     periodically read the selected address\n");
    xlprint("               md_loop [address] [loop_ms]\n");
    xlprint("               md_loop 0x80400000 1\n");
@@ -320,7 +323,7 @@ void trace_f(int argc, char **argv) {
 
 void reset_f(int argc, char **argv) {
    xlprint("\n*** RESET USING WATCHDOG ***\n\n");
-   while(1);
+   gc.sw_reset = TRUE;
 }
 
 void recon_f(int argc, char **argv) {
@@ -343,6 +346,10 @@ void irq_f(int argc, char **argv) {
    }
 }
 
+void oled_f(int argc, char **argv) {
+	oled_init();
+    oled_display();
+}
 
 void md_loop_f(int argc, char **argv) {
 

@@ -97,8 +97,8 @@
    static   uint8_t  hb_led[] = {0, 0, 1, 1, 0, 0, 1, 1,
                                  1, 1, 1, 1, 1, 1, 1, 1};
 
-   static   uint8_t  hb_cnt   =  0;
-   static   uint8_t  led_cnt  =  0;
+   static   uint8_t  hb_cnt    =  0;
+   static   uint8_t  led_cnt   =  0;
 
    static   char     clr_scrn[] = {0x1B, '[', '2', 'J', 0x00};
    static   char     cur_home[] = {0x1B, '[', 'H', 0x00};
@@ -129,6 +129,7 @@ int main() {
 // 7.1.4   Data Structures
 
    XWdtTb_Config    *config;
+   char				vers[128];
 
 // 7.1.5   Code
 
@@ -191,6 +192,15 @@ int main() {
 
    // GPIO Init
    gc.error |= gpio_init();
+
+   // OLED Init
+   gc.error |= oled_init();
+   oled_clear(OLED_PAGE);
+   oled_setFontType(0);
+   oled_setCursor(0, 0);
+   sprintf(vers, "ARTY-I\n\n%s\n%s\n%s\n", BUILD_STR, BUILD_DATE, BUILD_TIME);
+   oled_print(vers);
+   oled_display();
 
    // CM Init
    gc.error |= cm_init();
@@ -284,9 +294,6 @@ int main() {
    // Enable Exceptions
    Xil_ExceptionEnable();
 
-   // Start the Watchdog
-   XWdtTb_Start(&gc.watchdog);
-
    // Initialization Finished so
    // start Running
    gc.status &= ~CFG_STATUS_INIT;
@@ -302,6 +309,9 @@ int main() {
 
    // Init the Command Line Interpreter
    cli_init();
+
+   // Start the Watchdog
+   XWdtTb_Start(&gc.watchdog);
 
    //
    // BACKGROUND PROCESSING
@@ -339,7 +349,7 @@ int main() {
       //
       // UPDATE WATCHDOG
       //
-      XWdtTb_RestartWdt(&gc.watchdog);
+      if (gc.sw_reset == FALSE) XWdtTb_RestartWdt(&gc.watchdog);
    }
 
    // Unreachable code

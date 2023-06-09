@@ -101,6 +101,7 @@ signal sys_rst_n           : std_logic;
 signal heartbeat_count     : unsigned(25 downto 0);
 signal heartbeat           : std_logic;
 signal watchdog            : std_logic;
+signal watchdog_r0         : std_logic;
 
 --
 -- MAIN CODE
@@ -121,7 +122,7 @@ begin
 
    hw_tp(0)             <= heartbeat;
    hw_tp(1)             <= watchdog;
-   hw_tp(2)             <= '0';
+   hw_tp(2)             <= sys_rst_n;
    hw_tp(3)             <= '0';
 
    --
@@ -183,15 +184,19 @@ begin
       );
 
    --
-   -- System Reset, 12MHZ
+   -- System Reset, 100MHZ
    --
-   process(ext_resetn, clk12mhz) begin
-      if (ext_resetn = '0' and watchdog = '1') then
+   process(ext_resetn, clk100mhz) begin
+      if (ext_resetn = '0') then
           reset_cnt        <= (others => '0');
           sys_rst_n        <= '0';
-      elsif (rising_edge(clk12mhz)) then
-         -- hold reset low for ~5 microseconds then set high
-         if (reset_cnt(8) = '1') then
+      elsif (rising_edge(clk100mhz)) then
+         watchdog_r0       <= watchdog;
+         if (watchdog_r0 = '0' and watchdog = '1') then
+          reset_cnt        <= (others => '0');
+          sys_rst_n        <= '0';
+         -- hold reset low for ~10 microseconds then set high
+         elsif (reset_cnt(10) = '1') then
             sys_rst_n      <= '1';
          else
             sys_rst_n      <= '0';
@@ -201,14 +206,14 @@ begin
    end process;
 
    --
-   -- Heartbeat, 12MHZ
+   -- Heartbeat, 100MHZ
    --
-   process(sys_rst_n, clk12mhz) begin
+   process(sys_rst_n, clk100mhz) begin
       if (sys_rst_n = '0') then
           heartbeat_count     <= (others => '0');
           heartbeat           <= '0';
-      elsif (rising_edge(clk12mhz)) then
-          if (heartbeat_count(21) = '1') then
+      elsif (rising_edge(clk100mhz)) then
+          if (heartbeat_count(24) = '1') then
               heartbeat_count <= (others => '0');
               heartbeat       <= not heartbeat;
           else

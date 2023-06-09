@@ -30,9 +30,11 @@ ENTRY(_start)
 
 SECTIONS
 {
-.vectors.reset 0x0 : {
+
+.vectors.reset 0x30 : {  /* used for RELEASE */
+/*.vectors.reset 0x0 : {  /* used for DEBUG   */
    KEEP (*(.vectors.reset))
-} 
+}
 
 .vectors.sw_exception 0x8 : {
    KEEP (*(.vectors.sw_exception))

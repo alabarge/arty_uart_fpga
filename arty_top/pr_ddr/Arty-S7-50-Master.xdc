@@ -20,7 +20,7 @@ set_property -dict {PACKAGE_PIN L13 IOSTANDARD LVCMOS33} [get_ports iCM_UART_RXD
 set_property -dict {PACKAGE_PIN R12 IOSTANDARD LVCMOS33} [get_ports oSTDIO_UART_TXD]
 set_property -dict {PACKAGE_PIN V12 IOSTANDARD LVCMOS33} [get_ports iSTDIO_UART_RXD]
 
-## Micro OLED Interface, Arduino
+## Micro OLED Interface, SPI
 set_property -dict {PACKAGE_PIN G16 IOSTANDARD LVCMOS33} [get_ports oOLED_SCK]
 set_property -dict {PACKAGE_PIN H17 IOSTANDARD LVCMOS33} [get_ports oOLED_MOSI]
 set_property -dict {PACKAGE_PIN H16 IOSTANDARD LVCMOS33} [get_ports oOLED_SS]
@@ -34,12 +34,24 @@ set_property -dict { PACKAGE_PIN M14 IOSTANDARD LVCMOS33} [get_ports gpo_tri_o[6
 set_property -dict { PACKAGE_PIN N14 IOSTANDARD LVCMOS33} [get_ports gpo_tri_o[7]]
 
 ## Pmod Header JB
+#
+# JB1    SW_TP0
+# JB2    SW_TP1
+# JB3    SW_TP2
+# JB4    SW_Tp3
+#
 set_property -dict { PACKAGE_PIN P17 IOSTANDARD LVCMOS33} [get_ports sw_tp[0]]
 set_property -dict { PACKAGE_PIN P18 IOSTANDARD LVCMOS33} [get_ports sw_tp[1]]
 set_property -dict { PACKAGE_PIN R18 IOSTANDARD LVCMOS33} [get_ports sw_tp[2]]
 set_property -dict { PACKAGE_PIN T18 IOSTANDARD LVCMOS33} [get_ports sw_tp[3]]
 
 ## Pmod Header JD
+#
+# JD1    HW_TP0
+# JD2    HW_TP1
+# JD3    HW_TP2
+# JD3    HW_TP3
+#
 set_property -dict { PACKAGE_PIN V15 IOSTANDARD LVCMOS33} [get_ports hw_tp[0]]
 set_property -dict { PACKAGE_PIN U12 IOSTANDARD LVCMOS33} [get_ports hw_tp[1]]
 set_property -dict { PACKAGE_PIN V13 IOSTANDARD LVCMOS33} [get_ports hw_tp[2]]

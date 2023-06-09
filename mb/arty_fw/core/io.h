@@ -13,6 +13,7 @@
 
 #include "fpga_build.h"
 #include "gpio.h"
+#include "oled.h"
 #include "adc.h"
 #include "uart.h"
 #include "stamp.h"
