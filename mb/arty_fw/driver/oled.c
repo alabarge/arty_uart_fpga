@@ -171,8 +171,9 @@ uint32_t oled_init() {
    oled_command(OLED_SETVCOMDESELECT);         // 0xDB
    oled_command(0x40);
 
-   oled_command(OLED_DISPLAYON);               //--turn on oled panel
    oled_clear(OLED_ALL);                       // Erase hardware memory inside the OLED controller to avoid random data in memory.
+
+   oled_command(OLED_DISPLAYON);               //--turn on oled panel
 
    return result;
 }
