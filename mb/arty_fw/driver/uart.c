@@ -142,7 +142,7 @@ uint32_t uart_init(uint32_t baudrate, uint8_t port) {
    regs->control  = ctl.i;
 
    // set baudrate
-   regs->ticks = (uint16_t)((81.25E6 / baudrate) + 0.5);
+   regs->ticks = (uint16_t)((XPAR_CPU_CORE_CLOCK_FREQ_HZ / baudrate) + 0.5);
 
    // clear the hardware tx buffer, rx is read-only
    // access is 32-Bit address with 8-Bit data
@@ -168,7 +168,7 @@ uint32_t uart_init(uint32_t baudrate, uint8_t port) {
    txq.tail   = 0;
    txq.slots  = UART_TX_QUE;
 
-   XIntc_Connect(&gc.intc, XPAR_INTC_0_UARTLITE_0_VEC_ID,
+   XIntc_Connect(&gc.intc, XPAR_AXI_INTC_AXI_CM_UART_IRQ_INTR,
       (XInterruptHandler)uart_isr, NULL);
 
    // register the I/O interface callback for CM
@@ -183,7 +183,7 @@ uint32_t uart_init(uint32_t baudrate, uint8_t port) {
    regs->control  = ctl.i;
 
    // enable uart in intc
-   XIntc_Enable(&gc.intc, XPAR_INTC_0_UARTLITE_0_VEC_ID);
+   XIntc_Enable(&gc.intc, XPAR_AXI_INTC_AXI_CM_UART_IRQ_INTR);
 
    // report H/W details
    if (gc.trace & CFG_TRACE_ID) {
@@ -227,7 +227,7 @@ void uart_isr(void *arg) {
 
    // report interrupt request
    if (gc.trace & CFG_TRACE_IRQ) {
-      xlprint("uart_isr() irq = %02X\n", regs->status.i);
+      xlprint("uart_isr() irq = %02X\n", regs->irq);
    }
 
    //

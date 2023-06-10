@@ -94,7 +94,7 @@
 // 5 LOCAL CONSTANTS AND MACROS
 
    #define  COM_RESP      64
-   #define  COM_RETRIES   4
+   #define  COM_RETRIES   1
 
 // 6 MODULE DATA STRUCTURES
 

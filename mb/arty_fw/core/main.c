@@ -474,6 +474,9 @@ void version(void) {
 
 // 7.2.5   Code
 
+	// Main Version Banner
+	xlprint("\nARTY-I MICROBLAZE, %s\n\n", BUILD_HI);
+
    // Hardware Devices
    xlprint("\n");
    xlprint("%-16s base:irq %08X:%d\n", "mb_bram", XPAR_BRAM_0_BASEADDR, -1);

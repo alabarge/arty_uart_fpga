@@ -1,0 +1,5 @@
+the_ROM_image:
+{
+..\mb\arty_top\hw\arty_top.bit
+}
+

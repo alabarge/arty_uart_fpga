@@ -31,8 +31,8 @@ ENTRY(_start)
 SECTIONS
 {
 
-.vectors.reset 0x30 : {  /* used for RELEASE */
-/*.vectors.reset 0x0 : {  /* used for DEBUG   */
+.vectors.reset 0x30 : {  /* used when loading firmware from FLASH */
+/*.vectors.reset 0x0 : {  /* used when loading firmnware from VITIS IDE */
    KEEP (*(.vectors.reset))
 }
 

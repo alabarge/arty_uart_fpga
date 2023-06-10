@@ -180,7 +180,6 @@ void CCpView::OnInitialUpdate()
    str.Format(_T("  axi_intc        0x%08X\r\n"), XPAR_INTC_0_BASEADDR); str1 += str;
    str.Format(_T("  axi_wdttb       0x%08X\r\n"), XPAR_AXI_WATCHDOG_BASEADDR); str1 += str;
    str.Format(_T("  axi_systimer    0x%08X\r\n"), XPAR_AXI_SYSTIMER_BASEADDR); str1 += str;
-   str.Format(_T("  axi_freetimer   0x%08X\r\n"), XPAR_AXI_FREETIMER_BASEADDR); str1 += str;
    str.Format(_T("  axi_qspi        0x%08X\r\n"), XPAR_AXI_QSPI_BASEADDR); str1 += str;
    str.Format(_T("  axi_stamp       0x%08X\r\n"), XPAR_AXI_STAMP_BASEADDR); str1 += str;
    str.Format(_T("  axi_xadc        0x%08X\r\n"), XPAR_AXI_XADC_BASEADDR); str1 += str;

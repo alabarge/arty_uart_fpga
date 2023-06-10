@@ -49,7 +49,7 @@ architecture rtl of uart_regs is
 --
 -- CONSTANTS
 --
-constant C_UART_VERSION    : std_logic_vector(7 downto 0)  := X"01";
+constant C_UART_VERSION    : std_logic_vector(7 downto 0)  := X"02";
 
 -- default is enable
 constant C_UART_CONTROL    : std_logic_vector(31 downto 0) := X"80000000";
@@ -79,7 +79,7 @@ begin
 
    -- Read/Write BlockRAM
    cpu_TXD              <= s_axi_wdata(7 downto 0);
-   cpu_ADDR             <= s_axi_awaddr(11 downto 0);
+   cpu_ADDR             <= s_axi_awaddr(13 downto 2);
 
    cpu_WE               <= '1' when (s_axi_awaddr(12) = '1' and s_axi_awready = '1') else '0';
    cpu_RE               <= '1' when (s_axi_araddr(12) = '1' and (s_axi_rvalid = '1' or s_axi_rready = '1')) else '0';

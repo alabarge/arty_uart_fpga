@@ -172,7 +172,7 @@ uint32_t post_ddr(void) {
 
    // 7.2.5   Code
 
-   xlprint("postDDR() %08X : %02d MiB\n", pMem, ((((XPAR_SDRAM_HIGHADDR + 1) - XPAR_SDRAM_BASEADDR)  / 1048576) - 4));
+   xlprint("postDDR()  %08X : %02d MiB\n", pMem, ((((XPAR_SDRAM_HIGHADDR + 1) - XPAR_SDRAM_BASEADDR)  / 1048576) - 4));
 
    // Seed Pseudo-Random Number Generator
    srand_32(100);

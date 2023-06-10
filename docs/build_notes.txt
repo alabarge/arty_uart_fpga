@@ -36,6 +36,9 @@
 # ONLY FLASH RELEASED BUILDS!
 #
 
+#
+# FLASH FROM VITIS
+#
 # program flash, Xilinx->Program Flash, Browse for arty_fw.elf
 # set offset = 0x600000
 # flash type = s25fl128sxxxxxx0-spi-x1_x2_x4
@@ -47,6 +50,13 @@
 # flash type = s25fl128sxxxxxx0-spi-x1_x2_x4
 # select Blank check and Verify
 # then Program
+
+#
+# FLASH FROM XILINX->VITIS SHELL
+#
+# cd to utils directory
+# flash.bat
+#
 
 # use write_project_tcl -force make_pr_ddr.tcl to capture changes to block design
 # use beyond compare to move changes into the IP PR directory
@@ -78,8 +88,8 @@ source ../../script/pre_build.tcl
 #
 
 #
-# NOTE: WHEN DEBUG IS SELECTED IN VITIS, THE RESET VECTOR IN THE LSCRIPT.LD FILE
-#       MUST BE CHANGED, SEE NOTE IN FILE. USE RIGHT-CLICK PROJECT "RUN AS" OR "DEBUG AS"
-#       LAUNCH HARDWARE (SINGLE APPLICATION DEBUG)
+# NOTE: WHEN LAUNCHING FIRMWARE FROM VITIS (DEBUG OR RELEASE), THE RESET VECTOR
+#       IN THE LSCRIPT.LD FILE MUST BE CHANGED, SEE NOTE IN FILE. USE RIGHT-CLICK
+#       PROJECT "RUN AS" OR "DEBUG AS" LAUNCH HARDWARE (SINGLE APPLICATION DEBUG)
 
 
