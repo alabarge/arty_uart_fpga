@@ -93,7 +93,7 @@
 // 6.2  Local Data Structures
 
    static   uint8_t        cm_port = CM_PORT_NONE;
-   static   uint32_t       tx_head = 0;
+   static   uint16_t       tx_head = 0;
    static   uint16_t       tx_msglen = 0;
 
    static   uart_txq_t     txq;
@@ -163,7 +163,7 @@ uint32_t uart_init(uint32_t baudrate, uint8_t port) {
    for (j=0;j<UART_TX_QUE;j++) {
       txq.buf[j] = NULL;
    }
-   rxq.state  = UART_TX_IDLE;
+   txq.state  = UART_TX_IDLE;
    txq.head   = 0;
    txq.tail   = 0;
    txq.slots  = UART_TX_QUE;
@@ -223,6 +223,8 @@ void uart_isr(void *arg) {
 
    uint8_t     c;
 
+   uart_ptr_ctl_reg_t ptr_ctl;
+
 // 7.2.5   Code
 
    // report interrupt request
@@ -233,12 +235,16 @@ void uart_isr(void *arg) {
    //
    // RX INTERRUPT, WHILE HEAD != TAIL
    //
+   ptr_ctl.i = regs->ptr_ctl;
    while (regs->ptr_sta.b.rx_head != rxq.tail) {
       // clear interrupts
       regs->irq = regs->irq;
       // always read the rx buffer, 8-Bits
       c = regs->rtx_buf[rxq.tail];
       if (++rxq.tail == UART_RX_BUF_LEN) rxq.tail = 0;
+      // update hardware
+      ptr_ctl.b.rx_tail = rxq.tail;
+      regs->ptr_ctl = ptr_ctl.i;
       // handle restart outside of switch
       if (c == UART_START_FRAME) {
           rxq.state = UART_RX_IDLE;
@@ -320,15 +326,22 @@ void uart_tx(void) {
 
 // 7.4.4   Data Structures
 
+   uart_ptr_ctl_reg_t ptr_ctl;
+
 // 7.4.5   Code
 
-   if (regs->ptr_sta.b.tx_tail != tx_head && regs->status.b.tx_rdy == 1) {
+   if ((((tx_head + 1) & (UART_TX_BUF_LEN - 1)) != regs->ptr_sta.b.tx_tail) &&
+         (regs->status.b.tx_rdy == 1)) {
       switch (txq.state) {
          case UART_TX_IDLE :
             txq.state   = UART_TX_MSG;
             txq.n       = 0;
             regs->rtx_buf[tx_head] = msg_out[txq.n++];
             if (++tx_head == UART_TX_BUF_LEN) tx_head = 0;
+            // update hardware, RMW
+            ptr_ctl.i = regs->ptr_ctl;
+            ptr_ctl.b.tx_head = tx_head;
+            regs->ptr_ctl = ptr_ctl.i;
             // show activity
             gpio_set_val(GPIO_LED_COM, GPIO_LED_ON);
             // report message content
@@ -344,6 +357,10 @@ void uart_tx(void) {
             else {
                regs->rtx_buf[tx_head] = msg_out[txq.n++];
                if (++tx_head == UART_TX_BUF_LEN) tx_head = 0;
+               // update hardware, RMW
+               ptr_ctl.i = regs->ptr_ctl;
+               ptr_ctl.b.tx_head = tx_head;
+               regs->ptr_ctl = ptr_ctl.i;
             }
             break;
       }
@@ -459,7 +476,7 @@ void uart_msgtx(void) {
             msg_out[j++] = txq.buf[txq.tail][i];
          }
          // end-of-frame
-         msg_out[j++] = UART_START_FRAME;
+         msg_out[j++] = UART_END_FRAME;
          tx_msglen = j;
          uart_tx();
       }
@@ -583,5 +600,16 @@ void uart_report(void) {
    xlprint("rxq.tail   : %d\n", rxq.tail);
    xlprint("rxq.slot   : %d\n", rxq.slot);
    xlprint("rxq.msg    : %08X\n\n", rxq.msg);
+
+   // regs
+   xlprint("\n");
+   xlprint("regs->control  : %08X\n", regs->control);
+   xlprint("regs->status   : %08X\n", regs->status);
+   xlprint("regs->verion   : %02X\n", regs->version);
+   xlprint("regs->irq      : %02X\n", regs->irq);
+   xlprint("regs->ticks    : %04X\n", regs->ticks);
+   xlprint("regs->ptr_sta  : %08X\n", regs->ptr_sta.i);
+   xlprint("regs->ptr_ctl  : %08X\n", regs->ptr_ctl);
+
 
 } // end uart_report()

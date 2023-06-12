@@ -8,7 +8,7 @@
 #define CM_CHECK_CRC          TRUE
 
 #define CM_MSGQ_SLOTS         128
-#define CM_MSGQ_BUF_LEN       512
+#define CM_MSGQ_BUF_LEN       520
 
 #define CM_OK                 0x00000000
 #define CM_ERROR              0x80000001
@@ -62,14 +62,16 @@ typedef struct _cm_send_t {
 } cm_send_t, *pcm_send_t;
 
 // CM Message Queue
+// NOTE: The raw and buf data types must
+//       match the hardware read type
 typedef struct _cmq_t {
    uint8_t     state;
    uint8_t     flags;
    uint8_t     reserved[2];
    uint16_t    size;
    uint16_t    msglen;
-   uint32_t    raw[CM_MSGQ_BUF_LEN+4];
-   uint32_t   *buf;
+   uint8_t    *buf;
+   uint8_t     raw[CM_MSGQ_BUF_LEN];
 } cmq_t, *pcmq_t;
 
 // CM Port Connection

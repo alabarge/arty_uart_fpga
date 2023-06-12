@@ -81,7 +81,10 @@
 
    static   volatile pgpio_regs_t   leds = (volatile pgpio_regs_t)XPAR_AXI_LED_BASEADDR;
    static   volatile pgpio_regs_t   btns = (volatile pgpio_regs_t)XPAR_AXI_BUTTON_BASEADDR;
+   static   volatile pgpio_regs_t   swtp = (volatile pgpio_regs_t)XPAR_AXI_SW_TP_BASEADDR;
+
    static   uint32_t leds_dat;
+   static   uint32_t swtp_dat;
 
 // 7 MODULE CODE
 
@@ -112,14 +115,17 @@ uint32_t gpio_init(void) {
 
 // 7.1.5   Code
 
-   // set gpio_1 direction, all out
+   // set leds direction, all out
    leds->tri = 0x0;
-
-   // set gpio_1 all off
    leds->dat = 0x0;
    leds_dat  = 0x0;
 
-   // set gpio_2 direction, all in
+   // set sw test points, all out
+   swtp->tri = 0x0;
+   swtp->dat = 0x0;
+   swtp_dat  = 0x0;
+
+   // set buttons direction, all in
    btns->tri = ~0x0;
 
    return result;
@@ -198,17 +204,18 @@ void gpio_set_val(uint8_t gpio, uint8_t state) {
          leds_dat  |=  0x0F;
          break;
       case GPIO_TP_ON :
-         leds_dat |=  gpio;
+         swtp_dat |=  gpio;
          break;
       case GPIO_TP_OFF :
-         leds_dat &= ~gpio;
+         swtp_dat &= ~gpio;
          break;
       case GPIO_TP_TOGGLE :
-         leds_dat ^=  gpio;
+         swtp_dat ^=  gpio;
          break;
    }
 
    leds->dat = leds_dat;
+   swtp->dat = swtp_dat;
 
 }  // end gpio_val_set()
 

@@ -15,7 +15,7 @@ end uart_tb;
 architecture tb_arch of uart_tb is
 
 -- constants
-constant C_CLK_PERIOD:           TIME :=  10.000 ns;    -- 100 MHz
+constant C_CLK_PERIOD:           TIME :=  12.308 ns;    -- 81.247969 MHz
 constant C_S_AXI_DATA_WIDTH:     integer := 32;
 constant C_S_AXI_ADDR_WIDTH:     integer := 16;
 
@@ -82,7 +82,7 @@ begin
    --
 
    --
-   -- 100 MHZ
+   -- 81 MHZ
    --
    process begin
       s_axi_aclk <= '1';
@@ -160,14 +160,41 @@ begin
       wait until s_axi_aresetn = '1';
 
       -- message to transmit
-      BUS_WR(X"1000", X"00000000");
-      BUS_WR(X"1004", X"00000004");
-      BUS_WR(X"1008", X"00000008");
-      BUS_WR(X"100C", X"0000000C");
-      BUS_WR(X"1010", X"00000010");
-      BUS_WR(X"1014", X"00000014");
-      BUS_WR(X"1018", X"00000018");
-      BUS_WR(X"101C", X"0000001C");
+      BUS_WR(X"4000", X"00000000");
+      BUS_WR(X"4004", X"00000001");
+      BUS_WR(X"4008", X"00000002");
+      BUS_WR(X"400C", X"00000003");
+      BUS_WR(X"4010", X"00000004");
+      BUS_WR(X"4014", X"00000005");
+      BUS_WR(X"4018", X"00000006");
+      BUS_WR(X"401C", X"00000007");
+
+      BUS_WR(X"4020", X"00000008");
+      BUS_WR(X"4024", X"00000009");
+      BUS_WR(X"4028", X"0000000A");
+      BUS_WR(X"402C", X"0000000B");
+      BUS_WR(X"4030", X"0000000C");
+      BUS_WR(X"4034", X"0000000D");
+      BUS_WR(X"4038", X"0000000E");
+      BUS_WR(X"403C", X"0000000F");
+
+      BUS_WR(X"4040", X"00000010");
+      BUS_WR(X"4044", X"00000011");
+      BUS_WR(X"4048", X"00000012");
+      BUS_WR(X"404C", X"00000013");
+      BUS_WR(X"4050", X"00000014");
+      BUS_WR(X"4054", X"00000015");
+      BUS_WR(X"4058", X"00000016");
+      BUS_WR(X"405C", X"00000017");
+
+      BUS_WR(X"4060", X"00000018");
+      BUS_WR(X"4064", X"00000019");
+      BUS_WR(X"4068", X"0000001A");
+      BUS_WR(X"406C", X"0000001B");
+      BUS_WR(X"4070", X"0000001C");
+      BUS_WR(X"4074", X"0000001D");
+      BUS_WR(X"4078", X"0000001E");
+      BUS_WR(X"407C", X"0000001F");
 
       -- transmit 32 bytes
       BUS_WR(X"0018", X"00000020");
@@ -177,6 +204,47 @@ begin
 
       -- 32 characters received interrupt
       BUS_WR(X"0000", X"D0000020");
+
+      wait for 3 ms;
+
+      -- clear all interrupts
+      BUS_WR(X"000C", X"00000007");
+
+      BUS_RD(X"4000");
+      BUS_RD(X"4004");
+      BUS_RD(X"4008");
+      BUS_RD(X"400C");
+      BUS_RD(X"4010");
+      BUS_RD(X"4014");
+      BUS_RD(X"4018");
+      BUS_RD(X"401C");
+
+      BUS_RD(X"4020");
+      BUS_RD(X"4024");
+      BUS_RD(X"4028");
+      BUS_RD(X"402C");
+      BUS_RD(X"4030");
+      BUS_RD(X"4034");
+      BUS_RD(X"4038");
+      BUS_RD(X"403C");
+
+      BUS_RD(X"4040");
+      BUS_RD(X"4044");
+      BUS_RD(X"4048");
+      BUS_RD(X"404C");
+      BUS_RD(X"4050");
+      BUS_RD(X"4054");
+      BUS_RD(X"4058");
+      BUS_RD(X"405C");
+
+      BUS_RD(X"4060");
+      BUS_RD(X"4064");
+      BUS_RD(X"4068");
+      BUS_RD(X"406C");
+      BUS_RD(X"4070");
+      BUS_RD(X"4074");
+      BUS_RD(X"4078");
+      BUS_RD(X"407C");
 
       wait;
 

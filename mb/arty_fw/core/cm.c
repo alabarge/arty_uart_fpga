@@ -242,7 +242,7 @@ uint32_t cm_init(void) {
       cmq[i].size  = CM_MSGQ_BUF_LEN;
       cmq[i].state = CM_Q_IDLE;
       // allow room for uint32_t length
-      cmq[i].buf   = &cmq[i].raw[1];
+      cmq[i].buf   = &cmq[i].raw[4];
    }
 
    // Register this instance of the CM
@@ -567,8 +567,8 @@ pcmq_t cm_alloc(void) {
 
 // 7.5.5   Code
 
-   // Disable ALL interrupts
-   microblaze_disable_interrupts();
+   // Disable ISR
+   XIntc_Disable(&gc.intc, XPAR_AXI_INTC_AXI_CM_UART_IRQ_INTR);
 
    // Find next available slot
    for (i=0;i<CM_MSGQ_SLOTS;i++) {
@@ -576,7 +576,7 @@ pcmq_t cm_alloc(void) {
          cmq[cm.q_head].state = CM_Q_ALLOC;
          slot = &cmq[cm.q_head];
          // clear the entire buffer
-         memset(slot->raw, 0, sizeof(uint32_t) * CM_MSGQ_BUF_LEN);
+         memset(slot->raw, 0, CM_MSGQ_BUF_LEN);
          // account for uint32_t length at raw start
          msg = (pcm_msg_t)slot->buf;
          // used to retrieve slot from message
@@ -592,8 +592,8 @@ pcmq_t cm_alloc(void) {
       if (++cm.q_head >= CM_MSGQ_SLOTS) cm.q_head = 0;
    }
 
-   // Enable ALL interrupts
-   microblaze_enable_interrupts();
+   // Enable ISR
+   XIntc_Enable(&gc.intc, XPAR_AXI_INTC_AXI_CM_UART_IRQ_INTR);
 
    if (gc.trace & CFG_TRACE_ERROR) {
       if (slot == NULL)
@@ -632,8 +632,8 @@ void cm_free(pcm_msg_t msg) {
 
 // 7.6.5   Code
 
-   // Disable ALL interrupts
-   microblaze_disable_interrupts();
+   // Disable ISR
+   XIntc_Disable(&gc.intc, XPAR_AXI_INTC_AXI_CM_UART_IRQ_INTR);
 
    // Release the Slot
    if (msg != NULL) {
@@ -646,8 +646,8 @@ void cm_free(pcm_msg_t msg) {
       }
    }
 
-   // Enable ALL interrupts
-   microblaze_enable_interrupts();
+   // Enable ISR
+   XIntc_Enable(&gc.intc, XPAR_AXI_INTC_AXI_CM_UART_IRQ_INTR);
 
 } // end cm_free()
 
@@ -1942,8 +1942,8 @@ void cm_qmsg(pcm_msg_t msg) {
          xlprint("  msglen:    %04X\n", msg->h.msglen);
       }
 
-      // Disable ALL interrupts
-      microblaze_disable_interrupts();
+      // Disable ISR
+      XIntc_Disable(&gc.intc, XPAR_AXI_INTC_AXI_CM_UART_IRQ_INTR);
 
       // log message
       cm_log(msg);
@@ -1955,8 +1955,8 @@ void cm_qmsg(pcm_msg_t msg) {
       // so something has stalled otherwise
       cm.q_msg_cnt = (cm.q_msg_cnt + 1) & (CM_MSGQ_SLOTS - 1);
 
-      // Enable ALL interrupts
-      microblaze_enable_interrupts();
+      // Enable ISR
+      XIntc_Enable(&gc.intc, XPAR_AXI_INTC_AXI_CM_UART_IRQ_INTR);
 
    }
    else {
@@ -1997,8 +1997,8 @@ void cm_thread(void) {
 
 // 7.25.5   Code
 
-   // Disable ALL interrupts
-   microblaze_disable_interrupts();
+   // Disable ISR
+   XIntc_Disable(&gc.intc, XPAR_AXI_INTC_AXI_CM_UART_IRQ_INTR);
 
    // clear previous message
    slot = NULL;
@@ -2020,8 +2020,8 @@ void cm_thread(void) {
       }
    }
 
-   // Enable ALL interrupts
-   microblaze_enable_interrupts();
+   // Enable ISR
+   XIntc_Enable(&gc.intc, XPAR_AXI_INTC_AXI_CM_UART_IRQ_INTR);
 
   // Route Message
   if (slot != NULL) {

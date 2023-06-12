@@ -311,7 +311,7 @@ int main() {
    cli_init();
 
    // Start the Watchdog
-   XWdtTb_Start(&gc.watchdog);
+//   XWdtTb_Start(&gc.watchdog);
 
    //
    // BACKGROUND PROCESSING
@@ -349,7 +349,7 @@ int main() {
       //
       // UPDATE WATCHDOG
       //
-      if (gc.sw_reset == FALSE) XWdtTb_RestartWdt(&gc.watchdog);
+//      if (gc.sw_reset == FALSE) XWdtTb_RestartWdt(&gc.watchdog);
    }
 
    // Unreachable code
@@ -483,6 +483,7 @@ void version(void) {
    xlprint("%-16s base:irq %08X:%d\n", "axi_led", XPAR_AXI_LED_BASEADDR, -1);
    xlprint("%-16s base:irq %08X:%d\n", "axi_oled", XPAR_AXI_OLED_BASEADDR, -1);
    xlprint("%-16s base:irq %08X:%d\n", "axi_button", XPAR_AXI_BUTTON_BASEADDR, -1);
+   xlprint("%-16s base:irq %08X:%d\n", "axi_sw_tp", XPAR_AXI_SW_TP_BASEADDR, -1);
    xlprint("%-16s base:irq %08X:%d\n", "axi_stdio_uart", XPAR_AXI_STDIO_UART_BASEADDR, XPAR_INTC_0_UARTLITE_0_VEC_ID);
    xlprint("%-16s base:irq %08X:%d\n", "axi_cm_uart", XPAR_AXI_CM_UART_BASEADDR, XPAR_AXI_INTC_AXI_CM_UART_IRQ_INTR);
    xlprint("%-16s base:irq %08X:%d\n", "axi_intc", XPAR_AXI_INTC_BASEADDR, XIL_EXCEPTION_ID_INT);

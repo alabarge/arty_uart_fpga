@@ -102,9 +102,9 @@ typedef struct _uart_regs_t {
    uint32_t       irq;
    uint32_t       ticks;
    uart_ptr_sta_reg_t ptr_sta;
-   uart_ptr_ctl_reg_t ptr_ctl;
-   uint32_t       unused[1017];
-   uint32_t       rtx_buf[1024];
+   uint32_t       ptr_ctl;
+   uint32_t       unused[4089];
+   uint32_t       rtx_buf[4096];
 } uart_regs_t, *puart_regs_t;
 
 // transmit queue

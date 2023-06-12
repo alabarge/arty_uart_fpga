@@ -79,10 +79,12 @@ begin
 
    -- Read/Write BlockRAM
    cpu_TXD              <= s_axi_wdata(7 downto 0);
-   cpu_ADDR             <= s_axi_awaddr(13 downto 2);
+   cpu_ADDR             <= s_axi_awaddr(13 downto 2) when cpu_WE = '1' else
+                           s_axi_araddr(13 downto 2) when cpu_RE = '1' else
+                           (others => '0');
 
-   cpu_WE               <= '1' when (s_axi_awaddr(12) = '1' and s_axi_awready = '1') else '0';
-   cpu_RE               <= '1' when (s_axi_araddr(12) = '1' and (s_axi_rvalid = '1' or s_axi_rready = '1')) else '0';
+   cpu_WE               <= '1' when (s_axi_awaddr(14) = '1' and s_axi_awready = '1') else '0';
+   cpu_RE               <= '1' when (s_axi_araddr(14) = '1' and (s_axi_rvalid = '1' or s_axi_rready = '1')) else '0';
 
    -- unsued AXI-Lite signals :
    -- s_axi_awprot, s_axi_arprot, s_axi_wstrb and

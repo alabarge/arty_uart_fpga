@@ -296,10 +296,12 @@ void regs_f(int argc, char **argv) {
 void traffic_f(int argc, char **argv) {
    if (gc.trace & CFG_TRACE_CM_LOG) {
       gc.trace &= ~CFG_TRACE_CM_LOG;
+      gc.trace &= ~CFG_TRACE_CM;
       xlprint("cm traffic log = off\n");
    }
    else {
       gc.trace |=  CFG_TRACE_CM_LOG;
+      gc.trace |=  CFG_TRACE_CM;
       xlprint("cm traffic log = on\n");
    }
 }
