@@ -17,6 +17,8 @@
 
 static   DWORD fifo_speed[]  = {480000000};
 static   DWORD ftdi_speed[] = {12000000, 3000000, 2000000, 1500000, 1250000, 1000000, 500000, 115200, 19200};
+static   DWORD uart_speed[] = {12000000, 3000000, 2000000, 1500000, 1250000, 1000000, 500000, 115200, 19200};
+static   DWORD libsp_speed[] = { 12000000, 3000000, 2000000, 1500000, 1250000, 1000000, 500000, 115200, 19200 };
 static   DWORD com_speed[]  = {115200, 57600, 19200, 9600};
 static   INT   devID;
 
@@ -29,13 +31,13 @@ BEGIN_MESSAGE_MAP(CConView, CViewEx)
    ON_CONTROL_RANGE(BN_CLICKED, IDC_CON_STARTUP, IDC_CON_STARTUP, OnCheckUpdateED)
    ON_BN_CLICKED(IDC_CON_REFRESH, &CConView::OnBnClickedConRefresh)
    ON_BN_CLICKED(IDC_CON_CONNECT, &CConView::OnBnClickedConConnect)
-	ON_UPDATE_COMMAND_UI(IDC_CON_PORT_SPEED, &CConView::OnUpdatePortSpeed)
-	ON_UPDATE_COMMAND_UI(IDC_CON_CONNECT, &CConView::OnUpdateConnect)
-	ON_UPDATE_COMMAND_UI(IDC_CON_PORT_TYPE, &CConView::OnUpdateType)
-	ON_UPDATE_COMMAND_UI(IDC_CON_PORT_SEL, &CConView::OnUpdatePort)
-	ON_UPDATE_COMMAND_UI(IDC_CON_IP_ADDR, &CConView::OnUpdateIpAddr)
-	ON_UPDATE_COMMAND_UI(IDC_CON_MAC_ADDR, &CConView::OnUpdateMacAddr)
-	ON_UPDATE_COMMAND_UI(IDC_CON_IP_PORT, &CConView::OnUpdateIpPort)
+   ON_UPDATE_COMMAND_UI(IDC_CON_PORT_SPEED, &CConView::OnUpdatePortSpeed)
+   ON_UPDATE_COMMAND_UI(IDC_CON_CONNECT, &CConView::OnUpdateConnect)
+   ON_UPDATE_COMMAND_UI(IDC_CON_PORT_TYPE, &CConView::OnUpdateType)
+   ON_UPDATE_COMMAND_UI(IDC_CON_PORT_SEL, &CConView::OnUpdatePort)
+   ON_UPDATE_COMMAND_UI(IDC_CON_IP_ADDR, &CConView::OnUpdateIpAddr)
+   ON_UPDATE_COMMAND_UI(IDC_CON_MAC_ADDR, &CConView::OnUpdateMacAddr)
+   ON_UPDATE_COMMAND_UI(IDC_CON_IP_PORT, &CConView::OnUpdateIpPort)
    ON_MESSAGE(WM_CLOSING, &CConView::OnClosing)
    ON_MESSAGE(WM_DEV_REMOVE, &CConView::OnDevRemove)
    ON_MESSAGE(WM_DEV_ARRIVE, &CConView::OnDevArrive)
@@ -578,6 +580,63 @@ void CConView::OnBnClickedConRefresh()
       m_PortSel.SetItemData(0, 0);
       m_comPort = 0;
    }
+   //
+   // UART DEVICE
+   //
+   else if (m_comCon == APP_CON_UART) {
+      // available devices?
+      devCnt = uart_query(&m_pUARTInfo);
+      if (devCnt == 0) {
+         str.Format(_T("Warning : No UART Devices Available\n"));
+         pDoc->Log(str, APP_MSG_WARNING);
+      }
+      // parse device info
+      else {
+         if (devCnt <= UART_MAX_DEVICES) {
+            for (i=0,j=0;i<devCnt;i++) {
+               CA2W serial(m_pUARTInfo[i].serial);
+               CA2W desc(m_pUARTInfo[i].desc);
+               // Check for UART Omniware Serial
+               if (serial.m_psz[0] == 'O' && serial.m_psz[1] == '5') {
+                  if ((m_pUARTInfo[i].id == OPTO_VID_PID && m_pUARTInfo[i].flags != 1) ||
+                      (m_pUARTInfo[i].id == OPTO_VID_PID_ALT && m_pUARTInfo[i].flags != 1)) {
+                     str.Format(_T("UART.%d \t:\n"), i); pDoc->Log(str, APP_MSG_HIGHLITE);
+                  }
+                  else {
+                     str.Format(_T("UART.%d \t: Unavailable\n"), i); pDoc->Log(str, APP_MSG_ERROR);
+                  }
+               }
+               else {
+                  str.Format(_T("UART.%d \t: Unavailable\n"), i); pDoc->Log(str, APP_MSG_ERROR);
+               }
+               str.Format(_T(" flags \t: %08X\n"), m_pUARTInfo[i].flags);  pDoc->Log(str);
+               str.Format(_T(" type  \t: %08X\n"), m_pUARTInfo[i].type);   pDoc->Log(str);
+               str.Format(_T(" id    \t: %08X\n"), m_pUARTInfo[i].id);     pDoc->Log(str);
+               str.Format(_T(" locid \t: %08X\n"), m_pUARTInfo[i].locid);  pDoc->Log(str);
+               str.Format(_T(" serial\t: %s\n"),   serial.m_psz);          pDoc->Log(str);
+               str.Format(_T(" desc  \t: %s\n"),   desc.m_psz);            pDoc->Log(str);
+               str.Format(_T(" handle\t: %08X\n"), m_pUARTInfo[i].handle); pDoc->Log(str);
+               // Check for UART Omniware Serial
+               if (serial.m_psz[0] == 'O' && serial.m_psz[1] == '5') {
+                  // Add to ComboBox
+                  if ((m_pUARTInfo[i].handle == 0 && m_pUARTInfo[i].id == UART_VID_PID) ||
+                      (m_pUARTInfo[i].handle == 0 && m_pUARTInfo[i].id == UART_VID_PID_ALT)) {
+                     str.Format(_T("UART.%d"), i);
+                     m_PortSel.AddString(str);
+                     m_PortSel.SetItemData(j++, i);
+                     devFound = TRUE;
+                  }
+               }
+            }
+            // Show first selection, if any
+            m_comPort = (devFound == TRUE) ? 0 : APP_PORT_NONE;
+         }
+         else {
+            str.Format(_T("Error : Maximum Attached Devices Exceeded, %d\n"), devCnt);
+            GetDoc()->Log(str, APP_MSG_ERROR);
+         }
+      }
+   }
 
    // Update Form Items
    OnUpdateConfig(FALSE);
@@ -923,6 +982,55 @@ void CConView::OnBnClickedConConnect()
             pMainFrm->m_hCom    = NULL;
          }
       }
+      //
+      // UART DEVICE
+      //
+      else if (m_comCon == APP_CON_UART) {
+         // Open the OPTO Port
+         m_nCom              = APP_CON_UART;
+         pMainFrm->m_nCom    = APP_CON_UART;
+         port = (UINT)m_PortSel.GetItemData(m_comPort);
+         // Check for UART Device, Baudrate selectable
+         speed = (m_pUARTInfo[port].type == 8) ? 0 : uart_speed[m_comSpeed];
+         result = uart_init(speed, CM_PORT_COM0, port);
+         // Check Device ID
+         if (result != UART_OK) {
+            str.Format(_T("Error : Failed to Open UART.%d Device\n"), port);
+            GetDoc()->Log(str, APP_MSG_ERROR);
+            m_nCom              = APP_CON_NONE;
+            pMainFrm->m_nCom    = APP_CON_NONE;
+            pMainFrm->m_nPort   = APP_PORT_NONE;
+            pMainFrm->m_nPortId = 0;
+            pMainFrm->m_hCom    = NULL;
+            pMainFrm->m_nComErr = 0;
+         }
+         else {
+            CA2W serial(m_pUARTInfo[port].serial);
+            str.Format(_T("Opened UART.%d (%s) for Messaging\n"), port, serial.m_psz);
+            GetDoc()->Log(str);
+            opto_rev(&libRev, &sysRev, &apiRev);
+            str.Format(_T("UART.%d : ftd2xx.lib %08X, ftd2xx.sys %08X, optoapi.dll %08X\n"), port, libRev, sysRev, apiRev);
+            GetDoc()->Log(str);
+            opto_sysid(&sysid, &stamp, &cmDat);
+            str.Format(_T("UART.%d : sysID %d, stamp %d, cm %08X\n"), port, sysid, stamp, cmDat);
+            GetDoc()->Log(str);
+            // Assign the Type and Port
+            pMainFrm->m_nPort   = m_comPort;
+            pMainFrm->m_nPortId = port;
+            pMainFrm->m_hCom    = NULL;
+            pMainFrm->m_nComErr = 0;
+            // Save Serial for Device Removal Check
+            memcpy(pMainFrm->m_chSerial, m_pUARTInfo[port].serial, 16);
+            // Send CM Registration Request
+            cm_send_reg_req(APP_DEVID, CM_PORT_COM0, CM_REG_OPEN, (UCHAR *)dev.m_psz);
+            // Check for AutoConnect Port Change
+            if (m_autoPort != m_comPort) {
+               m_autoPort = m_comPort;
+               GetDoc()->SetModifiedFlag(TRUE);
+               OnUpdateConfig(TRUE);
+            }
+         }
+      }
    }
    //
    // DISCONNECT
@@ -1047,6 +1155,28 @@ void CConView::OnBnClickedConConnect()
          cm_send_reg_req(APP_DEVID, CM_PORT_COM0, CM_REG_CLOSE, (UCHAR *)dev.m_psz);
          // Set timer to close connection
          SetTimer(ID_TIMER_TCP_CLOSE, 50, NULL);
+      }
+      //
+      // UART DEVICE
+      //
+      else if (m_comCon == APP_CON_UART) {
+         // Close Registration to Hardware
+         cm_send_reg_req(APP_DEVID, CM_PORT_COM0, CM_REG_CLOSE, (UCHAR *)dev.m_psz);
+         // Close the Open Port
+         port = (UINT)m_PortSel.GetItemData(m_comPort);
+         CA2W serial(m_pUARTInfo[port].serial);
+         str.Format(_T("Closed UART.%d (%s)\n"), port, serial.m_psz);
+         GetDoc()->Log(str);
+         // Delete Serial for Device Removal Check
+         memset(pMainFrm->m_chSerial, 0, 16);
+         uart_final();
+         // No Connection
+         m_nCom              = APP_CON_NONE;
+         pMainFrm->m_nCom    = APP_CON_NONE;
+         pMainFrm->m_nComErr = 0;
+         pMainFrm->m_nPort   = APP_PORT_NONE;
+         pMainFrm->m_nPortId = 0;
+         pMainFrm->m_hCom    = NULL;
       }
    }
 
@@ -1288,6 +1418,18 @@ void CConView::OnCbnSelchangeConPortType()
             str.Format(_T("%.1f Mbps"), (double)fifo_speed[i] / 1000000);
          m_SpeedSel.AddString(str);
          j = (CFG_BAUD_RATE == fifo_speed[i]) ? i : j;
+      }
+      // Select Preferred Speed, default is 0
+      m_comSpeed = j;
+   }
+   else if (m_comCon == APP_CON_UART) {
+      for (i=0,j=0;i<DIM(uart_speed);i++) {
+         if (uart_speed[i] < 1000000)
+            str.Format(_T("%.1f Kbps"), (double)uart_speed[i] / 1000);
+         else
+            str.Format(_T("%.1f Mbps"), (double)uart_speed[i] / 1000000);
+         m_SpeedSel.AddString(str);
+         j = (CFG_BAUD_RATE == uart_speed[i]) ? i : j;
       }
       // Select Preferred Speed, default is 0
       m_comSpeed = j;

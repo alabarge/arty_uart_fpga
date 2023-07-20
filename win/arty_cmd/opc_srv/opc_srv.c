@@ -750,7 +750,7 @@ uint32_t opc_daq_state(void) {
          case OPC_DAQ_STATE_DONE :
             if (opc_daq.acq_done == TRUE && opc_daq.dat_done == TRUE) {
                opc.sv.state = OPC_STATE_IDLE;
-               cm_send_reg_req(CM_DEV_DE0, CM_PORT_COM0, CM_REG_CLOSE, gc.dev_str);
+               cm_send_reg_req(CM_DEV_ARTY, CM_PORT_COM0, CM_REG_CLOSE, gc.dev_str);
                Sleep(100);
                gc.halt = TRUE;
             }
@@ -790,8 +790,8 @@ uint32_t opc_write_file(pcm_pipe_daq_t pipe) {
    uint32_t    i,j,l,m;
    int32_t     k;
    char        line[1024];
-   float       samf[16];
-   int32_t     sami[16];
+   float       samf[16] = {0};
+   int32_t     sami[16] = {0};
 
 // 7.8.5   Code
 

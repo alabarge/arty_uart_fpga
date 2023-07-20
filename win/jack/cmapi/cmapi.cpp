@@ -1305,7 +1305,6 @@ CM_API uint32_t cm_route(pcm_msg_t msg) {
    if (cm.port[msg->h.port].media == CM_MEDIA_NONE) {
       result = CM_ERR_MEDIA_NONE;
       cm_free(msg);
-      cm_free(msg);
       return result;
    }
 

@@ -89,7 +89,7 @@
       { "ci.magic",              "0x55AA1234",           CI_HEX,        &ci.magic,                 1 },
       { "ci.debug",              "0x00000000",           CI_HEX,        &ci.debug,                 1 },
       { "ci.trace",              "0x00000A82",           CI_HEX,        &ci.trace,                 1 },
-      { "ci.feature",            "0x00000001",           CI_HEX,        &ci.feature,               1 },
+      { "ci.feature",            "0x00000000",           CI_HEX,        &ci.feature,               1 },
       { "ci.mac_addr_hi",        "0x0002C94E",           CI_HEX,        &ci.mac_addr_hi,           1 },
       { "ci.mac_addr_lo",        "0x7FC80000",           CI_HEX,        &ci.mac_addr_lo,           1 },
       { "ci.ip_addr",            "0xC0A80146",           CI_HEX,        &ci.ip_addr,               1 },

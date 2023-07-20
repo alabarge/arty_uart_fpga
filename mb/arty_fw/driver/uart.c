@@ -177,9 +177,10 @@ uint32_t uart_init(uint32_t baudrate, uint8_t port) {
    // update CM port
    cm_port = port;
 
-   // enable rx interrupt, every character
+   // enable rx interrupt, 2 ms timeout
    ctl.b.rx_int   = 1;
-   ctl.b.char_cnt = 1;
+   ctl.b.char_cnt = 0;
+   ctl.b.timeout  = 1;
    regs->control  = ctl.i;
 
    // enable uart in intc
@@ -445,7 +446,7 @@ void uart_msgtx(void) {
 
    pcm_msg_t   msg;
 
-   uint32_t    i,j;
+   uint32_t    i,j=0;
 
 // 7.6.5   Code
 
@@ -463,17 +464,20 @@ void uart_msgtx(void) {
       //
       if (msg->h.dst_cmid != CM_ID_PIPE) {
          // start-of-frame
-         msg_out[0] = UART_START_FRAME;
+         msg_out[j++] = UART_START_FRAME;
          // octet stuffing for transmit
-         for (i=0,j=1;i<msg->h.msglen;i++) {
-            // check for control characters
+         for (i=0;i<msg->h.msglen;i++) {
+            // check for HDLC control characters
             if ((txq.buf[txq.tail][i] == UART_START_FRAME) ||
                 (txq.buf[txq.tail][i] == UART_END_FRAME)   ||
                 (txq.buf[txq.tail][i] == UART_ESCAPE)) {
+               msg_out[j++] = UART_ESCAPE;
                msg_out[j++] = txq.buf[txq.tail][i] ^ UART_STUFFED_BIT;
             }
-            // all others
-            msg_out[j++] = txq.buf[txq.tail][i];
+            else {
+               // all others
+               msg_out[j++] = txq.buf[txq.tail][i];
+            }
          }
          // end-of-frame
          msg_out[j++] = UART_END_FRAME;
@@ -492,9 +496,6 @@ void uart_msgtx(void) {
       }
       // release message
       cm_free((pcm_msg_t)txq.buf[txq.tail]);
-      // clear the msg pointer
-      txq.buf[txq.tail] = NULL;
-      txq.len[txq.tail] = 0;
       // advance the tx queue
       if (++txq.tail == txq.slots) txq.tail = 0;
    }
@@ -587,10 +588,16 @@ void uart_report(void) {
    xlprint("txq.state  : %d\n", txq.state);
    xlprint("txq.head   : %d\n", txq.head);
    xlprint("txq.tail   : %d\n", txq.tail);
-   xlprint("txq.buf[]  : %08X\n", txq.buf[txq.head]);
    xlprint("txq.slots  : %d\n", txq.slots);
-   xlprint("txq.len[]  : %d\n", txq.len[txq.head]);
    xlprint("txq.n      : %d\n", txq.n);
+   xlprint("txq.buf[0] : %08X  %d\n", txq.buf[0], txq.len[0]);
+   xlprint("txq.buf[1] : %08X  %d\n", txq.buf[1], txq.len[1]);
+   xlprint("txq.buf[2] : %08X  %d\n", txq.buf[2], txq.len[2]);
+   xlprint("txq.buf[3] : %08X  %d\n", txq.buf[3], txq.len[3]);
+   xlprint("txq.buf[4] : %08X  %d\n", txq.buf[4], txq.len[4]);
+   xlprint("txq.buf[5] : %08X  %d\n", txq.buf[5], txq.len[5]);
+   xlprint("txq.buf[6] : %08X  %d\n", txq.buf[6], txq.len[6]);
+   xlprint("txq.buf[7] : %08X  %d\n", txq.buf[7], txq.len[7]);
 
    // rxq
    xlprint("\n");

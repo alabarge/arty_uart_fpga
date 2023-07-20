@@ -375,7 +375,7 @@ void md_loop_f(int argc, char **argv) {
       gc.cli.loop_flags = 0x0;
       if (argv[1] != NULL) sscanf(argv[1], "%x", (unsigned int *)&gc.cli.loop_addr);
       if (argv[2] != NULL) {
-         loop_ms = (uint8_t)strtol(argv[2], NULL, 10);
+         loop_ms = (uint32_t)strtol(argv[2], NULL, 10);
          gc.cli.loop_ms = MILLISECONDS * loop_ms;
       }
       xlprint("*** Hit Enter to Exit Looping, Reading Address %08X ***\n",
@@ -402,7 +402,7 @@ void mw_loop_f(int argc, char **argv) {
       if (argv[1] != NULL) sscanf(argv[1], "%x", (unsigned int *)&gc.cli.loop_addr);
       if (argv[2] != NULL) sscanf(argv[2], "%x", (unsigned int *)&gc.cli.loop_val);
       if (argv[3] != NULL) {
-         loop_ms = (uint8_t)strtol(argv[3], NULL, 10);
+         loop_ms = (uint32_t)strtol(argv[3], NULL, 10);
          gc.cli.loop_ms = MILLISECONDS * loop_ms;
       }
       xlprint("*** Hit Enter to Exit Looping, Writing Address %08X, Value %08X ***\n",
@@ -432,7 +432,7 @@ void reg_test_f(int argc, char **argv) {
       if (argv[1] != NULL) sscanf(argv[1], "%x", (unsigned int *)&gc.cli.loop_addr);
       if (argv[2] != NULL) sscanf(argv[2], "%x", (unsigned int *)&gc.cli.loop_val);
       if (argv[3] != NULL) {
-         loop_ms = (uint8_t)strtol(argv[3], NULL, 10);
+         loop_ms = (uint32_t)strtol(argv[3], NULL, 10);
          gc.cli.loop_ms = MILLISECONDS * loop_ms;
       }
       srand(100);
@@ -477,7 +477,7 @@ void mem_test_f(int argc, char **argv) {
       if (argv[1] != NULL) sscanf(argv[1], "%x", (unsigned int *)&gc.cli.loop_addr);
       if (argv[2] != NULL) sscanf(argv[2], "%x", (unsigned int *)&gc.cli.loop_val);
       if (argv[3] != NULL) {
-         loop_ms = (uint8_t)strtol(argv[3], NULL, 10);
+         loop_ms = (uint32_t)strtol(argv[3], NULL, 10);
          gc.cli.loop_ms = MILLISECONDS * loop_ms;
       }
       xlprint("*** Hit Enter to Exit Looping, Write/Read Address %08X, Count %d ***\n",

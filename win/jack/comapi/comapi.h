@@ -35,7 +35,7 @@ typedef struct _com_dev_info_t {
 #define  COM_ERR_DEV          0x80004000
 #define  COM_ERR_DEV_CNT      0x80008000
 #define  COM_ERR_POOL         0x80010000
-#define  COM_ERR_KEYCODE      0x80020000
+#define  COM_ERR_BAUDRATE     0x80020000
 
 #define  COM_MSGLEN_UINT8     512
 #define  COM_MSGLEN_UINT32    (COM_MSGLEN_UINT8 >> 2)

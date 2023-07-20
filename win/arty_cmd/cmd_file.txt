@@ -1,5 +1,5 @@
 #
-#  DE0 COMMAND FILE
+#  ARTY COMMAND FILE
 #
 gc.debug          = 0x00000000;
 gc.trace          = 0x00001AC2;

@@ -99,3 +99,6 @@ Tools->Launch Vitis IDE
 source ./ip/pr_ddr/pre_build.tcl
 
 
+# stop lockup when opening block design
+# stored in %APPDATA%/Xilinx/Vivado/<version>/Vivado_init.tcl
+set_param gui.addressMap 0

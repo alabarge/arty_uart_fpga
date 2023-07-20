@@ -324,7 +324,7 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
    memset(m_chSerial, 0, 16);
 
    // Register for Device Change Notifications
-   DEV_BROADCAST_DEVICEINTERFACE dbch;
+   DEV_BROADCAST_DEVICEINTERFACE dbch = { 0 };
    dbch.dbcc_size = sizeof(dbch);
    dbch.dbcc_devicetype = DBT_DEVTYP_DEVICEINTERFACE;
    for (i=0;i<sizeof(devIFGuid);i++) {
@@ -906,7 +906,7 @@ void CMainFrame::OnError(UINT &nError)
 
 afx_msg LRESULT CMainFrame::OnChangeView(WPARAM wp, LPARAM lp)
 {
-   PPAGEENTRY  pPage;
+   PPAGEENTRY  pPage = { 0 };
 
    // Capture Initial View, this prevents re-creation
    if (*m_pPage[0].pView == NULL) {
@@ -949,7 +949,7 @@ afx_msg LRESULT CMainFrame::OnChangeView(WPARAM wp, LPARAM lp)
 
 void CMainFrame::OnSelectView(UINT itemID)
 {
-   PPAGEENTRY     pPage;
+   PPAGEENTRY     pPage = { 0 };
    // Select the View based on Dialog ID
    if (m_pageMap.Lookup((WORD)itemID, (void *&)pPage)) {
       if (*pPage->pView != NULL) {
@@ -960,7 +960,7 @@ void CMainFrame::OnSelectView(UINT itemID)
 
 void CMainFrame::OnCreateView(UINT itemID)
 {
-   PPAGEENTRY  pPage;
+   PPAGEENTRY  pPage = { 0 };
    if (m_pageMap.Lookup((WORD)itemID, (void *&)pPage)) {
       if (*pPage->pView == NULL) {
          CCreateContext ctx;

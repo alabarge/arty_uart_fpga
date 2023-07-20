@@ -20,7 +20,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
     <UseOfMfc>Dynamic</UseOfMfc>
     <SpectreMitigation>false</SpectreMitigation>
@@ -28,7 +28,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
     <UseOfMfc>Dynamic</UseOfMfc>
@@ -88,7 +88,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>Netapi32.lib;PEGRP64F.lib;cmapi.lib;comapi.lib;optoapi.lib;fifoapi.lib;lanapi.lib;udpapi.lib;wbemuuid.lib;Winmm.lib</AdditionalDependencies>
+      <AdditionalDependencies>Netapi32.lib;PEGRP64F.lib;cmapi.lib;comapi.lib;optoapi.lib;uartapi.lib;fifoapi.lib;lanapi.lib;udpapi.lib;wbemuuid.lib;Winmm.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)\lib\$(Platform)\$(Configuration);$(SolutionDir)$(Configuration)\</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>MSVCRT;LIBCMT</IgnoreSpecificDefaultLibraries>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
@@ -112,7 +112,7 @@
       <Message>Build Version</Message>
     </PostBuildEvent>
     <PreBuildEvent>
-      <Command>$(SolutionDir)..\..\utils\fw_ver.exe $(ProjectDir)build.inc $(ProjectDir)build.h $(SolutionDir)..\..\</Command>
+      <Command>$(SolutionDir)..\..\utils\fw_ver.exe $(ProjectDir)build.inc $(ProjectDir)build.h ..\..\.git</Command>
       <Message>Build Version</Message>
     </PreBuildEvent>
     <PreLinkEvent>
@@ -147,7 +147,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>Netapi32.lib;PEGRP64F.lib;cmapi.lib;comapi.lib;optoapi.lib;fifoapi.lib;lanapi.lib;udpapi.lib;wbemuuid.lib;Winmm.lib</AdditionalDependencies>
+      <AdditionalDependencies>Netapi32.lib;PEGRP64F.lib;cmapi.lib;comapi.lib;optoapi.lib;uartapi.lib;fifoapi.lib;lanapi.lib;udpapi.lib;wbemuuid.lib;Winmm.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)\lib\$(Platform)\$(Configuration);$(SolutionDir)$(Configuration)\</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>
       </IgnoreSpecificDefaultLibraries>
@@ -171,7 +171,7 @@
       <Message>Build Version</Message>
     </PreBuildEvent>
     <PostBuildEvent>
-      <Command>copyDLLs.bat $(SolutionDir) $(Platform) $(Configuration)</Command>
+      <Command>copyDLLs.bat $(SolutionDir) $(Platform) $(Configuration) Install</Command>
       <Message>Build Version</Message>
     </PostBuildEvent>
     <PreLinkEvent>

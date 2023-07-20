@@ -6,6 +6,7 @@
 #include "MainFrm.h"
 #include "comapi.h"
 #include "optoapi.h"
+#include "uartapi.h"
 #include "fifoapi.h"
 #include "lanapi.h"
 #include "udpapi.h"
@@ -64,6 +65,7 @@ protected:
    CButton        m_Connect;
    CFont          m_font;
             
+   uart_dev_info_t  *m_pUARTInfo;
    opto_dev_info_t  *m_pOPTOInfo;
    fifo_dev_info_t  *m_pFIFOInfo;
    com_dev_info_t   *m_pCOMInfo;

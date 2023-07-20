@@ -4,7 +4,7 @@
 
    1.1 Module Type
 
-      DE10-I DATA ACQUISITION APPLICATION
+      ARTY-I DATA ACQUISITION APPLICATION
 
    1.2 Functional Description
 
@@ -146,10 +146,10 @@ int main(int argc, char *argv[]) {
    log_set_log_file("de0_win_log.txt");
 
    // UDP Log
-   udp_log("\nDE0-I WIN, %s\n\n", BUILD_HI);
+   udp_log("\nARTY-I WIN, %s\n\n", BUILD_HI);
 
    // Report the Startup Banner
-   printf("\nDE0-I WIN, %s\n\n", BUILD_HI);
+   printf("\nARTY-I WIN, %s\n\n", BUILD_HI);
 
    // Clear gc, the apps global data structure
    memset(&gc, 0, sizeof(gc_t));
@@ -172,7 +172,7 @@ int main(int argc, char *argv[]) {
    gc.msg_table   = msg_table;
    gc.msg_table_len = DIM(msg_table);
 
-   sprintf(gc.dev_str,"DE0-I WIN, %s", BUILD_STR);
+   sprintf(gc.dev_str,"ARTY-I WIN, %s", BUILD_STR);
 
    // parse the command line
    for (i=1;i<argc;i++) {
@@ -260,7 +260,7 @@ int main(int argc, char *argv[]) {
    gc.error |= opc_init();
 
    // Send CM Registration Request
-   cm_send_reg_req(CM_DEV_DE0, CM_PORT_COM0, CM_REG_OPEN, gc.dev_str);
+   cm_send_reg_req(CM_DEV_ARTY, CM_PORT_COM0, CM_REG_OPEN, gc.dev_str);
 
    // Main Thread
    while (1) {
@@ -397,7 +397,7 @@ void usage(void) {
 // 7.4.5   Code
 
    printf("\n");
-   printf("usage: de0_cmd [-h][-f filename][-q]\n\n");
+   printf("usage: arty_cmd [-h][-f filename][-q]\n\n");
    printf("  This utility will execute the operation code and parameters in the command file.\n");
    printf("  -h       ... usage\n");
    printf("  -f       ... specifies the command input filename\n");

@@ -40,13 +40,13 @@
 # FLASH FROM VITIS
 #
 # program flash, Xilinx->Program Flash, Browse for arty_fw.elf
-# set offset = 0x600000
+# set offset = 0x600000 (this offset is also defined in srec_boot in blconfig.h)
 # flash type = s25fl128sxxxxxx0-spi-x1_x2_x4
 # select Convert ELF, Blank check and Verify
 # then Program
 
 # program flash, Xilinx->Program Flash, Browse for mb\arty_top\hw\arty_top.bit
-# set offset = 0x0
+# set offset = 0x0 (always zero for fpga bitfile, btw - this bitfile has the bootloader)
 # flash type = s25fl128sxxxxxx0-spi-x1_x2_x4
 # select Blank check and Verify
 # then Program
@@ -84,7 +84,7 @@ source ../../script/pre_build.tcl
 
 #
 # NOTE: WHEN CONNECTING TO THE COMMAND LINE INTERFACE USING THE BUILT IN SERIAL
-#       PORT, THE FPGA WILL RESET WHEN CONNECTED FOR THE FIRST TIME
+#       PORT, THE FPGA WILL RESET WHEN CONNECTED FOR THE FIRST TIME (SOMETIMES)
 #
 
 #

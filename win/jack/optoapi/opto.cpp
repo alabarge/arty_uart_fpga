@@ -10,6 +10,9 @@
 
       This module provides an API to access the OPTO D2XX Driver.
 
+            NOTE: IN ORDER TO USE THIS DLL THE FTDI USB DEVICE MUST HAVE A SERIAL
+            NUMBER THAT BEGINS WITH "O1".
+
    1.3 Specification/Design Reference
 
       OPTOAPI_DLL.docx

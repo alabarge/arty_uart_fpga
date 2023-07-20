@@ -13,8 +13,8 @@ set_property -dict {PACKAGE_PIN C18 IOSTANDARD LVCMOS33} [get_ports ext_resetn]
 #set_property CLOCK_DEDICATED_ROUTE FALSE [get_nets ext_resetn_IBUF]
 
 ## CM UART Interface
-set_property -dict {PACKAGE_PIN N13 IOSTANDARD LVCMOS33} [get_ports oCM_UART_TXD]
-set_property -dict {PACKAGE_PIN L13 IOSTANDARD LVCMOS33} [get_ports iCM_UART_RXD]
+set_property -dict {PACKAGE_PIN R16 IOSTANDARD LVCMOS33} [get_ports oCM_UART_TXD]
+set_property -dict {PACKAGE_PIN T14 IOSTANDARD LVCMOS33} [get_ports iCM_UART_RXD]
 
 ## STDIO UART Interface
 set_property -dict {PACKAGE_PIN R12 IOSTANDARD LVCMOS33} [get_ports oSTDIO_UART_TXD]
@@ -53,9 +53,9 @@ set_property -dict { PACKAGE_PIN T18 IOSTANDARD LVCMOS33} [get_ports sw_tp[3]]
 # JD3    HW_TP3
 #
 set_property -dict { PACKAGE_PIN V15 IOSTANDARD LVCMOS33} [get_ports hw_tp[0]]
-set_property -dict { PACKAGE_PIN U12 IOSTANDARD LVCMOS33} [get_ports hw_tp[1]]
-set_property -dict { PACKAGE_PIN V13 IOSTANDARD LVCMOS33} [get_ports hw_tp[2]]
-set_property -dict { PACKAGE_PIN T12 IOSTANDARD LVCMOS33} [get_ports hw_tp[3]]
+set_property -dict { PACKAGE_PIN V13 IOSTANDARD LVCMOS33} [get_ports hw_tp[1]]
+set_property -dict { PACKAGE_PIN T13 IOSTANDARD LVCMOS33} [get_ports hw_tp[2]]
+set_property -dict { PACKAGE_PIN T11 IOSTANDARD LVCMOS33} [get_ports hw_tp[3]]
 
 ## Switches
 #set_property -dict { PACKAGE_PIN H14   IOSTANDARD LVCMOS33 } [get_ports { sw[0] }]; #IO_L20N_T3_A19_15 Sch=sw[0]

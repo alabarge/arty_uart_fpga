@@ -103,6 +103,10 @@ signal heartbeat           : std_logic;
 signal watchdog            : std_logic;
 signal watchdog_r0         : std_logic;
 
+signal cm_rxd              : std_logic;
+signal cm_txd              : std_logic;
+signal cm_irq              : std_logic;
+
 --
 -- MAIN CODE
 --
@@ -120,10 +124,13 @@ begin
    led0_rgb(1)          <= '0';
    led0_rgb(2)          <= '0';
 
-   hw_tp(0)             <= heartbeat;
-   hw_tp(1)             <= watchdog;
-   hw_tp(2)             <= sys_rst_n;
+   hw_tp(0)             <= cm_rxd;
+   hw_tp(1)             <= cm_txd;
+   hw_tp(2)             <= cm_irq;
    hw_tp(3)             <= '0';
+
+   oCM_UART_TXD         <= cm_txd;
+   cm_rxd               <= iCM_UART_RXD;
 
    --
    -- VIVADO BLOCK DESIGN
@@ -177,8 +184,9 @@ begin
          Vaux10_0_v_p                  => vauxp10,
          Vaux11_0_v_n                  => vauxn11,
          Vaux11_0_v_p                  => vauxp11,
-         cm_uart_rxd                   => iCM_UART_RXD,
-         cm_uart_txd                   => oCM_UART_TXD,
+         cm_uart_rxd                   => cm_rxd,
+         cm_uart_txd                   => cm_txd,
+         cm_irq                        => cm_irq,
          stdio_uart_rxd                => iSTDIO_UART_RXD,
          stdio_uart_txd                => oSTDIO_UART_TXD
       );

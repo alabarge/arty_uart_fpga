@@ -10,6 +10,9 @@
 
       This module provides an API to access the FIFO D2XX Driver.
 
+            NOTE: IN ORDER TO USE THIS DLL THE FTDI USB DEVICE MUST HAVE A SERIAL
+            NUMBER THAT BEGINS WITH "O2".
+
    1.3 Specification/Design Reference
 
       FIFOAPI_DLL.docx
