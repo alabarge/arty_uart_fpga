@@ -59,6 +59,8 @@
          7.5   stamp_time()
          7.6   stamp_version()
 		   7.7   stamp_count()
+		   7.8   stamp_inc()
+		   7.9   stamp_magic()
 
 -----------------------------------------------------------------------------*/
 
@@ -272,6 +274,7 @@ uint32_t stamp_version(void) {
 
 } // end stamp_version()
 
+
 // ===========================================================================
 
 // 7.7
@@ -300,3 +303,63 @@ uint32_t stamp_count(void) {
    return regs->count;
 
 } // end stamp_count()
+
+
+// ===========================================================================
+
+// 7.8
+
+uint32_t stamp_inc(void) {
+
+/* 7.8.1   Functional Description
+
+   This routine will return the timestamp increment register value.
+
+   7.8.2   Parameters:
+
+   NONE
+
+   7.8.3   Return Values:
+
+   return   increment register
+
+-----------------------------------------------------------------------------
+*/
+
+// 7.8.4   Data Structures
+
+// 7.8.5   Code
+
+   return regs->inc;
+
+} // end stamp_inc()
+
+
+// ===========================================================================
+
+// 7.9
+
+uint32_t stamp_magic(void) {
+
+/* 7.9.1   Functional Description
+
+   This routine will return the timestamp magic register value.
+
+   7.9.2   Parameters:
+
+   NONE
+
+   7.9.3   Return Values:
+
+   return   magic register
+
+-----------------------------------------------------------------------------
+*/
+
+// 7.9.4   Data Structures
+
+// 7.9.5   Code
+
+   return regs->magic;
+
+} // end stamp_magic()

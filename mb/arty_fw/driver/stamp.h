@@ -16,9 +16,12 @@ typedef struct _stamp_regs_t {
    uint32_t       epoch;
    uint32_t       date;
    uint32_t       time;
-   uint32_t       version;
+   uint32_t       inc;
    uint32_t       test;
    uint32_t       count;
+   uint32_t       magic;
+   uint32_t       version;
+   uint32_t       map_date;
 } stamp_regs_t, *pstamp_regs_t;
 
 uint32_t  stamp_init(void);
@@ -28,4 +31,6 @@ uint32_t  stamp_date(void);
 uint32_t  stamp_time(void);
 uint32_t  stamp_version(void);
 uint32_t  stamp_count(void);
+uint32_t  stamp_inc(void);
+uint32_t  stamp_magic(void);
 

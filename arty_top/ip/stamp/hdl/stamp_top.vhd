@@ -5,7 +5,7 @@ use ieee.numeric_std.all;
 entity stamp_top is
    generic (
       C_S_AXI_DATA_WIDTH   : integer   := 32;
-      C_S_AXI_ADDR_WIDTH   : integer   := 5
+      C_S_AXI_ADDR_WIDTH   : integer   := 16
    );
    port (
       s_axi_aclk        : in    std_logic;

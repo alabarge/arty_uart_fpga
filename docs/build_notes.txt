@@ -3,9 +3,27 @@
 #
 
 # choose place and route from arty_uart_fpga\ip
-# double-click create_proj.bat file, this will delete existing PR directory
+# double-click create_proj.bat file, this will delete existing vivado directory
+
+# fpga_build.vhd is not updated automatically, it must be updated manually
+# make sure vivado is in the arty_uart_fpga/arty_top/pr_ddr/vivado/system directory
+# update fpga_build.vhd, requires IP upgrade, time stamp the design
+   source ../../../pr_ddr/script/pre_build.tcl
+# select "Refresh IP Catalog"
+# select "Upgrade Selected"
+# skip "Generate Output Products"
+# rerun IP Status
 
 # from vivado, click Generate Bitstream, takes a while
+
+# create fpga_version.h
+   source ../../../pr_ddr/script/post_build.tcl
+
+#
+# FOR PRODUCTION RELEASE OF FPGA BIT FILE EXECUTE THE FOLLOWING SCRIPT
+#
+   source ../../../pr_ddr/script/zip_release.tcl
+
 
 # once complete, select File->Export->Export Hardware (include bitstream)
 
@@ -13,22 +31,24 @@
 
 # select arty_uart_fpga\mb directory, close welcome screen
 
-# select Window->Preferences... Import preferences, example d:\arty_uart_fpga\utils\eclipse.epf
-  restart eclipse
+# select Window->Preferences... Import preferences (bottom left icon), example d:\arty_uart_fpga\utils\eclipse.epf
+# restart eclipse
 
 # select File->Import Eclipse workspace or zip file
 
-# unselect Copy projects into workspace and Browse to arty_uart_fpga\mb directory
+# unselect "Copy projects" into workspace and Browse to arty_uart_fpga\mb directory
 
 # not all projects need to be selected, just the ones for change
 # for example if you select arty_fw you also need to select arty_fw_system and arty_top
 
-# select Release for all projects from the Assistant, only release builds can be flashed
+# select "Release" for all projects from the Assistant, only release builds can be flashed
 
 # select right-click arty_top and Update Hardware Specification
-# select right-click arty_top Build Project (creates libxil.a library)
+# should be something like: D:/arty_uart_fpga/arty_top/pr_ddr/vivado/system/arty_top.xsa
 
-# select right_click arty_fw Build Project (creates arty_fw.elf and arty_fw.srec files)
+# select right-click arty_top "Build Project" (creates libxil.a library)
+
+# select right_click arty_fw "Build Project" (creates arty_fw.elf and arty_fw.srec files)
 
 #
 # FLASH ORDER MATTERS HERE, IF THE ELF FILE CHANGES THE BIT FILE MUST ALSO BE FLASHED
@@ -37,7 +57,14 @@
 #
 
 #
-# FLASH FROM VITIS
+# FLASH FROM XILINX->VITIS SHELL
+#
+# cd to utils directory
+# flash.bat
+#
+
+#
+# FLASH FROM VITIS (VIA GUI)
 #
 # program flash, Xilinx->Program Flash, Browse for arty_fw.elf
 # set offset = 0x600000 (this offset is also defined in srec_boot in blconfig.h)
@@ -51,12 +78,7 @@
 # select Blank check and Verify
 # then Program
 
-#
-# FLASH FROM XILINX->VITIS SHELL
-#
-# cd to utils directory
-# flash.bat
-#
+
 
 # use write_project_tcl -force make_pr_ddr.tcl to capture changes to block design
 # use beyond compare to move changes into the IP PR directory
@@ -70,11 +92,6 @@
 # use Tools->Generate Memory Configuration File ...
 # add bitstream and application ELF file (not binary if using the elf bootloader)
 #
-
-# fpga_build.vhd is not updated automatically, it must be updated manually
-# make sure vivado is in the arty_uart_fpga/arty_top directory
-# update fpga_build.vhd, requires IP upgrade, time stamp the design
-source ../../script/pre_build.tcl
 
 #
 # NOTE: IF ANYTHING MOVES IN THE ADDRESS MAP THAT AFFECTS SREC BOOT THEN THE

@@ -7,7 +7,70 @@
 #include <time.h>
 #include <limits.h>
 
-#include "cm_const.h"
+   // CM Message Header
+   typedef struct _cm_hdr_t {
+      uint8_t  dst_cmid;        // Destination CM Address
+      uint8_t  src_cmid;        // Source CM Address
+      uint8_t  dst_devid :  4;  // Destination Device ID
+      uint8_t  src_devid :  4;  // Source Device ID
+      uint8_t  seqid     :  4;  // Message Sequence Number
+      uint8_t  endian    :  1;  // Processor Endianess
+      uint8_t  event     :  1;  // Event ID
+      uint8_t  keep      :  1;  // Don't Delete
+      uint8_t  proto     :  1;  // Protocol ID
+      uint8_t  crc8;            // CRC-8 using x^8 + x^5 + x^4 + 1
+      uint8_t  slot;            // Slot position in queue
+      uint16_t msglen    : 12;  // Message Length
+      uint16_t port      :  4;  // Port Connection
+   } cm_hdr_t, *pcm_hdr_t;
+
+   // parameters common to all messages
+   typedef struct _msg_parms_t {
+      uint8_t srvid;
+      uint8_t msgid;
+      uint8_t flags;
+      uint8_t status;
+   } msg_parms_t, *pmsg_parms_t;
+
+   // cm message structure
+   typedef struct _cm_msg_t {
+      cm_hdr_t       h;
+      msg_parms_t    p;
+   } cm_msg_t, *pcm_msg_t;
+
+   // CM PIPE HEADER DATA STRUCTURE
+   // USED FOR VARIABLE LENGTH PIPE MESSAGES
+   typedef struct _cm_pipe_t {
+      uint8_t     dst_cmid;       // Destination CM ID
+      uint8_t     msgid;          // Pipe Message ID, CM_PIPE_DAQ_DATA = 0x10
+      uint8_t     port;           // Destination Port
+      uint8_t     flags;          // Message Flags
+      uint32_t    msglen;         // Message Length in 32-Bit words
+      uint32_t    seqid;          // Sequence ID
+      uint32_t    stamp;          // 32-Bit FPGA Clock Count
+      uint32_t    stamp_us;       // 32-Bit Time Stamp in microseconds
+      uint32_t    status;         // Current Machine Status
+      uint32_t    rate;           // ADC rate
+      uint32_t    magic;          // Magic Number
+      uint16_t    samples[496];   // DAQ Samples
+   } cm_pipe_t, *pcm_pipe_t;
+
+   // CM PIPE MESSAGE DATA STRUCTURE
+   // USED FOR FIXED 1024-BYTE PIPE MESSAGES
+   typedef struct _cm_pipe_fixed_t {
+      uint8_t     dst_cmid;       // Destination CM ID
+      uint8_t     msgid;          // Pipe Message ID
+      uint8_t     port;           // Destination Port
+      uint8_t     flags;          // Message Flags
+      uint32_t    msglen;         // Message Length in 32-Bit words
+      uint32_t    seqid;          // Sequence ID
+      uint32_t    stamp;          // 32-Bit FPGA Clock Count
+      uint32_t    stamp_us;       // 32-Bit Time Stamp in microseconds
+      uint32_t    status;         // Current Machine Status
+      uint32_t    rate;           // ADC rate
+      uint32_t    magic;          // Magic Number
+      uint16_t    samples[496];   // DAQ Samples
+   } cm_pipe_fixed_t, *pcm_pipe_fixed_t;
 
    static uint8_t crc_array[] = {
       0x00, 0x5e, 0xbc, 0xe2, 0x61, 0x3f, 0xdd, 0x83,
@@ -317,7 +380,7 @@ int main(int argc, char *argv[]) {
       }
       fclose(fid);
       // Calculate CRC Checksum
-      cm_crc((pcm_msg_t)bin, CM_CHECK_CRC);
+      cm_crc((pcm_msg_t)bin, CM_CALC_CRC);
    }
    else {
       printf("Fatal Error : CRC File %s did not Open for Read\n", argv[1]);

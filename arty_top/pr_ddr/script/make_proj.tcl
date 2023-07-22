@@ -481,6 +481,7 @@ proc create_hier_cell_mb_bram { parentCell nameHier } {
   set_property -dict [ list \
    CONFIG.PHASE {0.0} \
  ] $clk100mhz
+  set cm_irq [ create_bd_port -dir O -type intr cm_irq ]
   set cm_uart_rxd [ create_bd_port -dir I -type data cm_uart_rxd ]
   set cm_uart_txd [ create_bd_port -dir O -type data cm_uart_txd ]
   set resetn [ create_bd_port -dir I -type rst resetn ]
@@ -684,7 +685,7 @@ proc create_hier_cell_mb_bram { parentCell nameHier } {
   connect_bd_net -net axi_timebase_wdt_0_wdt_reset [get_bd_ports watchdog] [get_bd_pins axi_watchdog/wdt_reset]
   connect_bd_net -net axi_timer_0_interrupt [get_bd_pins axi_systimer/interrupt] [get_bd_pins intc_concat/In2]
   connect_bd_net -net axi_uartlite_0_interrupt [get_bd_pins axi_stdio_uart/interrupt] [get_bd_pins intc_concat/In0]
-  connect_bd_net -net cm_uart_irq [get_bd_pins axi_cm_uart/irq] [get_bd_pins intc_concat/In3]
+  connect_bd_net -net cm_uart_irq [get_bd_ports cm_irq] [get_bd_pins axi_cm_uart/irq] [get_bd_pins intc_concat/In3]
   connect_bd_net -net cm_uart_rxd_1 [get_bd_ports cm_uart_rxd] [get_bd_pins axi_cm_uart/rxd]
   connect_bd_net -net cm_uart_txd [get_bd_ports cm_uart_txd] [get_bd_pins axi_cm_uart/txd]
   connect_bd_net -net ddr_clock_1 [get_bd_ports clk100mhz] [get_bd_pins sdram/sys_clk_i]

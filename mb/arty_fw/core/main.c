@@ -184,9 +184,6 @@ int main() {
    gc.error |= XIntc_Connect(&gc.intc, XPAR_INTC_0_TMRCTR_0_VEC_ID,
             (XInterruptHandler)XTmrCtr_InterruptHandler, (void *)&gc.systimer);
    XIntc_Enable(&gc.intc, XPAR_INTC_0_TMRCTR_0_VEC_ID);
-   // 10 mS roll-over, timer counts up
-   XTmrCtr_SetResetValue(&gc.systimer, 0, 0x000C65BF);
-   XTmrCtr_Start(&gc.systimer, 0);
 
    gc.ping_time = STAMP_TCR;
 
@@ -241,7 +238,7 @@ int main() {
    gc.fpga_ver  = stamp_version();
 
    // Check System IDs
-   if (gc.sysid != FPGA_SYSID || gc.timestamp != FPGA_EPOCH) {
+   if (gc.sysid != FPGA_PID || gc.timestamp != FPGA_EPOCH) {
       gc.error |= CFG_ERROR_ID;
    }
 
@@ -312,6 +309,10 @@ int main() {
 
    // Start the Watchdog
 //   XWdtTb_Start(&gc.watchdog);
+
+   // 10 mS roll-over, timer counts up
+   XTmrCtr_SetResetValue(&gc.systimer, 0, 0x000C65BF);
+   XTmrCtr_Start(&gc.systimer, 0);
 
    //
    // BACKGROUND PROCESSING
@@ -474,9 +475,6 @@ void version(void) {
 
 // 7.2.5   Code
 
-	// Main Version Banner
-	xlprint("\nARTY-I MICROBLAZE, %s\n\n", BUILD_HI);
-
    // Hardware Devices
    xlprint("\n");
    xlprint("%-16s base:irq %08X:%d\n", "mb_bram", XPAR_BRAM_0_BASEADDR, -1);
@@ -495,15 +493,19 @@ void version(void) {
    xlprint("%-16s base:irq %08X:%d\n", "sdram", XPAR_SDRAM_BASEADDR, -1);
    xlprint("\n");
 
-   xlprint("hw/sw stamp.id: %d %d\n", gc.sysid, FPGA_SYSID);
+   xlprint("hw/sw stamp.id: %d %d\n", gc.sysid, FPGA_PID);
    xlprint("hw/sw stamp.epoch: %d %d\n", (uint32_t)gc.timestamp, FPGA_EPOCH);
-   xlprint("hw stamp.time: %08X\n", stamp_time());
-   xlprint("hw stamp.date: %08X\n", stamp_date());
-   xlprint("fpga_ver: %d.%d.%d.%d\n",
+   xlprint("hw stamp.time:  %08X\n", stamp_time());
+   xlprint("hw stamp.date:  %08X\n", stamp_date());
+   xlprint("hw stamp.magic: %08X\n", stamp_magic());
+   xlprint("fpga_ver: %d.%d.%d build %d\n",
         gc.fpga_ver >> 24 & 0xFF,
-        gc.fpga_ver >> 16 & 0xFF,
-        gc.fpga_ver >>  8 & 0xFF,
-        gc.fpga_ver >>  0 & 0xFF);
+        gc.fpga_ver >> 12 & 0xFFF,
+        gc.fpga_ver >>  0 & 0xFFF,
+        stamp_inc());
+
+   // Main Version Banner
+   xlprint("\nARTY-I MICROBLAZE, %s\n\n", BUILD_HI);
 
    // Report warning if System ID and Time Stamp
    // do not match fpga_build.h entries.

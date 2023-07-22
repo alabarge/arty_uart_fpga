@@ -7,7 +7,7 @@ use work.fpga_ver.all;
 entity stamp_regs is
    generic (
       C_S_AXI_DATA_WIDTH   : integer   := 32;
-      C_S_AXI_ADDR_WIDTH   : integer   := 5
+      C_S_AXI_ADDR_WIDTH   : integer   := 16
    );
    port (
       s_axi_aclk        : in    std_logic;
@@ -44,7 +44,7 @@ architecture rtl of stamp_regs is
 -- CONSTANTS
 --
 
-constant C_NUM_REG         : integer := 8;
+constant C_NUM_REG         : integer := 16;
 
 --
 -- SIGNAL DECLARATIONS
@@ -182,7 +182,7 @@ begin
       if (s_axi_aresetn = '0') then
          s_axi_rdata       <= (others => '0');
       elsif (rdCE(0) = '1') then
-         s_axi_rdata    <= C_BUILD_SYSID;
+         s_axi_rdata    <= X"000000" & C_BUILD_PID;
       elsif (rdCE(1) = '1') then
          s_axi_rdata    <= C_BUILD_EPOCH_HEX;
       elsif (rdCe(2) = '1') then
@@ -190,11 +190,19 @@ begin
       elsif (rdCE(3) = '1') then
          s_axi_rdata    <= C_BUILD_TIME_HEX;
       elsif (rdCE(4) = '1') then
-         s_axi_rdata    <= C_BUILD_MAJOR & C_BUILD_MINOR & C_BUILD_NUM & C_BUILD_INC;
+         s_axi_rdata    <= X"000000" & C_BUILD_INC;
       elsif (rdCE(5) = '1') then
          s_axi_rdata    <= stamp_TEST;
       elsif (rdCE(6) = '1') then
          s_axi_rdata    <= std_logic_vector(stamp_cnt);
+      elsif (rdCE(7) = '1') then
+         s_axi_rdata    <= X"012355AA";
+      elsif (rdCE(8) = '1') then
+         -- 8-Bit H/W ID, 12-Bit Map Rev, 12-Bit Logic Rev
+         s_axi_rdata    <= C_BUILD_PID & C_BUILD_MAP & C_BUILD_LOGIC;
+      elsif (rdCE(9) = '1') then
+         -- Register Map Date
+         s_axi_rdata    <= C_BUILD_MAP_DATE;
       else
          s_axi_rdata    <= (others => '0');
       end if;

@@ -28,13 +28,14 @@ int main(int argc, char *argv[]) {
    struct tm *now;
    time_t clock;
 
-   uint32_t build_major = 0;
-   uint32_t build_minor = 0;
    uint32_t build_inc   = 0;
-   uint32_t build_num   = 0;
    uint32_t build_hex   = 0;
-   uint32_t build_sysid = 0;
    uint32_t error       = 0;
+
+   uint32_t build_pid   = 0;
+   uint32_t build_map   = 0;
+   uint32_t build_logic = 0;
+   uint32_t build_map_date = 0;
 
    uint32_t build_inc_found = 0;
    uint32_t j, ret;
@@ -62,7 +63,7 @@ int main(int argc, char *argv[]) {
             "SEP", "OCT", "NOV", "DEC"
           };
 
-   printf("\nFirmware Version Utility 1.10\n");
+   printf("\nfpga_build.vhd & fpga_build.h File Creation 1.4, Pre-Synthesis\n");
 
    // command Line
    printf("cmd : ");
@@ -74,23 +75,22 @@ int main(int argc, char *argv[]) {
    // current directory
    if (getcwd(cwd, sizeof(cwd)) != 0) printf("cwd : %s\n", cwd);
 
-   if (argc < 4) {
+   if (argc < 5) {
       printf("Error: Filenames not specified.\n");
       return -1;
    }
 
    //
-   // If build.h exists then parse for BUILD_INC
+   // If fpga_build.h exists then parse for FPGA_INC and increment
    //
    if  ((ver = fopen(argv[2],"rt")) != NULL) {
       while (fgets(in_line, sizeof(in_line), ver) != NULL) {
          token = strtok(in_line, " ");
          token = strtok(NULL, " ");
          if (token == NULL) continue;
-         if (strcmp(token, "BUILD_INC") == 0) {
+         if (strcmp(token, "FPGA_INC") == 0) {
             token = strtok(NULL, "\n");
             sscanf(token, "%d", &build_inc);
-            build_inc++;
             build_inc &= 0x00FF;
             build_inc_found = 1;
             break;
@@ -100,88 +100,54 @@ int main(int argc, char *argv[]) {
    }
 
    //
-   // Parse build.inc
+   // Parse fpga_build.inc file
    //
    if  ((ver = fopen(argv[1],"rt")) != NULL) {
-      if (fgets(in_line, sizeof(in_line), ver) != NULL) {
+      while (fgets(in_line, sizeof(in_line), ver) != NULL) {
          token = strtok(in_line, " ");
          token = strtok(NULL, " ");
-         if (strcmp(token, "BUILD_MAJOR") == 0) {
-            token = strtok(NULL, "\n");
-            sscanf(token, "%d", &build_major);
-            build_major &= 0x00FF;
-         }
-         else {
-            error = 1;
-            goto ERROR;
-         }
-      }
-      else {
-         error = 1;
-         goto ERROR;
-      }
-      if (fgets(in_line, sizeof(in_line), ver) != NULL) {
-         token = strtok(in_line, " ");
-         token = strtok(NULL, " ");
-         if (strcmp(token, "BUILD_MINOR") == 0) {
-            token = strtok(NULL, "\n");
-            sscanf(token, "%d", &build_minor);
-            build_minor &= 0x00FF;
-         }
-         else {
-            error = 1;
-            goto ERROR;
-         }
-      }
-      else {
-         error = 1;
-         goto ERROR;
-      }
-      if (fgets(in_line, sizeof(in_line), ver) != NULL) {
-         token = strtok(in_line, " ");
-         token = strtok(NULL, " ");
-         if (strcmp(token, "BUILD_NUM") == 0) {
-            token = strtok(NULL, "\n");
-            sscanf(token, "%d", &build_num);
-            build_num &= 0x00FF;
-         }
-         else {
-            error = 1;
-            goto ERROR;
-         }
-      }
-      else {
-         error = 1;
-         goto ERROR;
-      }
-      if (fgets(in_line, sizeof(in_line), ver) != NULL) {
-         token = strtok(in_line, " ");
-         token = strtok(NULL, " ");
+         if (token == NULL) continue;
          if (strcmp(token, "BUILD_INC") == 0) {
             token = strtok(NULL, "\n");
-            // If build_inc not found in build.h
+            // If build_inc not found in fpga_build.h
             if (build_inc_found == 0) {
                sscanf(token, "%d", &build_inc);
                build_inc &= 0x00FF;
             }
+            continue;
          }
-         else {
-            error = 1;
-            goto ERROR;
+         else if (strcmp(token, "BUILD_PID") == 0) {
+            token = strtok(NULL, "\n");
+            sscanf(token, "%d", &build_pid);
+               build_pid &= 0x00FF;
+            continue;
          }
-      }
-      else {
-         error = 1;
-         goto ERROR;
+         else if (strcmp(token, "BUILD_MAP") == 0) {
+            token = strtok(NULL, "\n");
+            sscanf(token, "%d", &build_map);
+               build_map &= 0x0FFF;
+            continue;
+         }
+         else if (strcmp(token, "BUILD_LOGIC") == 0) {
+            token = strtok(NULL, "\n");
+            sscanf(token, "%d", &build_logic);
+               build_logic &= 0x0FFF;
+            continue;
+         }
+         else if (strcmp(token, "BUILD_MAP_DATE") == 0) {
+            token = strtok(NULL, "\n");
+            sscanf(token, "%x", &build_map_date);
+            continue;
+         }
       }
       fclose(ver);
    }
-
-   ERROR:
+   printf("status      = %02X%03X%03X\n", build_pid, build_map, build_logic);
+   printf("status_date = %08X\n", build_map_date);
 
    if (error == 1) {
       fclose(ver);
-      printf("Error Parsing %s\n", argv[1]);
+      printf("Error Parsing %s, %d\n", argv[1], error);
       return -1;
    }
 
@@ -190,7 +156,7 @@ int main(int argc, char *argv[]) {
    build_inc &= 0x00FF;
 
    // 32-Bit Build Number
-   build_hex = (build_major << 24) | (build_minor << 16) | (build_num << 8) | build_inc;
+   build_hex = (build_pid << 24) | (build_map << 12) | build_logic;
 
    // Open File for Writing
    if  ((ver = fopen(argv[2],"wt")) == NULL) {
@@ -220,7 +186,7 @@ int main(int argc, char *argv[]) {
 
    // Check for .git existence
    struct stat status;
-   stat(argv[3], &status);
+   stat(argv[4], &status);
 
    // If .git directory then gather state info
    if (S_ISDIR(status.st_mode)) {
@@ -294,44 +260,84 @@ int main(int argc, char *argv[]) {
       }
    }
    else {
-      printf("Warning : The %s Directory was not found\n", argv[3]);
+      printf("Warning : The %s Directory was not found\n", argv[4]);
    }
 
    // Create Build Strings
-   sprintf(build_lo, "%d.%d.%d build %d", build_major, build_minor, build_num, build_inc);
-   sprintf(build_hi, "%s, %s %s [%s] %s", build_lo, build_time, build_date, build_user,git_rev);
+   sprintf(build_lo, "%d.%d.%d build %d", build_pid, build_map, build_logic, build_inc);
+   sprintf(build_hi, "%s, %s %s [%s] %s", build_lo, build_time, build_date, build_user, git_rev);
    sprintf(build_str1, "%s (%04d/%02d/%02d)", "", now->tm_year+1900, now->tm_mon+1, now->tm_mday);
-   sprintf(build_str2, "%d.%d.%d.%d", build_major, build_minor, build_num, build_inc);
+   sprintf(build_str2, "%d.%d.%d.%d", build_pid, build_map, build_logic, build_inc);
 
    fprintf(ver, "#pragma once\n\n");
 
-   fprintf(ver, "#define BUILD_MAJOR      %d\n", build_major);
-   fprintf(ver, "#define BUILD_MINOR      %d\n", build_minor);
-   fprintf(ver, "#define BUILD_NUM        %d\n", build_num);
-   fprintf(ver, "#define BUILD_INC        %d\n", build_inc);
-   fprintf(ver, "#define BUILD_SYSID      0x%08X\n", build_sysid);
-   fprintf(ver, "#define BUILD_VER_HEX    0x%08X\n", build_hex);
-   fprintf(ver, "#define BUILD_TIME       \"%s\"\n", build_time);
-   fprintf(ver, "#define BUILD_DATE       \"%s\"\n", build_date);
-   fprintf(ver, "#define BUILD_USER       \"%s\"\n", build_user);
-   fprintf(ver, "#define BUILD_STR        \"%s\"\n", build_str2);
-   fprintf(ver, "#define BUILD_LO         \"%s\"\n", build_lo);
-   fprintf(ver, "#define BUILD_HI         \"%s\"\n", build_hi);
-   fprintf(ver, "#define BUILD_STRING     \"%s\"\n", build_str2);
-   fprintf(ver, "#define BUILD_EPOCH      %d\n", (uint32_t)clock);
-   fprintf(ver, "#define BUILD_EPOCH_HEX  0x%08X\n", (uint32_t)clock);
-   fprintf(ver, "#define BUILD_DATE_HEX   0x%04d%02d%02d\n", now->tm_year+1900, now->tm_mon+1, now->tm_mday);
-   fprintf(ver, "#define BUILD_TIME_HEX   0x00%02d%02d%02d\n", now->tm_hour, now->tm_min, now->tm_sec);
-   fprintf(ver, "#define BUILD_GIT_REV    \"%s\"\n", git_rev);
-   fprintf(ver, "#define BUILD_GIT_AUTH   \"%s\"\n", git_auth);
-   fprintf(ver, "#define BUILD_GIT_EMAIL  \"%s\"\n", git_email);
-   fprintf(ver, "#define BUILD_GIT_DATE   \"%s\"\n", git_date);
+   fprintf(ver, "#define FPGA_PID        %d\n",     build_pid);
+   fprintf(ver, "#define FPGA_MAP        %d\n",     build_map);
+   fprintf(ver, "#define FPGA_LOGIC      %d\n",     build_logic);
+   fprintf(ver, "#define FPGA_INC        %d\n",     build_inc);
+   fprintf(ver, "#define FPGA_MAP_DATE   0x%08X\n", build_map_date);
+   fprintf(ver, "#define FPGA_VER_HEX    0x%08X\n", build_hex);
+   fprintf(ver, "#define FPGA_TIME       \"%s\"\n", build_time);
+   fprintf(ver, "#define FPGA_DATE       \"%s\"\n", build_date);
+   fprintf(ver, "#define FPGA_USER       \"%s\"\n", build_user);
+   fprintf(ver, "#define FPGA_STR        \"%s\"\n", build_str2);
+   fprintf(ver, "#define FPGA_LO         \"%s\"\n", build_lo);
+   fprintf(ver, "#define FPGA_HI         \"%s\"\n", build_hi);
+   fprintf(ver, "#define FPGA_STRING     \"%s\"\n", build_str2);
+   fprintf(ver, "#define FPGA_EPOCH      %d\n", (uint32_t)clock);
+   fprintf(ver, "#define FPGA_EPOCH_HEX  0x%08X\n", (uint32_t)clock);
+   fprintf(ver, "#define FPGA_DATE_HEX   0x%04d%02d%02d\n", now->tm_year+1900, now->tm_mon+1, now->tm_mday);
+   fprintf(ver, "#define FPGA_TIME_HEX   0x00%02d%02d%02d\n", now->tm_hour, now->tm_min, now->tm_sec);
+   fprintf(ver, "#define FPGA_GIT_REV    \"%s\"\n", git_rev);
+   fprintf(ver, "#define FPGA_GIT_AUTH   \"%s\"\n", git_auth);
+   fprintf(ver, "#define FPGA_GIT_EMAIL  \"%s\"\n", git_email);
+   fprintf(ver, "#define FPGA_GIT_DATE   \"%s\"\n", git_date);
 
    fclose(ver);
    fflush(ver);
 
    //
-   // Open build.h and read BUILD_HI, sanity check
+   // Create FPGA VHDL Version File
+   //
+   // Open File for Writing
+   if  ((ver = fopen(argv[3],"wt")) == NULL) {
+      printf("Error: Unable to open %s for writing\n", argv[3]);
+      exit (-1);
+   }
+   fprintf(ver, "library ieee;\n");
+   fprintf(ver, "use ieee.std_logic_1164.all;\n");
+   fprintf(ver, "\n");
+   fprintf(ver, "package fpga_ver is\n");
+   fprintf(ver, "\n");
+   fprintf(ver, "   constant C_BUILD_PID       : std_logic_vector(7 downto 0)   := X\"%02X\";\n", build_pid);
+   fprintf(ver, "   constant C_BUILD_MAP       : std_logic_vector(11 downto 0)  := X\"%03X\";\n", build_map);
+   fprintf(ver, "   constant C_BUILD_LOGIC     : std_logic_vector(11 downto 0)  := X\"%03X\";\n", build_logic);
+   fprintf(ver, "   constant C_BUILD_INC       : std_logic_vector(7 downto 0)   := X\"%02X\";\n", build_inc);
+   fprintf(ver, "   constant C_BUILD_MAP_DATE  : std_logic_vector(31 downto 0)  := X\"%08X\";\n", build_map_date);
+   fprintf(ver, "   constant C_BUILD_VER_HEX   : std_logic_vector(31 downto 0)  := X\"%08X\";\n", build_hex);
+   fprintf(ver, "   constant C_BUILD_TIME      : string                         := \"%s\";\n", build_time);
+   fprintf(ver, "   constant C_BUILD_DATE      : string                         := \"%s\";\n", build_date);
+   fprintf(ver, "   constant C_BUILD_USER      : string                         := \"%s\";\n", build_user);
+   fprintf(ver, "   constant C_BUILD_STR       : string                         := \"%s\";\n", build_str2);
+   fprintf(ver, "   constant C_BUILD_LO        : string                         := \"%s\";\n", build_lo);
+   fprintf(ver, "   constant C_BUILD_HI        : string                         := \"%s\";\n", build_hi);
+   fprintf(ver, "   constant C_BUILD_STRING    : string                         := \"%s\";\n", build_str1);
+   fprintf(ver, "   constant C_BUILD_EPOCH     : integer                        := %d;\n", (uint32_t)clock);
+   fprintf(ver, "   constant C_BUILD_EPOCH_HEX : std_logic_vector(31 downto 0)  := X\"%08X\";\n", (uint32_t)clock);
+   fprintf(ver, "   constant C_BUILD_DATE_HEX  : std_logic_vector(31 downto 0)  := X\"%04d%02d%02d\";\n", now->tm_year+1900, now->tm_mon+1, now->tm_mday);
+   fprintf(ver, "   constant C_BUILD_TIME_HEX  : std_logic_vector(31 downto 0)  := X\"00%02d%02d%02d\";\n", now->tm_hour, now->tm_min, now->tm_sec);
+   fprintf(ver, "   constant C_BUILD_GIT_REV   : string                         := \"%s\";\n", git_rev);
+   fprintf(ver, "   constant C_BUILD_GIT_AUTH  : string                         := \"%s\";\n", git_auth);
+   fprintf(ver, "   constant C_BUILD_GIT_EMAIL : string                         := \"%s\";\n", git_email);
+   fprintf(ver, "   constant C_BUILD_GIT_DATE  : string                         := \"%s\";\n", git_date);
+   fprintf(ver, "\n");
+   fprintf(ver, "end fpga_ver;\n");
+
+   fclose(ver);
+   fflush(ver);
+
+   //
+   // Open fpga_build.h and read BUILD_HI, sanity check
    //
    if  ((ver = fopen(argv[2],"rt")) != NULL) {
       while (fgets(in_line, sizeof(in_line), ver) != NULL) {
