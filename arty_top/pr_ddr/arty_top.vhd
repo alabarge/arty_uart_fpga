@@ -102,7 +102,6 @@ signal heartbeat_count     : unsigned(25 downto 0);
 signal heartbeat           : std_logic;
 signal watchdog            : std_logic;
 signal watchdog_r0         : std_logic;
-signal test_point          : std_logic;
 
 --
 -- MAIN CODE
@@ -121,7 +120,7 @@ begin
    led0_rgb(1)          <= '0';
    led0_rgb(2)          <= '0';
 
-   hw_tp(0)             <= test_point;
+   hw_tp(0)             <= '0';
    hw_tp(1)             <= '0';
    hw_tp(2)             <= '0';
    hw_tp(3)             <= '0';
@@ -180,7 +179,6 @@ begin
          Vaux3_0_v_p                   => vauxp3,
          cm_uart_rxd                   => iCM_UART_RXD,
          cm_uart_txd                   => oCM_UART_TXD,
-         hw_tp                         => test_point,
          stdio_uart_rxd                => iSTDIO_UART_RXD,
          stdio_uart_txd                => oSTDIO_UART_TXD
       );

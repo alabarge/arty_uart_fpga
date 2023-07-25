@@ -50,6 +50,10 @@
 
 # select right_click arty_fw "Build Project" (creates arty_fw.elf and arty_fw.srec files)
 
+# launch VS 2022 by double-clicking win/jack/jack.sln
+# select Build->Rebuild Solution
+# F5 for debugging
+
 #
 # FLASH ORDER MATTERS HERE, IF THE ELF FILE CHANGES THE BIT FILE MUST ALSO BE FLASHED
 #
@@ -80,7 +84,7 @@
 
 
 
-# use write_project_tcl -force make_pr_ddr.tcl to capture changes to block design
+# use write_project_tcl -force make_proj.tcl to capture changes to block design
 # use beyond compare to move changes into the IP PR directory
 # incidental changes based on build, layout and GUI do not need to be updated
 

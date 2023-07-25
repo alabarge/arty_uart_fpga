@@ -455,11 +455,11 @@ proc create_hier_cell_mb_bram { parentCell nameHier } {
 
   set Vaux2_0 [ create_bd_intf_port -mode Slave -vlnv xilinx.com:interface:diff_analog_io_rtl:1.0 Vaux2_0 ]
 
+  set Vaux3_0 [ create_bd_intf_port -mode Slave -vlnv xilinx.com:interface:diff_analog_io_rtl:1.0 Vaux3_0 ]
+
   set Vaux8_0 [ create_bd_intf_port -mode Slave -vlnv xilinx.com:interface:diff_analog_io_rtl:1.0 Vaux8_0 ]
 
   set Vaux9_0 [ create_bd_intf_port -mode Slave -vlnv xilinx.com:interface:diff_analog_io_rtl:1.0 Vaux9_0 ]
-
-  set Vp_Vn_0 [ create_bd_intf_port -mode Slave -vlnv xilinx.com:interface:diff_analog_io_rtl:1.0 Vp_Vn_0 ]
 
   set ddr3_sdram [ create_bd_intf_port -mode Master -vlnv xilinx.com:interface:ddrx_rtl:1.0 ddr3_sdram ]
 
@@ -481,7 +481,6 @@ proc create_hier_cell_mb_bram { parentCell nameHier } {
   set_property -dict [ list \
    CONFIG.PHASE {0.0} \
  ] $clk100mhz
-  set cm_irq [ create_bd_port -dir O -type intr cm_irq ]
   set cm_uart_rxd [ create_bd_port -dir I -type data cm_uart_rxd ]
   set cm_uart_txd [ create_bd_port -dir O -type data cm_uart_txd ]
   set resetn [ create_bd_port -dir I -type rst resetn ]
@@ -580,16 +579,29 @@ proc create_hier_cell_mb_bram { parentCell nameHier } {
   # Create instance: axi_xadc, and set properties
   set axi_xadc [ create_bd_cell -type ip -vlnv xilinx.com:ip:xadc_wiz:3.3 axi_xadc ]
   set_property -dict [list \
+    CONFIG.ACQUISITION_TIME_VP_VN {false} \
+    CONFIG.ADC_CONVERSION_RATE {80} \
+    CONFIG.AVERAGE_ENABLE_VAUXP0_VAUXN0 {true} \
+    CONFIG.AVERAGE_ENABLE_VAUXP10_VAUXN10 {true} \
+    CONFIG.AVERAGE_ENABLE_VAUXP11_VAUXN11 {true} \
+    CONFIG.AVERAGE_ENABLE_VAUXP1_VAUXN1 {true} \
+    CONFIG.AVERAGE_ENABLE_VAUXP2_VAUXN2 {true} \
+    CONFIG.AVERAGE_ENABLE_VAUXP3_VAUXN3 {true} \
+    CONFIG.AVERAGE_ENABLE_VAUXP8_VAUXN8 {true} \
+    CONFIG.AVERAGE_ENABLE_VAUXP9_VAUXN9 {true} \
+    CONFIG.AVERAGE_ENABLE_VP_VN {false} \
+    CONFIG.CHANNEL_AVERAGING {16} \
     CONFIG.CHANNEL_ENABLE_TEMPERATURE {true} \
     CONFIG.CHANNEL_ENABLE_VAUXP0_VAUXN0 {true} \
     CONFIG.CHANNEL_ENABLE_VAUXP10_VAUXN10 {true} \
     CONFIG.CHANNEL_ENABLE_VAUXP11_VAUXN11 {true} \
     CONFIG.CHANNEL_ENABLE_VAUXP1_VAUXN1 {true} \
     CONFIG.CHANNEL_ENABLE_VAUXP2_VAUXN2 {true} \
-    CONFIG.CHANNEL_ENABLE_VAUXP3_VAUXN3 {false} \
+    CONFIG.CHANNEL_ENABLE_VAUXP3_VAUXN3 {true} \
     CONFIG.CHANNEL_ENABLE_VAUXP8_VAUXN8 {true} \
     CONFIG.CHANNEL_ENABLE_VAUXP9_VAUXN9 {true} \
-    CONFIG.CHANNEL_ENABLE_VP_VN {true} \
+    CONFIG.CHANNEL_ENABLE_VP_VN {false} \
+    CONFIG.DCLK_FREQUENCY {81.247969} \
     CONFIG.ENABLE_TEMP_BUS {true} \
     CONFIG.EXTERNAL_MUX_CHANNEL {VP_VN} \
     CONFIG.OT_ALARM {false} \
@@ -649,9 +661,9 @@ proc create_hier_cell_mb_bram { parentCell nameHier } {
   connect_bd_intf_net -intf_net Vaux11_0_1 [get_bd_intf_ports Vaux11_0] [get_bd_intf_pins axi_xadc/Vaux11]
   connect_bd_intf_net -intf_net Vaux1_0_1 [get_bd_intf_ports Vaux1_0] [get_bd_intf_pins axi_xadc/Vaux1]
   connect_bd_intf_net -intf_net Vaux2_0_1 [get_bd_intf_ports Vaux2_0] [get_bd_intf_pins axi_xadc/Vaux2]
+  connect_bd_intf_net -intf_net Vaux3_1 [get_bd_intf_ports Vaux3_0] [get_bd_intf_pins axi_xadc/Vaux3]
   connect_bd_intf_net -intf_net Vaux8_0_1 [get_bd_intf_ports Vaux8_0] [get_bd_intf_pins axi_xadc/Vaux8]
   connect_bd_intf_net -intf_net Vaux9_0_1 [get_bd_intf_ports Vaux9_0] [get_bd_intf_pins axi_xadc/Vaux9]
-  connect_bd_intf_net -intf_net Vp_Vn_0_1 [get_bd_intf_ports Vp_Vn_0] [get_bd_intf_pins axi_xadc/Vp_Vn]
   connect_bd_intf_net -intf_net axi_crossbar_0_M00_AXI [get_bd_intf_pins axi_crossbar/M00_AXI] [get_bd_intf_pins axi_qspi/AXI_LITE]
   connect_bd_intf_net -intf_net axi_crossbar_0_M01_AXI [get_bd_intf_pins axi_crossbar/M01_AXI] [get_bd_intf_pins axi_intc/s_axi]
   connect_bd_intf_net -intf_net axi_crossbar_0_M02_AXI [get_bd_intf_pins axi_crossbar/M02_AXI] [get_bd_intf_pins axi_led/S_AXI]
@@ -681,11 +693,11 @@ proc create_hier_cell_mb_bram { parentCell nameHier } {
   connect_bd_intf_net -intf_net mig_7series_0_DDR3 [get_bd_intf_ports ddr3_sdram] [get_bd_intf_pins sdram/DDR3]
 
   # Create port connections
+  connect_bd_net -net axi_cm_uart_irq [get_bd_pins axi_cm_uart/irq] [get_bd_pins intc_concat/In3]
   connect_bd_net -net axi_quad_spi_0_ip2intc_irpt [get_bd_pins axi_qspi/ip2intc_irpt] [get_bd_pins intc_concat/In1]
   connect_bd_net -net axi_timebase_wdt_0_wdt_reset [get_bd_ports watchdog] [get_bd_pins axi_watchdog/wdt_reset]
   connect_bd_net -net axi_timer_0_interrupt [get_bd_pins axi_systimer/interrupt] [get_bd_pins intc_concat/In2]
   connect_bd_net -net axi_uartlite_0_interrupt [get_bd_pins axi_stdio_uart/interrupt] [get_bd_pins intc_concat/In0]
-  connect_bd_net -net cm_uart_irq [get_bd_ports cm_irq] [get_bd_pins axi_cm_uart/irq] [get_bd_pins intc_concat/In3]
   connect_bd_net -net cm_uart_rxd_1 [get_bd_ports cm_uart_rxd] [get_bd_pins axi_cm_uart/rxd]
   connect_bd_net -net cm_uart_txd [get_bd_ports cm_uart_txd] [get_bd_pins axi_cm_uart/txd]
   connect_bd_net -net ddr_clock_1 [get_bd_ports clk100mhz] [get_bd_pins sdram/sys_clk_i]
