@@ -198,7 +198,6 @@ uint32_t daq_msg(pcm_msg_t msg) {
          // RUN State
          sv.state         = DAQH_STATE_RUN;
          sv.adc_index     = 0;
-//         sv.blklen        = ADC_POOL_CNT * sizeof(cm_pipe_daq_t);
          // Issue the H/W Run Command
          daq_hal_run(&sv);
          cm_send_msg(CM_MSG_RESP, (pcm_msg_t)rsp, msg, sizeof(daq_run_msg_t), 0, 0);
@@ -208,35 +207,8 @@ uint32_t daq_msg(pcm_msg_t msg) {
    // DAQ INTERRUPT INDICATION
    //
    else if (cm_msg == MSG(CM_ID_DAQ_SRV, DAQ_INT_IND)) {
-      // Packet Ready Indication, Only when not using Head/Tail from hardware
-      if (msg->p.flags & DAQ_INT_FLAG_PKT) {
-         // send ADC_POOL_CNT packets
-          uart_pipe(sv.adc_index, sv.blklen);
-         // next location in circular memory
-//         if (++sv.adc_index > (ADC_FIFO_SPAN / (ADC_POOL_CNT * sizeof(cm_pipe_daq_t)))) {
-//            sv.adc_index = 0;
-//         }
-      }
-      // Transfer Done Indication, from FIFO, FTDI or COM
-      else if (msg->p.flags & DAQ_INT_FLAG_PIPE) {
-         // Create Done Indication
-         pcmq_t slot = cm_alloc();
-         if (slot != NULL) {
-            pdaq_done_ind_msg_t ind = (pdaq_done_ind_msg_t)slot->buf;
-            ind->p.srvid    = CM_ID_DAQ_SRV;
-            ind->p.msgid    = DAQ_DONE_IND;
-            ind->p.flags    = DAQ_NO_FLAGS;
-            ind->p.status   = DAQ_OK;
-            ind->b.opcode   = sv.opcode;
-            ind->b.status   = daq.status;
-            ind->b.stamp    = gc.sys_time;
-            // Send the Indication
-            cm_send_msg(CM_MSG_IND, (pcm_msg_t)ind, NULL, sizeof(daq_done_ind_msg_t),
-                        CM_ID_BCAST, gc.winid);
-         }
-      }
-      // ADC Done Indication, Ignore when using FIFO, FTDI or COM
-      else if (msg->p.flags & DAQ_INT_FLAG_DONE) {
+      // ADC Done Indication
+      if (msg->p.flags & DAQ_INT_FLAG_DONE) {
          // Create Done Indication
          pcmq_t slot = cm_alloc();
          if (slot != NULL) {
@@ -353,6 +325,8 @@ uint32_t daq_tick(void) {
          xlprint("daq_hal_run() Abort\n");
       }
    }
+
+   adc_tick();
 
    return result;
 

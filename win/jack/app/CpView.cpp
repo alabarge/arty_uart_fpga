@@ -186,7 +186,7 @@ void CCpView::OnInitialUpdate()
    str.Format(_T("  sdram           0x%08X\r\n"), XPAR_SDRAM_BASEADDR); str1 += str;
    str.Format(_T("                  0x%08X\r\n"), (UINT)XPAR_SDRAM_BASEADDR + (UINT)XPAR_SDRAM_HIGHADDR); str1 += str;
 
-   str.Format(_T("  sysid           %d\r\n"), FPGA_SYSID); str1 += str;
+   str.Format(_T("  sysid           %d\r\n"), FPGA_PID); str1 += str;
    str.Format(_T("  stamp           %d\r\n"), FPGA_EPOCH); str1 += str;
    str.Format(_T("\r\n")); str1 += str;
 

@@ -1,4 +1,4 @@
-rmdir /s /q .\release
+if exist ".\release\" rmdir /s /q .\release
 echo f|xcopy .\output_files\arty_top.bit .\release\ARTY_S7_B_FPGA_Project.bit /F /Y /R
 echo f|xcopy .\output_files\arty_top_v*.bit .\release\arty_top_v*.bit /F /Y /R
 echo f|xcopy .\output_files\fpga_version.h .\release\fpga_version.h /F /Y /R

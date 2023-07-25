@@ -72,7 +72,7 @@ typedef struct _daq_error_table_t {
 #define DAQ_MAX_SAM        (DAQ_MAX_LEN / DAQ_MAX_CH)
 
 // Pipe message pooling
-#define DAQ_MAX_PIPE_RUN   32
+#define DAQ_MAX_PIPE_RUN   4
 
 // 2.5V / 2^12 (12-Bit ADC), Internal Reference
 #define DAQ_LSB            (2.5 / 4096.0)
@@ -119,7 +119,7 @@ typedef struct {
 // SAME SIZE AS SLOTS IN WINDOWS DRIVER
 typedef struct _cm_pipe_daq_t {
    uint8_t     dst_cmid;       // Destination CM ID
-   uint8_t     msgid;          // Pipe Message ID, CM_PIPE_DAQ_DATA = 0x10
+   uint8_t     msgid;          // Pipe Message ID, CM_PIPE_DAQ_DATA = 0x15
    uint8_t     port;           // Destination Port
    uint8_t     flags;          // Message Flags
    uint32_t    msglen;         // Message Length in 32-Bit words

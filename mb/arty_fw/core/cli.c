@@ -94,6 +94,8 @@
    static void rpc_f(int argc, char **argv);
    static void irq_f(int argc, char **argv);
    static void oled_f(int argc, char **argv);
+   static void adc_f(int argc, char **argv);
+   static void adc_run_f(int argc, char **argv);
    static void md_loop_f(int argc, char **argv);
    static void mw_loop_f(int argc, char **argv);
    static void reg_test_f(int argc, char **argv);
@@ -116,6 +118,8 @@
       {.cmd = "rpc",       .func = rpc_f        },
       {.cmd = "irq",       .func = irq_f        },
       {.cmd = "oled",      .func = oled_f       },
+      {.cmd = "adc",       .func = adc_f        },
+      {.cmd = "adc_run",   .func = adc_run_f    },
       {.cmd = "md_loop",   .func = md_loop_f    },
       {.cmd = "mw_loop",   .func = mw_loop_f    },
       {.cmd = "reg_test",  .func = reg_test_f   },
@@ -196,6 +200,12 @@ void help_f(int argc, char **argv) {
    xlprint("   rpc,        remote procedure call, project specific for debug\n");
    xlprint("   irq,        toggle IRQ trace\n");
    xlprint("   oled,       initialize the oled module\n");
+   xlprint("   adc,        report adc channels and set rate and average\n");
+   xlprint("               adc [rate] [average]\n");
+   xlprint("               adc 32 0\n");
+   xlprint("   adc_run,    adc packet acquisition\n");
+   xlprint("               adc_run [packets]\n");
+   xlprint("               adc_run 32\n");
    xlprint("   md_loop     periodically read the selected address\n");
    xlprint("               md_loop [address] [loop_ms]\n");
    xlprint("               md_loop 0x80400000 1\n");
@@ -357,7 +367,28 @@ void irq_f(int argc, char **argv) {
 
 void oled_f(int argc, char **argv) {
 	oled_init();
-    oled_display();
+	oled_display();
+}
+
+void adc_f(int argc, char **argv) {
+   uint8_t rate, avg;
+   if (argv[1] != NULL) {
+      rate = (uint8_t)strtol(argv[1], NULL, 10);
+      adc_rate(rate);
+   }
+   if (argv[2] != NULL) {
+      avg = (uint8_t)strtol(argv[2], NULL, 10);
+      adc_avg(avg);
+   }
+   adc_report();
+}
+
+void adc_run_f(int argc, char **argv) {
+   uint32_t packets = 1;
+   if (argv[1] != NULL) {
+      packets = (uint32_t)strtol(argv[1], NULL, 10);
+   }
+   adc_run(DAQ_CMD_RUN | DAQ_CMD_RAMP, packets);
 }
 
 void md_loop_f(int argc, char **argv) {

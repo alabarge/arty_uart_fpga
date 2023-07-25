@@ -58,22 +58,22 @@ entity arty_top is
       oOLED_DC             : out   std_logic;
       
       -- XADC
-      vp_in                : in    std_logic;
-      vn_in                : in    std_logic;
       vauxp0               : in    std_logic;
       vauxn0               : in    std_logic;
       vauxp1               : in    std_logic;
       vauxn1               : in    std_logic;
-      vauxp2               : in    std_logic;
-      vauxn2               : in    std_logic;
-      vauxp8               : in    std_logic;
-      vauxn8               : in    std_logic;
       vauxp9               : in    std_logic;
       vauxn9               : in    std_logic;
+      vauxp2               : in    std_logic;
+      vauxn2               : in    std_logic;
       vauxp10              : in    std_logic;
       vauxn10              : in    std_logic;
       vauxp11              : in    std_logic;
       vauxn11              : in    std_logic;
+      vauxp8               : in    std_logic;
+      vauxn8               : in    std_logic;
+      vauxp3               : in    std_logic;
+      vauxn3               : in    std_logic;
 
       -- Test Points
       hw_tp                : out   std_logic_vector(3 downto 0);
@@ -102,10 +102,7 @@ signal heartbeat_count     : unsigned(25 downto 0);
 signal heartbeat           : std_logic;
 signal watchdog            : std_logic;
 signal watchdog_r0         : std_logic;
-
-signal cm_rxd              : std_logic;
-signal cm_txd              : std_logic;
-signal cm_irq              : std_logic;
+signal test_point          : std_logic;
 
 --
 -- MAIN CODE
@@ -124,13 +121,10 @@ begin
    led0_rgb(1)          <= '0';
    led0_rgb(2)          <= '0';
 
-   hw_tp(0)             <= cm_rxd;
-   hw_tp(1)             <= cm_txd;
-   hw_tp(2)             <= cm_irq;
+   hw_tp(0)             <= test_point;
+   hw_tp(1)             <= '0';
+   hw_tp(2)             <= '0';
    hw_tp(3)             <= '0';
-
-   oCM_UART_TXD         <= cm_txd;
-   cm_rxd               <= iCM_UART_RXD;
 
    --
    -- VIVADO BLOCK DESIGN
@@ -168,25 +162,25 @@ begin
          qspi_flash_ss_io              => qspi_flash_ss_io,
          resetn                        => sys_rst_n,
          watchdog                      => watchdog,
-         Vp_Vn_0_v_n                   => vn_in,
-         Vp_Vn_0_v_p                   => vp_in,
          Vaux0_0_v_n                   => vauxn0,
          Vaux0_0_v_p                   => vauxp0,
          Vaux1_0_v_n                   => vauxn1,
          Vaux1_0_v_p                   => vauxp1,
-         Vaux2_0_v_n                   => vauxn2,
-         Vaux2_0_v_p                   => vauxp2,
-         Vaux8_0_v_n                   => vauxn8,
-         Vaux8_0_v_p                   => vauxp8,
          Vaux9_0_v_n                   => vauxn9,
          Vaux9_0_v_p                   => vauxp9,
+         Vaux2_0_v_n                   => vauxn2,
+         Vaux2_0_v_p                   => vauxp2,
          Vaux10_0_v_n                  => vauxn10,
          Vaux10_0_v_p                  => vauxp10,
          Vaux11_0_v_n                  => vauxn11,
          Vaux11_0_v_p                  => vauxp11,
-         cm_uart_rxd                   => cm_rxd,
-         cm_uart_txd                   => cm_txd,
-         cm_irq                        => cm_irq,
+         Vaux8_0_v_n                   => vauxn8,
+         Vaux8_0_v_p                   => vauxp8,
+         Vaux3_0_v_n                   => vauxn3,
+         Vaux3_0_v_p                   => vauxp3,
+         cm_uart_rxd                   => iCM_UART_RXD,
+         cm_uart_txd                   => oCM_UART_TXD,
+         hw_tp                         => test_point,
          stdio_uart_rxd                => iSTDIO_UART_RXD,
          stdio_uart_txd                => oSTDIO_UART_TXD
       );

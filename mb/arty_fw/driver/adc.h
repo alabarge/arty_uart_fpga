@@ -19,4 +19,7 @@ uint32_t adc_init(void);
 void     adc_isr(void *arg);
 void     adc_intack(uint8_t int_type);
 void     adc_run(uint32_t flags, uint32_t packets);
-uint32_t adc_version(void);
+void     adc_tick(void);
+void     adc_rate(uint8_t rate);
+void     adc_report(void);
+void     adc_avg(uint8_t avg);

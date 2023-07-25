@@ -1052,7 +1052,7 @@ END
 
 STRINGTABLE
 BEGIN
-    IDC_DAQ_PACKETS         "Number of 1K Packets to Collect, Minimum is 32 (0 is Continuous Sampling)"
+    IDC_DAQ_PACKETS         "Number of 1K Packets to Collect, Minimum is 4 (0 is Continuous Sampling)"
 END
 
 STRINGTABLE

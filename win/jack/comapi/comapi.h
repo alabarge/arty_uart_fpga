@@ -41,7 +41,7 @@ typedef struct _com_dev_info_t {
 #define  COM_MSGLEN_UINT32    (COM_MSGLEN_UINT8 >> 2)
 #define  COM_POOL_SLOTS       256
 #define  COM_PIPELEN_UINT8    1024
-#define  COM_PACKET_CNT       32
+#define  COM_PACKET_CNT       4
 #define  COM_BLOCK_LEN        (COM_PACKET_CNT * COM_PIPELEN_UINT8)
 
 #define  COM_MAX_DEVICES      256

@@ -2,11 +2,11 @@
 # NOTE: INSTALL BOARD FILES FROM DIGILENT INTO VIVADO DIRECTORY
 #
 
-# choose place and route from arty_uart_fpga\ip
+# cd to arty_uart_fpga\arty_top\pr_ddr\script
 # double-click create_proj.bat file, this will delete existing vivado directory
 
 # fpga_build.vhd is not updated automatically, it must be updated manually
-# make sure vivado is in the arty_uart_fpga/arty_top/pr_ddr/vivado/system directory
+# make sure vivado is in the arty_uart_fpga\arty_top\pr_ddr\vivado\system directory
 # update fpga_build.vhd, requires IP upgrade, time stamp the design
    source ../../../pr_ddr/script/pre_build.tcl
 # select "Refresh IP Catalog"

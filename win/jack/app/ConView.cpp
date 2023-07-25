@@ -318,7 +318,7 @@ afx_msg LRESULT CConView::OnCmMsg(WPARAM wParam, LPARAM lParam)
       str.Format(_T("%d"), ver->b.vhdl[1]);
       GetDlgItem(IDC_CON_ADC_REV)->SetWindowText(str);
       // Check SYSID
-      if (ver->b.sysid != FPGA_SYSID && pDoc->m_ini->apSysIDWarn) {
+      if (ver->b.sysid != FPGA_PID && pDoc->m_ini->apSysIDWarn) {
          AfxMessageBox(IDS_SYSID_INVALID, MB_OK|MB_ICONSTOP);
       }
    }

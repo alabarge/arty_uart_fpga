@@ -99,7 +99,7 @@
    static   uart_txq_t     txq;
    static   uart_rxq_t     rxq;
 
-   static   uint8_t        msg_out[sizeof(cm_pipe_t)];
+   static   uint8_t        msg_out[sizeof(cm_pipe_t) * 2];
 
    static   volatile puart_regs_t regs = (volatile puart_regs_t)XPAR_AXI_CM_UART_BASEADDR;
 
@@ -385,8 +385,8 @@ void uart_cmio(uint8_t op_code, pcm_msg_t msg) {
 
    7.5.2   Parameters:
 
-   msg     Message Pointer
-   opCode  CM_IO_TX
+   msg      Message Pointer
+   op_code  CM_IO_TX
 
    7.5.3   Return Values:
 
@@ -444,8 +444,6 @@ void uart_msgtx(void) {
 
 // 7.6.4   Data Structures
 
-   pcm_msg_t   msg;
-
    uint32_t    i,j=0;
 
 // 7.6.5   Code
@@ -456,44 +454,28 @@ void uart_msgtx(void) {
    }
    // check for message in queue
    else if (txq.head != txq.tail) {
-      msg = (pcm_msg_t)txq.buf[txq.tail];
       // clear outbound message buffer
       memset(msg_out, 0, sizeof(msg_out));
-      //
-      // cm message
-      //
-      if (msg->h.dst_cmid != CM_ID_PIPE) {
-         // start-of-frame
-         msg_out[j++] = UART_START_FRAME;
-         // octet stuffing for transmit
-         for (i=0;i<msg->h.msglen;i++) {
-            // check for HDLC control characters
-            if ((txq.buf[txq.tail][i] == UART_START_FRAME) ||
-                (txq.buf[txq.tail][i] == UART_END_FRAME)   ||
-                (txq.buf[txq.tail][i] == UART_ESCAPE)) {
-               msg_out[j++] = UART_ESCAPE;
-               msg_out[j++] = txq.buf[txq.tail][i] ^ UART_STUFFED_BIT;
-            }
-            else {
-               // all others
-               msg_out[j++] = txq.buf[txq.tail][i];
-            }
+      // start-of-frame
+      msg_out[j++] = UART_START_FRAME;
+      // octet stuffing for transmit
+      for (i=0;i<txq.len[txq.tail];i++) {
+         // check for HDLC control characters
+         if ((txq.buf[txq.tail][i] == UART_START_FRAME) ||
+             (txq.buf[txq.tail][i] == UART_END_FRAME)   ||
+             (txq.buf[txq.tail][i] == UART_ESCAPE)) {
+            msg_out[j++] = UART_ESCAPE;
+            msg_out[j++] = txq.buf[txq.tail][i] ^ UART_STUFFED_BIT;
          }
-         // end-of-frame
-         msg_out[j++] = UART_END_FRAME;
-         tx_msglen = j;
-         uart_tx();
-      }
-      //
-      // pipe message
-      //
-      else {
-         for (i=0;i<sizeof(cm_pipe_t);i++) {
-            msg_out[i] = txq.buf[txq.tail][i];
+         else {
+            // all others
+            msg_out[j++] = txq.buf[txq.tail][i];
          }
-         tx_msglen = sizeof(cm_pipe_t);
-         uart_tx();
       }
+      // end-of-frame
+      msg_out[j++] = UART_END_FRAME;
+      tx_msglen = j;
+      uart_tx();
       // release message
       cm_free((pcm_msg_t)txq.buf[txq.tail]);
       // advance the tx queue
@@ -507,7 +489,7 @@ void uart_msgtx(void) {
 
 // 7.7
 
-void uart_pipe(uint32_t index, uint32_t msglen) {
+void uart_pipe(pcm_pipe_t msg) {
 
 /* 7.7.1   Functional Description
 
@@ -515,8 +497,7 @@ void uart_pipe(uint32_t index, uint32_t msglen) {
 
    7.7.2   Parameters:
 
-   index   Index into DMA mapped memory
-   msglen  Message length in bytes
+   msg     Pipe Message to Transmit
 
    7.7.3   Return Values:
 
@@ -527,13 +508,13 @@ void uart_pipe(uint32_t index, uint32_t msglen) {
 
 // 7.7.4   Data Structures
 
-   uint8_t *msg = NULL;
+   pcmq_t   slot;
 
 // 7.7.5   Code
 
    // Trace Entry
    if (gc.trace & CFG_TRACE_PIPE) {
-      xlprint("uart_pipe() msg:msglen = %08X:%d\n", (uint8_t *)msg, msglen);
+      xlprint("uart_pipe() msg = %08X\n", (uint8_t *)msg);
       dump((uint8_t *)msg, 32, 0, 0);
    }
 
@@ -542,14 +523,18 @@ void uart_pipe(uint32_t index, uint32_t msglen) {
 
    // Validate message, drop if NULL
    if (msg != NULL) {
-      // place in transmit queue
-      txq.buf[txq.head] = (uint8_t *)msg;
-      txq.len[txq.head] = msglen;
-      if (++txq.head == txq.slots) txq.head = 0;
-      // try to transmit message
-      uart_msgtx();
-      // show activity
-      gpio_set_val(GPIO_LED_PIPE, GPIO_LED_ON);
+      slot = cm_alloc();
+      if (slot != NULL) {
+         memcpy(slot->buf, (uint8_t *)msg, sizeof(cm_pipe_t));
+         // place in transmit queue
+         txq.buf[txq.head] = slot->buf;
+         txq.len[txq.head] = sizeof(cm_pipe_t);
+         if (++txq.head == txq.slots) txq.head = 0;
+         // try to transmit message
+         uart_msgtx();
+         // show activity
+         gpio_set_val(GPIO_LED_PIPE, GPIO_LED_ON);
+      }
    }
 
    // Enable ISR

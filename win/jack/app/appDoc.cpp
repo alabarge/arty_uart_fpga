@@ -121,7 +121,7 @@ CappDoc::CappDoc()
       {_T("daq.float"),          _T("0"),                   DOC_UINT,      &m_ini->daqFloat,          1,       0x00000000,    _T(""),                _T("")},
       {_T("daq.plot"),           _T("0"),                   DOC_UINT,      &m_ini->daqPlot,           1,       0x00000000,    _T(""),                _T("")},
       {_T("daq.raw"),            _T("0"),                   DOC_UINT,      &m_ini->daqRaw,            1,       0x00000000,    _T(""),                _T("")},
-      {_T("daq.packets"),        _T("32"),                  DOC_UINT,      &m_ini->daqPackets,         1,       0x00000000,    _T(""),                _T("")},
+      {_T("daq.packets"),        _T("4"),                   DOC_UINT,      &m_ini->daqPackets,         1,       0x00000000,    _T(""),                _T("")},
       //
       // Parameter Pane "CPU Plot Settings"
       //

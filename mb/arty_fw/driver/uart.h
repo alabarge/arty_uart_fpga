@@ -134,6 +134,6 @@ void      uart_intack(uint8_t int_type);
 void      uart_tx(void);
 void      uart_cmio(uint8_t op_code, pcm_msg_t msg);
 void      uart_msgtx(void);
-void      uart_pipe(uint32_t index, uint32_t msglen);
+void      uart_pipe(pcm_pipe_t msg);
 void      uart_report(void);
 
