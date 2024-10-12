@@ -1,4 +1,4 @@
-source ../scripts/settings.tcl
+source ../script/settings.tcl
 
 set ip_dir ../../$ip_name
 

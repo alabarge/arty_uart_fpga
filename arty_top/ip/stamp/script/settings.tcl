@@ -1,6 +1,6 @@
 set project_name stamp
 set fpga_device xc7s50csga324-1
-set scripts_dir ../scripts
+set scripts_dir ../script
 set build_dir ../vivado
 set src_dir ../hdl
 set xci_dir ../xci
